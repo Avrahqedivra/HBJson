@@ -8,11 +8,8 @@
     margin-top: 0.5rem;
     margin-left: 0rem;
     margin-bottom: 0.3rem;
-/* #shieldLogo { */
-    /* width: 35rem; */
-    /* margin-top: 1rem; */
-    /* margin-left: 1rem; */
 }
+
 #infoLine {
     margin: 1rem 0 1rem 0;
     color: var(--color-fg-infoline);
