@@ -756,6 +756,10 @@
 					for (let i = 0; i < lastActiveLength; i++) {
 						var record = lastActive[i];
 						var link = '\"tgId' + parseInt(record.TGID) + '\"';
+						var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
+
+						if (alias.indexOf("<img") == -1)
+							alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
 
 						content = '<tr class=' + bgClass + '>';
 						content += "<td class='tdDate'>" + record.DATE + "</td>";
@@ -765,7 +769,7 @@
 						content += "<td class='dmrid'>" + record.DMRID + "</td>";
 						content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 						content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-						content += "<td class='alias ellipsis'>" + record.ALIAS + "</td>";
+						content += "<td class='alias ellipsis'>" + alias + "</td>";
 						if (record.DELAY == "ONLINE")
 							content += "<td class='online'>" + record.DELAY + "</td>";
 						else

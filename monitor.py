@@ -810,7 +810,7 @@ def rts_update(p):
                 CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['TYPE'] = callType
                 CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['SRC'] = peer
                 CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['SUB'] = '{} ({})'.format(alias_short(sourceSub, subscriber_ids), sourceSub)
-                CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['DEST'] = '{} ({})'.format(alias_tgid(destination,talkgroup_ids),destination)
+                CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['DEST'] = '{} ({})'.format(alias_tgid(destination, talkgroup_ids), destination)
               
             if action == 'END':
                 CTABLE['MASTERS'][system]['PEERS'][peer][timeSlot]['TS'] = False
@@ -835,9 +835,9 @@ def rts_update(p):
         if action == 'START':
             CTABLE['PEERS'][system][timeSlot]['TIMEOUT'] = timeout
             CTABLE['PEERS'][system][timeSlot]['TS'] = True
-            CTABLE['PEERS'][system][timeSlot]['SUB'] = '{} ({})'.format(alias_short(sourceSub,subscriber_ids),sourceSub)
+            CTABLE['PEERS'][system][timeSlot]['SUB'] = '{} ({})'.format(alias_short(sourceSub, subscriber_ids), sourceSub)
             CTABLE['PEERS'][system][timeSlot]['SRC'] = sourcePeer
-            CTABLE['PEERS'][system][timeSlot]['DEST'] = '{} ({})'.format(alias_tgid(destination,talkgroup_ids),destination)
+            CTABLE['PEERS'][system][timeSlot]['DEST'] = '{} ({})'.format(alias_tgid(destination, talkgroup_ids), destination)
 
             if not sourcePeer or not sourceSub or not destination:
                 CTABLE['PEERS'][system][timeSlot]['TXRX'] = ''
@@ -1134,10 +1134,10 @@ def process_message(_bmessage):
             REPORT_DMRID    = p[6]
             REPORT_TS       = p[7]
             REPORT_TGID     = p[8]
-            REPORT_ALIAS    = alias_tgid(int(p[8]), talkgroup_ids)
-            REPORT_CALLSIGN = alias_only(int(p[6]), subscriber_ids)[0].strip()
-            REPORT_FNAME     = alias_only(int(p[6]), subscriber_ids)[1].strip()
-            REPORT_BOTH     = alias_short(int(p[6]), subscriber_ids)
+            REPORT_ALIAS    = alias_tgid(int(REPORT_TGID), talkgroup_ids)
+            REPORT_CALLSIGN = alias_only(int(REPORT_DMRID), subscriber_ids)[0].strip()
+            REPORT_FNAME    = alias_only(int(REPORT_DMRID), subscriber_ids)[1].strip()
+            REPORT_BOTH     = alias_short(int(REPORT_DMRID), subscriber_ids)
             jsonStr = {}
 
             if REPORT_PACKET == 'END':

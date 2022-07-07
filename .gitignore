@@ -12,6 +12,5 @@ logo/*.*
 templates/tginfo.html
 images/nabilla.png
 html/subscribers.html
-
-
-
+peer_ids.json
+talkgroup_ids_i.json

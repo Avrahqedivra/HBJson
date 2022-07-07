@@ -168,7 +168,55 @@ function getConfigFromLocalStorage() {
                     $("#"+tbs.name).hide();
             }
         }
-    }            
+    }
+}
+
+function getTgFlag(id) {
+    if (id.length > 2 && parseInt(id) > 100) {
+        id = id.substring(0, 3);
+
+        switch (id) {
+            case "736":
+                if (id.indexOf(callsign) != -1) break; // else fall through                
+            case "994":
+                return "unlicenced.png"
+
+            case "206":
+                return "be.png";
+            case "214":
+                return "es.png";
+            case "228":
+                return "ch.png";
+            case "262":
+            case "264":
+                return "de.png";
+
+            case "102":
+            case "302":
+                return "ca.png";
+
+            case "604":
+                return "ma.png";
+
+            case "340":
+            case "546":
+            case "547":
+            case "742":
+            case "647":
+            case "208":
+                return "fr.png";
+
+            default:
+                break;
+        }
+
+        for (let i = 0; i < mcc.length; i++) {
+            if (mcc[i].dmrid == id)
+                return "https://flagcdn.com/h20/" + mcc[i].code.toLowerCase() + ".png";
+        }
+    }
+
+    return "shield.png";
 }
 
 function getFlag(callsign, dmrid) {
@@ -184,7 +232,7 @@ function getFlag(callsign, dmrid) {
         if (callsign.startsWith("FS"))
             return "shield.png";
 
-        if (callsign.startsWith("14FRS"))
+        if (callsign.startsWith("14FRS") || callsign.startsWith("FRS"))
             return "frs.png";
 
         if (callsign.startsWith("BALISE") || dmrid.startsWith(14))
