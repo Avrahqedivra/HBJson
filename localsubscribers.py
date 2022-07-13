@@ -68,7 +68,7 @@ def localSubscribersToJson():
 
                 SUBSCRIBERSJ = []
 
-                for row in subscribers:                    
+                for row in subscribers:
                     SUBSCRIBERSJ.append({
                         'fname':        row[0],
                         'name':         row[1], 
