@@ -11,6 +11,8 @@ logo/*.*
 *.bak
 templates/tginfo.html
 images/nabilla.png
+images/parrot.png
+images/system.png
 html/subscribers.html
 peer_ids.json
 talkgroup_ids_i.json

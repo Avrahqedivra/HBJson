@@ -177,7 +177,7 @@ function getTgFlag(id) {
 
         switch (id) {
             case "736":
-                if (id.indexOf(callsign) != -1) break; // else fall through                
+                if (id.indexOf(callsign) != -1) break; // else fall through
             case "994":
                 return "unlicenced.png"
 
@@ -283,6 +283,26 @@ function getFlag(callsign, dmrid) {
 }
 
 mcc = [
+{
+	"dmrid": "653",
+	"country": "Eswatini",
+	"code": "SZ"
+},
+{
+	"dmrid": "225",
+    "country": "Vatican City",
+    "code": "VA"
+},
+{
+	"dmrid": "425",
+    "country": "Palestinian Authority",
+    "code": "PS"
+},
+{
+	"dmrid": "255",
+    "country": "Ukraine",
+    "code": "UA"
+},
 {
     "dmrid": "111",
     "country": "United States of America",
@@ -437,11 +457,6 @@ mcc = [
     "dmrid": "250",
     "country": "Russian Federation",
     "code": "RU"
-},
-{
-    "dmrid": "255",
-    "country": "Moldova",
-    "code": "MD"
 },
 {
     "dmrid": "257",
@@ -910,7 +925,7 @@ mcc = [
 },
 {
     "dmrid": "455",
-    "country": "Macau",
+    "country": "Macao",
     "code": "MO"
 },
 {
@@ -1210,7 +1225,7 @@ mcc = [
 },
 {
     "dmrid": "626",
-    "country": "Sao Tome and Principe",
+    "country": "São Tomé and Príncipe",
     "code": "ST"
 },
 {
