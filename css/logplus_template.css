@@ -35,6 +35,10 @@ table, td, th {
   font-weight: var(--color-fw-lastheard);
 }
 
+#tableLog {
+  width: fit-content;
+}
+
 #tableLog tr:nth-child(even) {
   background: var(--color-bg-even)
 }

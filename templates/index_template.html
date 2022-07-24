@@ -16,12 +16,27 @@
 		<noscript>You must enable JavaScript</noscript>
 
 		<div id="siteHeader">
-			<div id="sitelogo">
-			<<<site_logo>>>
-			</div>
+			<div id="sitelogo"><<<site_logo>>></div>
 
-			<div id="buttonArea">
-				<<<button_bar>>><div class="button iconbutton" id="btnlisteners">&#x1F441; 0</div>
+			<div id="buttonArea"><<<button_bar>>><div class="button iconbutton" id="btnlisteners">&#x1F441; 0</div></div>
+
+			<!-- The Modal -->
+			<div id="statisticsModal" class="modal">
+				<!-- Modal content -->
+				<div class="modal-content-statistics">
+					<span class="close close-statistics">&times;</span>
+					<table class="tablefixed">
+						<thead id="theadStatistics" tbodyid="statistics">
+							<tr class="headerRow">
+								<th class="thlstg">TG</th>
+								<th class="thlsCnx">Nb Cnx</th>
+								<th class="thlsDelay">Total Time</th>
+							</tr>
+						</thead>
+						<tbody id="statistics">
+						</tbody>
+					</table>
+				</div>
 			</div>
 
 			<!-- The Modal -->
@@ -141,61 +156,6 @@
 		</div>
 	</center>
 </body>
-
-<script type="text/javascript">
-	$(document).ready(function () {
-		$(window).click(function (event) {
-			if (event.target == document.getElementById("listenersModal"))
-				$("#listenersModal").hide();
-		});
-
-		$(document).on("click", "#lastActive thead", function () {
-			if (hideAllTG = hideAllTG ? false:true)
-				$("#insertPoint").hide();
-			else
-				$("#insertPoint").show();
-		});
-
-		$(document).on("click", ".lastheard thead", function () {
-			var hblink = "#hblink" + $(this).attr('tgid');
-			$(hblink).toggle(100);
-
-			setTimeout(() => {
-				var display = $(hblink).css('display');
-				if (display == "none")
-					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(1px)");
-				else
-					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(0)");
-			}, 125);
-		});
-
-		$(document).on("click", ".network thead", function () {
-			$("#" + $(this).attr('tbodyid')).toggle(100);
-		});
-
-		$(document).on("click", ".close", function () {
-			$("#listenersModal").hide();
-			$("#followUpModal").hide();
-		});
-
-		$(document).on("dblclick", "#btnlisteners", function (e) {
-			if (e.ctrlKey) {
-				$("#listeners tr").remove();
-				var content = "";
-
-				listenerList = uniqByKeepLast(listenerList, swl => swl.NETID);
-
-				listenerList.forEach(swl => {
-					content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl
-						.PORT + "</td><td>" + swl.NETID + "</td></tr>";
-				});
-
-				$("#listeners").append(content);
-				$("#listenersModal").show();
-			}
-		});
-	});
-</script>
 
 <script type="text/javascript">
 	var traffic = [];
@@ -322,7 +282,7 @@
 
 				content += '<td class="' + peState + '" rowspan="2">';
 				content += record["STATS"]["CONNECTED"] 
-						+ '<br><div style="font: 8pt arial, sans-serif">' 
+						+ '<br><div style="font: 8pt arial, sans-serif">'
 						+ record["STATS"]["PINGS_SENT"] 
 						+ " / " + record["STATS"]["PINGS_ACKD"] 
 						+ " / " + (record["STATS"]["PINGS_SENT"] - record["STATS"]["PINGS_ACKD"]) 
@@ -394,122 +354,121 @@
 		return peersArray;
 	}
 
-    function updateMasters(masters, emaster) {
-        if (masters != null && $('#masters').is(':visible')) {
-            var content = "";
-            $("#masters").empty();
+	function updateMasters(masters, emaster) {
+		if (masters != null && $('#masters').is(':visible')) {
+				var content = "";
+				$("#masters").empty();
 
-            for (let entry in masters) {
-                done = false;
+				for (let entry in masters) {
+						done = false;
 
-                if (!done) {
-                    // skip empty peers
-                    var length = Object.keys(masters[entry]["PEERS"]).length;
-                    if (length == 0 && !emaster)
-                        continue;
+						if (!done) {
+								// skip empty peers
+								var length = Object.keys(masters[entry]["PEERS"]).length;
+								if (length == 0 && !emaster)
+										continue;
 
-                    rowspan = Math.max(1, length) * 2 + 1;
-                    content += "<tr>";
-                    content += "<td class='msMasters' rowspan='" + rowspan + "'>" + entry;
-                    content += "<br><div class='msRepeat'>" + masters[entry]["REPEAT"] + "</div></td>";
-                    content += '</tr>';
-                    done = true;
-                }
+								rowspan = Math.max(1, length) * 2 + 1;
+								content += "<tr>";
+								content += "<td class='msMasters' rowspan='" + rowspan + "'>" + entry;
+								content += "<br><div class='msRepeat'>" + masters[entry]["REPEAT"] + "</div></td>";
+								content += '</tr>';
+								done = true;
+						}
 
-                var peers = sortMastersPeersByOnlineTime(masters[entry]["PEERS"]);
-				var peersLength = peers.length;
+						var peers = sortMastersPeersByOnlineTime(masters[entry]["PEERS"]);
+						var peersLength = peers.length;
 
-                try {
-                    if (peersLength == 0) {
-                        content += '<tr>';
-                        content += '<td rowspan="2">';
-                        content += '<div class="tooltip">';
-                        content += '<div class="msCallsign">N/A</div>';
-                        content += '<span class="msNetID">&nbsp;(Id: n/a)</span>';
-                        content += '<span class="tooltiptext">';
-                        content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
-                        content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>';
-                        content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + "N/A";
-                        content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + "N/A";
-                        content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + "N/A";
-                        content += '</span>';
-                        content += '</span>';
-                        content += '</div>';
-                        content += '<br>';
+						try {
+							if (peersLength == 0) {
+									content += '<tr>';
+									content += '<td rowspan="2">';
+									content += '<div class="tooltip">';
+									content += '<div class="msCallsign">N/A</div>';
+									content += '<span class="msNetID">&nbsp;(Id: n/a)</span>';
+									content += '<span class="tooltiptext">';
+									content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
+									content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>';
+									content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + "N/A";
+									content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + "N/A";
+									content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + "N/A";
+									content += '</span>';
+									content += '</span>';
+									content += '</div>';
+									content += '<br>';
 
-                        content += '<div class="msLocation">' + "N/A" + '</div>';
-                        content += '</td>';
+									content += '<div class="msLocation">' + "N/A" + '</div>';
+									content += '</td>';
 
-                        content += '<td class="tdGradient" rowspan="2">' + "N/A" + '</td>';
+									content += '<td class="tdGradient" rowspan="2">' + "N/A" + '</td>';
 
-                        content += '<td class="msTS1">TS1</td>';
-                        content += '<td class="msTSE">' + "N/A" + '</td>';
-                        content += '<td class="msTSE">' + "N/A" + '</td>';
-                        content += '</tr>';
+									content += '<td class="msTS1">TS1</td>';
+									content += '<td class="msTSE">' + "N/A" + '</td>';
+									content += '<td class="msTSE">' + "N/A" + '</td>';
+									content += '</tr>';
 
-                        content += '<tr>';
-                        content += '<td class="msTS2">TS2</td>';
-                        content += '<td class="msTSE">' + "N/A" + '</td>';
-                        content += '<td class="msTSE">' + "N/A" + '</td>';
-                        content += '</tr>'
-                    } else {						
-                        for (let i = 0; i < peersLength; i++) {
-                            netID = peers[i][0];
-                            record = peers[i][1];
+									content += '<tr>';
+									content += '<td class="msTS2">TS2</td>';
+									content += '<td class="msTSE">' + "N/A" + '</td>';
+									content += '<td class="msTSE">' + "N/A" + '</td>';
+									content += '</tr>'
+							} else {
+									for (let i = 0; i < peersLength; i++) {
+										netID = peers[i][0];
+										record = peers[i][1];
 
-                            ts1rx = record["1"]["TXRX"];
-                            ts2rx = record["2"]["TXRX"];
+										ts1rx = record["1"]["TXRX"];
+										ts2rx = record["2"]["TXRX"];
 
-                            ts1 = ((ts1rx == "") ? "msTS1" : ((ts1rx == "TX") ? "msTSTX" : "msTSRX"));
-                            ts2 = ((ts2rx == "") ? "msTS2" : ((ts2rx == "TX") ? "msTSTX" : "msTSRX"));
+										ts1 = ((ts1rx == "") ? "msTS1" : ((ts1rx == "TX") ? "msTSTX" : "msTSRX"));
+										ts2 = ((ts2rx == "") ? "msTS2" : ((ts2rx == "TX") ? "msTSTX" : "msTSRX"));
 
-                            cnx1 = (ts1rx == "") ? "msTS" : ((ts1rx == "TX") ? "msTSTX" : "msTSRX");
-                            cnx2 = (ts2rx == "") ? "msTS" : ((ts2rx == "TX") ? "msTSTX" : "msTSRX");
+										cnx1 = (ts1rx == "") ? "msTS" : ((ts1rx == "TX") ? "msTSTX" : "msTSRX");
+										cnx2 = (ts2rx == "") ? "msTS" : ((ts2rx == "TX") ? "msTSTX" : "msTSRX");
 
-                            hardwareType = (record["RX_FREQ"] == "N/A" && record["TX_FREQ"] == "N/A") ? "IP Network" : "Radio";
+										hardwareType = (record["RX_FREQ"] == "N/A" && record["TX_FREQ"] == "N/A") ? "IP Network" : "Radio";
 
-                            content += '<tr>';
-                            content += '<td rowspan="2">';
-                            content += '<div class="tooltip">';
-                            content += '<div class="msCallsign">' + record["CALLSIGN"] + '</div>';
-                            content += '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>';
-                            content += '<span class="tooltiptext">';
-                            content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
-                            content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">' + hardwareType + '</font></b><br>';
-                            content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + record["SLOTS"];
-                            content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + record["SOFTWARE_ID"];
-                            content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + record["PACKAGE_ID"];
-                            content += '</span>';
-                            content += '</span>';
-                            content += '</div>';
-                            content += '<br>';
+										content += '<tr>';
+										content += '<td rowspan="2">';
+										content += '<div class="tooltip">';
+										content += '<div class="msCallsign">' + record["CALLSIGN"] + '</div>';
+										content += '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>';
+										content += '<span class="tooltiptext">';
+										content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
+										content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">' + hardwareType + '</font></b><br>';
+										content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + record["SLOTS"];
+										content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + record["SOFTWARE_ID"];
+										content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + record["PACKAGE_ID"];
+										content += '</span>';
+										content += '</span>';
+										content += '</div>';
+										content += '<br>';
 
-                            content += '<div class="msLocation">' + record["LOCATION"] + '</div>';
-                            content += '</td>';
+										content += '<div class="msLocation">' + record["LOCATION"] + '</div>';
+										content += '</td>';
 
-                            content += '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>';
+										content += '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>';
 
-                            content += '<td class="' + ts1 + '">TS1</td>';
-                            content += '<td class="' + cnx1 + '">' + record["1"]["SUB"] + '</td>';
-                            content += '<td class="' + cnx1 + '">' + record["1"]["DEST"] + '</td>';
-                            content += '</tr>';
+										content += '<td class="' + ts1 + '">TS1</td>';
+										content += '<td class="' + cnx1 + '">' + record["1"]["SUB"] + '</td>';
+										content += '<td class="' + cnx1 + '">' + record["1"]["DEST"] + '</td>';
+										content += '</tr>';
 
-                            content += '<tr>';
-                            content += '<td class="' + ts2 + '">TS2</td>';
-                            content += '<td class="' + cnx2 + '">' + record["2"]["SUB"] + '</td>';
-                            content += '<td class="' + cnx2 + '">' + record["2"]["DEST"] + '</td>';
-                            content += '</tr>'
-                        }
-                    }
-                } catch (error) {
+										content += '<tr>';
+										content += '<td class="' + ts2 + '">TS2</td>';
+										content += '<td class="' + cnx2 + '">' + record["2"]["SUB"] + '</td>';
+										content += '<td class="' + cnx2 + '">' + record["2"]["DEST"] + '</td>';
+										content += '</tr>'
+								}
+							}
+						} catch (error) {
+						}
+				}
 
-                }
-            }
-
-            $(content).appendTo("#masters");
-            content = "";
-        }
-    }
+				$(content).appendTo("#masters");
+				content = "";
+		}
+	}
 
 	function checkDeadOnline() {
 		try {
@@ -565,14 +524,76 @@
 				if (om.DELAY == 0)
 					bgClass += " darker ";
 
+				var alias = om.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
+
 				content += "<tr class='" + bgClass + "'><td class='firstname ellipsis'>" + enhanceNames(om.NAME) +
 					"</td><td class='tdDate'>" + om.DATE + "</td><td class'tdTime'>" + om.TIME + "</td><td class=''>" + om
-					.TGID + "</td><td class='alias ellipsis'>" + om.ALIAS + "</td><td class='delay'>" + delay + "</td></tr>";
+					.TGID + "</td><td class='alias ellipsis'>" + alias + "</td><td class='delay'>" + delay + "</td></tr>";
 			}
 		});
 
 		$("#followup").append(content);
 		$("#followUpModal").show();
+	}
+
+	function stats() {
+		statistics = [];
+
+		for(let i=0; i<traffic.length; i++) {
+			var record = traffic[i];
+
+			if (record.PACKET == "END") {
+				var tgid = ""+record.TGID;
+
+				if (tgid == "2089")
+					toto = 10;
+
+				record.DELAY = parseInt(record.DELAY);
+
+				if (record.DELAY > 9999)
+						record.DELAY = record.DELAY / 1000;
+
+				// skip hidden tgs
+				if (tgfilter.has('' + tgid))
+						continue;
+
+				if (statistics[tgid] == null) {
+					statistics[tgid] = { "tgid": record.TGID, "cnxCount": 1, "cnxTime": record.DELAY };
+				}
+				else {
+					statistics[tgid]["cnxCount"] = statistics[tgid]["cnxCount"] + 1;
+					statistics[tgid]["cnxTime"] = statistics[tgid]["cnxTime"] + record.DELAY;
+				}
+			}
+		}
+
+		for (const tgid of tgorder) {
+			// skip hidden tgs
+			if (tgfilter.has('' + tgid))
+					continue;
+
+			if (statistics[tgid] == null)
+				statistics[tgid] = { "tgid": tgid, "cnxCount": 0, "cnxTime": 0 };
+		}
+
+		$("#statistics tr").remove();
+			var content = "";
+
+			statistics.forEach(stat => {
+				cnxTime = parseInt(stat.cnxTime);
+
+				if (cnxTime < 60 )
+					delay = cnxTime + " sec";
+				else if (cnxTime < 3600)
+					delay = parseInt(cnxTime / 60) + " min";
+				else
+					delay = parseInt(cnxTime / 3600) + " hrs";
+
+				content += "<tr class='"+ (stat.cnxCount == 0 ? "trstatisticsred":"trstatisticsgreen") + "'><td class='tdstattg'>" + stat.tgid + "</td><td class='tdstatcnt'>" + stat.cnxCount + "</td><td class='tdstatdelay'>" + delay + "</td></tr>";
+			});
+
+			$("#statistics").append(content);
+			$("#statisticsModal").show();
 	}
 
 	function doTraffic(t) {
@@ -796,6 +817,65 @@
 			updatePeers(CTable["PEERS"]);
 		}
 	}
+
+	$(document).ready(function () {
+		$(window).click(function (event) {
+			if (event.target == document.getElementById("listenersModal"))
+				$("#listenersModal").hide();
+		});
+
+		$(window).click(function (event) {
+			if (event.target == document.getElementById("statisticsModal"))
+				$("#statisticsModal").hide();
+		});
+
+		$(document).on("click", "#lastActive thead", function () {
+			if (hideAllTG = hideAllTG ? false:true)
+				$("#insertPoint").hide();
+			else
+				$("#insertPoint").show();
+		});
+
+		$(document).on("click", ".lastheard thead", function () {
+			var hblink = "#hblink" + $(this).attr('tgid');
+			$(hblink).toggle(100);
+
+			setTimeout(() => {
+				var display = $(hblink).css('display');
+				if (display == "none")
+					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(1px)");
+				else
+					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(0)");
+			}, 125);
+		});
+
+		$(document).on("click", ".network thead", function () {
+			$("#" + $(this).attr('tbodyid')).toggle(100);
+		});
+
+		$(document).on("click", ".close", function () {
+			$("#statisticsModal").hide();
+			$("#listenersModal").hide();
+			$("#followUpModal").hide();
+		});
+
+		$(document).on("dblclick", "#btnlisteners", function (e) {
+			if (e.ctrlKey) {
+				$("#listeners tr").remove();
+				var content = "";
+
+				listenerList = uniqByKeepLast(listenerList, swl => swl.NETID);
+
+				listenerList.forEach(swl => {
+					content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl
+						.PORT + "</td><td>" + swl.NETID + "</td></tr>";
+				});
+
+				$("#listeners").append(content);
+				$("#listenersModal").show();
+			}
+		});
+	});
 
 	window.onload = () => {
 		lastActive = [];

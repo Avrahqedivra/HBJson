@@ -632,14 +632,16 @@ color: #569cd6;
 }
 
 .modal-content-followup::-webkit-scrollbar, 
-  .modal-content-listeners::-webkit-scrollbar {
+  .modal-content-listeners::-webkit-scrollbar,
+    .modal-content-statistics::-webkit-scrollbar {
     display: block;
     width: 6px;
     background-color: #404040;
 }
 
 .modal-content-followup::-webkit-scrollbar-thumb, 
-  .modal-content-listeners::-webkit-scrollbar-thumb {
+  .modal-content-listeners::-webkit-scrollbar-thumb,
+    .modal-content-statistics::-webkit-scrollbar-thumb {
     background-color: #569cd6;
 }
 
@@ -653,6 +655,21 @@ color: #569cd6;
   top: 50%;
   left: 50%;
   margin-left: -20rem;
+  transform: translateY(-50%);
+
+  max-height: 60rem;
+  overflow-y: auto;
+}
+
+.modal-content-statistics {
+  scrollbar-width: thin;
+  
+  width: 22rem;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -12rem;
   transform: translateY(-50%);
 
   max-height: 60rem;
@@ -710,6 +727,27 @@ color: #569cd6;
   filter: saturate(0.4)
 }
 
+.thlstg {
+  width: 6rem;
+}
+.tdstattg {
+  text-align: right;
+  padding-right: 1rem;
+}
+.thlsCnx {
+  width: 6rem;
+}
+.tdstatcnt {
+  text-align: right;
+  padding-right: 1rem;
+}
+.thlsDelay {
+  width: 9rem;
+}
+.tdstatdelay {
+  text-align: right;
+  padding-right: 1rem;
+}
 .thlscallsign {
   width: 10rem;
 }
@@ -726,7 +764,25 @@ color: #569cd6;
   width: 10rem;
 }
 
-.trlisteners {
+#modalArea::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  background-color: #404040;
+}
+
+#modalArea::-webkit-scrollbar-thumb {
+  background-color: #569cd6;
+}
+
+.trstatisticsred {
+  color: var(--color-tgRed);
+}
+
+.trstatisticsgreen {
+  color: var(--color-tgGreen);
+}
+
+.trlisteners, .trstatistics {
   color: var(--color-fg-marquee);  
 }
 
