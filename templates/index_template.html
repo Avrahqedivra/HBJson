@@ -9,7 +9,36 @@
     <link rel="stylesheet" href="theme_template.css">
     <link rel="stylesheet" href="mysite_template.css">
     <meta name="description" content="Copyright (c) 2016, 2017, 2018, 2019.The Regents of the K0USY Group. All rights reserved. Version SP2ONG 2019-2020 (v20200629)" />
-</head>
+
+		<style>
+			#hbtables {
+				margin-top: 1rem;
+				height: calc(100vh - 18rem);
+				overflow-y: scroll;
+				width: fit-content;
+				scrollbar-width: thin;
+			}
+	
+			#hbtables::-webkit-scrollbar {
+				display: block;
+				width: 6px;
+				background-color: #404040;
+			}
+	
+			#hbtables::-webkit-scrollbar-thumb {
+				background-color: #569cd6;
+			}
+	
+			@supports (-moz-appearance:none) {
+				div[name="hbtables"] { 
+						overflow-y: scroll;
+						width: fit-content;
+						margin-top: 0.5rem;
+						scrollbar-color: #569cd6 #404040;
+				}
+			}
+		</style>
+	</head>
 
 <body>
 	<center>
@@ -81,7 +110,7 @@
 				</div>
 			</div>
 
-			<div name="hbtables">
+			<div name="hbtables" id="hbtables">
 				<table id="lastActive" class="tables lastActive tablefixed" style="display: none;">
 					<thead>
 						<tr class="headerRow">
@@ -678,8 +707,8 @@
 					var netid = record.SRC_ID;
 					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
-					if (delay > 1000)
-						delay = "xx";
+					if (delay > 9999)
+						delay = parseInt(delay / 1000);
 					else if (delay < 2)
 						delay = "PTT";
 
