@@ -60,10 +60,9 @@ h1 {
     color: #ffffff;
 }
 
-@media (height: 768px) {
+@media (device-height: 768px) {
     #siteLogo {
         width: 12rem;
     }
 }
-  
   
