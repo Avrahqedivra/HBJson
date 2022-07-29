@@ -1156,3 +1156,10 @@ select {
 
   --color-filter-emaster: 1.20;
 }
+
+@media (height: 768px) {
+  #siteLogo {
+    width: 12rem;
+  }
+}
+
