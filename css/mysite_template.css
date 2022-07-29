@@ -59,3 +59,11 @@ h1 {
     background-color: #525252;
     color: #ffffff;
 }
+
+@media (height: 768px) {
+    #siteLogo {
+        width: 12rem;
+    }
+}
+  
+  
