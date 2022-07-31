@@ -1114,7 +1114,7 @@ def process_message(_bmessage):
     elif opcode == OPCODE['LINK_EVENT']:
         logging.info('LINK_EVENT Received: {}'.format(repr(_message[1:])))
 
-    elif opcode == OPCODE['BRDG_EVENT']:        
+    elif opcode == OPCODE['BRDG_EVENT']:
         if LOGINFO == True:
             logging.info('BRIDGE EVENT: {}'.format(repr(_message[1:])))
         
@@ -1125,15 +1125,15 @@ def process_message(_bmessage):
         REPORT_TYPE     = p[0]
         REPORT_RXTX     = p[2]
         REPORT_SRC_ID   = p[5]
+        REPORT_TGID     = p[8]
 
-        if REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
+        if (len(TGID_MANAGE) == 0 or REPORT_TGID in TGID_MANAGE) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
             REPORT_DATE     = _now[0:10]
             REPORT_TIME     = _now[11:19]
             REPORT_PACKET   = p[1]
             REPORT_SYS      = p[3]
             REPORT_DMRID    = p[6]
             REPORT_TS       = p[7]
-            REPORT_TGID     = p[8]
             REPORT_ALIAS    = alias_tgid(int(REPORT_TGID), talkgroup_ids)
             REPORT_CALLSIGN = alias_only(int(REPORT_DMRID), subscriber_ids)[0].strip()
             REPORT_FNAME    = alias_only(int(REPORT_DMRID), subscriber_ids)[1].strip()
@@ -1649,7 +1649,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v2.8.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v2.9.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):

@@ -20,10 +20,12 @@ OPB_FILTER = ""
 TGID_FILTER = ""
 # tg order on html monitor page, for example "38,7,39,777"
 TGID_ORDER = ""
+# all tgid not in this list will be excluded. if empty all will be allowed
+TGID_MANAGE = ""
 # TG to hilite
 TGID_HILITE = ""
 # TG colors is a json array string of tgid and hex rgb
-TGID_COLORS = TGID_COLORS = '{ "tx":"#fbd379", "ind":"#fefefe", "38":"#569cd6", "7":"#fca33c", "39":"#a3e978", "777":"#bc7ebb" }'
+TGID_COLORS = '{ "tx":"#fbd379", "ind":"#fefefe", "38":"#569cd6", "7":"#fca33c", "39":"#a3e978", "777":"#bc7ebb" }'
 # dynamic tg, if not filtred by TGID_FILTER, tg will be added dynamicaly to dashboard beside those in TG_ORDER
 DYNAMIC_TG = False
 # hide OMs with DMRID starting with, for example with "208,206"
