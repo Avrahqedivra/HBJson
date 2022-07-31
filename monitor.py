@@ -953,38 +953,40 @@ def createLogTableJson():
     with open(LOG_PATH + "lastheard.log", "r") as lastheard:
         for row in islice(reversed(list(csv.reader(lastheard))), 2000):
 
-            REPORT_DATE     = row[0]
-            REPORT_DELAY    = row[1]
-            REPORT_INFRA    = row[4]
+            REPORT_TGID = row[8]
 
-            REPORT_SRC_ID   = row[5]
-            REPORT_DMRID    = row[10]
+            if (len(TGID_MANAGE) == 0 or REPORT_TGID in TGID_MANAGE):
+                REPORT_DATE     = row[0]
+                REPORT_DELAY    = row[1]
+                REPORT_INFRA    = row[4]
 
-            REPORT_TS       = row[7]
-            REPORT_TGID     = row[8]
-            REPORT_LOGP     = row[9]
+                REPORT_SRC_ID   = row[5]
+                REPORT_DMRID    = row[10]
 
-            REPORT_NETID    = row[6]
+                REPORT_TS       = row[7]
+                REPORT_LOGP     = row[9]
 
-            REPORT_CALLSIGN = row[11]
+                REPORT_NETID    = row[6]
 
-            if len(row) < 13:
-                row.append("---")
+                REPORT_CALLSIGN = row[11]
 
-            REPORT_FNAME     = row[12]
+                if len(row) < 13:
+                    row.append("---")
 
-            MESSAGEJ.append({ 
-                'DATE': REPORT_DATE[:10], 
-                'TIME': REPORT_DATE[11:16], 
-                'TS': REPORT_TS[2:], 
-                'CALLSIGN': REPORT_CALLSIGN, 
-                'DMRID': REPORT_DMRID, 
-                'NAME': REPORT_FNAME, 
-                'TGID': REPORT_TGID[2:], 
-                'ALIAS': REPORT_LOGP, 
-                'DELAY': REPORT_DELAY,
-                'SYS': REPORT_INFRA, 
-                'SRC_ID':  REPORT_NETID })
+                REPORT_FNAME     = row[12]
+
+                MESSAGEJ.append({ 
+                    'DATE': REPORT_DATE[:10], 
+                    'TIME': REPORT_DATE[11:16], 
+                    'TS': REPORT_TS[2:], 
+                    'CALLSIGN': REPORT_CALLSIGN, 
+                    'DMRID': REPORT_DMRID, 
+                    'NAME': REPORT_FNAME, 
+                    'TGID': REPORT_TGID[2:], 
+                    'ALIAS': REPORT_LOGP, 
+                    'DELAY': REPORT_DELAY,
+                    'SYS': REPORT_INFRA, 
+                    'SRC_ID':  REPORT_NETID })
 
         return MESSAGEJ
 
