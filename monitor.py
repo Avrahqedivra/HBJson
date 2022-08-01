@@ -132,12 +132,15 @@ CTABLE['SETUP']['LASTHEARD'] = LASTHEARD_INC
 
 # TGID filter for lasheard
 def get_tgidf():
-   if len(TGID_ALLOWED) !=0:
-       mylist = TGID_ALLOWED.replace(' ','').split(',')
-   else:
+    try:
+        if len(TGID_ALLOWED) !=0:
+            mylist = TGID_ALLOWED.replace(' ','').split(',')
+        else:
+            mylist = []
+    except NameError:
        mylist = []
 
-   return mylist
+    return mylist
 
 # OPB Filter for lastheard
 def get_opbf():
