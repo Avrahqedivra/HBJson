@@ -21,7 +21,7 @@ TGID_FILTER = ""
 # tg order on html monitor page, for example "38,7,39,777"
 TGID_ORDER = ""
 # all tgid not in this list will be excluded. if empty all will be allowed
-TGID_MANAGE = ""
+TGID_ALLOWED = ""
 # TG to hilite
 TGID_HILITE = ""
 # TG colors is a json array string of tgid and hex rgb
