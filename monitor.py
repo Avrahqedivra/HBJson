@@ -130,12 +130,22 @@ BUTTONBAR_HTML      = ""
 # Define setup setings
 CTABLE['SETUP']['LASTHEARD'] = LASTHEARD_INC
 
+# TGID filter for lasheard
+def get_tgidf():
+   if len(TGID_ALLOWED) !=0:
+       mylist = TGID_ALLOWED.replace(' ','').split(',')
+   else:
+       mylist = []
+
+   return mylist
+
 # OPB Filter for lastheard
 def get_opbf():
    if len(OPB_FILTER) !=0:
        mylist = OPB_FILTER.replace(' ','').split(',')
    else:
        mylist = []
+
    return mylist
 
 # For importing HTML templates
@@ -229,7 +239,8 @@ def creation_date(path_to_file):
 def replaceSystemStrings(data):
     return data.replace("<<<site_logo>>>", sitelogo_html).replace("<<<system_name>>>", REPORT_NAME) \
         .replace("<<<button_bar>>>", BUTTONBAR_HTML) \
-        .replace("<<<TGID_FILTER>>>", str(TGID_FILTER)).replace("<<<TGID_ORDER>>>", str(TGID_ORDER)) \
+        .replace("<<<TGID_FILTER>>>", str(TGID_FILTER)) \
+        .replace("<<<TGID_ORDER>>>", str(TGID_ORDER)) \
         .replace("<<<TGID_HILITE>>>", str(TGID_HILITE)) \
         .replace("<<<TGID_COLORS>>>", str(TGID_COLORS)) \
         .replace("<<<SOCKET_SERVER_PORT>>>", str(SOCKET_SERVER_PORT)) \
@@ -955,7 +966,7 @@ def createLogTableJson():
 
             REPORT_TGID = row[8]
 
-            if (len(TGID_MANAGE) == 0 or REPORT_TGID in TGID_MANAGE):
+            if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed):
                 REPORT_DATE     = row[0]
                 REPORT_DELAY    = row[1]
                 REPORT_INFRA    = row[4]
@@ -1129,7 +1140,7 @@ def process_message(_bmessage):
         REPORT_SRC_ID   = p[5]
         REPORT_TGID     = p[8]
 
-        if (len(TGID_MANAGE) == 0 or REPORT_TGID in TGID_MANAGE) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
+        if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
             REPORT_DATE     = _now[0:10]
             REPORT_TIME     = _now[11:19]
             REPORT_PACKET   = p[1]
@@ -1221,6 +1232,8 @@ def process_message(_bmessage):
             
             # logging.info('Process [' + REPORT_PACKET + '] Message Took ' + str(int((ptime.perf_counter() - start) * 1000)) + 'ms')
         else:
+            if (len(tgid_allowed) != 0 and REPORT_TGID not in tgid_allowed):
+                logging.debug('TG{} NOT ALLOWED'.format(REPORT_TGID))
             logging.debug('{} UNKNOWN LOG MESSAGE'.format(_now[10:19]))
     else:
         logging.debug('got unknown opcode: {}, message: {}'.format(repr(opcode), repr(_message[1:])))
@@ -1664,6 +1677,9 @@ if __name__ == '__main__':
     # Create Static Website index file
     sitelogo_html = get_template(PATH + "templates/sitelogo.html")
     BUTTONBAR_HTML = get_template(PATH + "templates/buttonbar.html")
+
+    # get tgid filter
+    tgid_allowed = get_tgidf()
 
     # Download alias files
     result = try_download(PATH, PEER_FILE, PEER_URL, (FILE_RELOAD * 86400))
