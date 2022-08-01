@@ -276,9 +276,8 @@ thead {
 .tgPink {
   color: var(--color-tgPink);
 }
-
 .tgtable {
-  margin-top: 2rem;  
+  margin-top: 1rem;
 }
 
 /*
