@@ -116,7 +116,9 @@ function eraseCookie(name) {
 
 function adjustTheme() {
     if (themeSettings == "auto") {
-        if (new Date().getHours() > 22) {
+        var hr = new Date().getHours();
+        // choose dark netween 10PM and 7AM
+        if (hr > 22 && hr < 7) {
             if (document.documentElement.className != "theme-dark")
                 document.documentElement.className = "theme-dark";
         }
@@ -158,7 +160,7 @@ function getConfigFromLocalStorage() {
             }
             else {
                 if (tbs.open) {
-                    $("#"+tbs.name).show();                                                            
+                    $("#"+tbs.name).show();
                     // var count = tbs.colspan;
                     // if (count == null)
                     //     count = 5;
