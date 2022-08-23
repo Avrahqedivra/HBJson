@@ -8,10 +8,12 @@
     cd /opt
     git clone https://github.com/Avrahqedivra/HBJson.git
     cd HBJson
-    
-    edit config.py to match your needs
 
-    run with : python3 monitor.py
+    to install needed packages : pip install -r requirements.txt
+    
+    to match your server : edit config.py
+
+    test with : python3 monitor.py
     
     connect with your browser on http://monitorip:port
 
