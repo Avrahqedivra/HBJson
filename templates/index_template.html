@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html class="theme-dark" manifest="hbjson.appcache">
+<html class="theme-light" manifest="hbjson.appcache">
 
 <head>
-		<link rel="shortcut icon" href="favicon.png"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 		<meta charset="UTF-8">
 		<meta http-equiv="refresh" content="20000"/>
 		<title>HBJSON Monitor</title>
@@ -12,7 +12,7 @@
     <meta name="description" content="Copyright (c) 2016, 2017, 2018, 2019.The Regents of the K0USY Group. All rights reserved. Version SP2ONG 2019-2020 (v20200629)" />
 
 		<style>
-			#hbtables {
+			#xhbtables {
 				margin-top: 0rem;
 				height: calc(100vh - 16rem);
 				overflow-y: scroll;
@@ -714,7 +714,7 @@
 						delay = "PTT";
 
 					hide_dmrid.forEach(dh => {
-						if (dmrid.startsWith(dh)) {
+						if (dh.length > 0 && dmrid.startsWith(dh)) {
 							callsign = "XXXXX";
 							dmrid = "0000000";
 							netid = "XXXXX";
