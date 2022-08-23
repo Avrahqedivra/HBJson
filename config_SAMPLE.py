@@ -67,6 +67,7 @@ SUBSCRIBER_FILE = 'subscriber_ids.json'          # Will auto-download from DMR-M
 TGID_FILE       = 'talkgroup_ids.json'           # User provided, should be in "integer TGID, TGID name" format
 LOCAL_SUB_FILE  = 'local_subscriber_ids.json'    # User provided (optional, leave '' if you don't use it), follow the format of DMR-MARC
 LOCAL_PEER_FILE = 'local_peer_ids.json'          # User provided (optional, leave '' if you don't use it), follow the format of DMR-MARC
+LOCAL_TGID_FILE = 'local_talkgroup_ids.json'     # User provided (optional, leave '' if you don't use it)
 FILE_RELOAD     = 1                              # Number of days before we reload DMR-MARC database files
 PEER_URL        = 'https://database.radioid.net/static/rptrs.json'
 SUBSCRIBER_URL  = 'https://database.radioid.net/static/users.json'

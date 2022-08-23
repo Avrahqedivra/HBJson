@@ -1016,7 +1016,6 @@ def tableToExcel(tableName):
                     with pd.ExcelWriter("/tmp/" + tableName + ".xlsx", engine="xlsxwriter") as writer:
                         df_data.to_excel(writer, sheet_name = tableName)
 
-
                     cursor.close()    
                 connection.close()
 
@@ -1025,7 +1024,7 @@ def tableToExcel(tableName):
                 logging.info('MYSQL ERROR: {}'.format(e))
 
 # "radioid", "https://database.radioid.net/static/users.json");
-# "theshield", "http://theshield.site/local_subscriber_ids.json");
+# "Francophonie", "http://francophonie.link/local_subscriber_ids.json");
 def fetchRemoteUsersFiles(fileurl):
     if 'fileurl' != "":
         logging.info('requesting: %s', fileurl)
@@ -1684,16 +1683,25 @@ if __name__ == '__main__':
     # get tgid filter
     tgid_allowed = get_tgidf()
 
-    # Download alias files
-    result = try_download(PATH, PEER_FILE, PEER_URL, (FILE_RELOAD * 86400))
-    logging.info(result)
+    try:
+        # Download alias files
+        result = try_download(PATH, PEER_FILE, PEER_URL, (FILE_RELOAD * 86400))
+        logging.info(result)
+    except:
+        pass
 
-    result = try_download(PATH, SUBSCRIBER_FILE, SUBSCRIBER_URL, (FILE_RELOAD * 86400))
-    logging.info(result)
+    try:
+        result = try_download(PATH, SUBSCRIBER_FILE, SUBSCRIBER_URL, (FILE_RELOAD * 86400))
+        logging.info(result)
+    except:
+        pass
 
-    result = try_download(PATH, LOCAL_SUB_FILE, LOCAL_SUBSCRIBER_URL, (FILE_RELOAD * 3600))
-    logging.info(result)
-
+    try:
+        result = try_download(PATH, LOCAL_SUB_FILE, LOCAL_SUBSCRIBER_URL, (FILE_RELOAD * 3600))
+        logging.info(result)
+    except:
+        pass
+    
     # Make Alias Dictionaries
     peer_ids = mk_full_id_dict(PATH, PEER_FILE, 'peer')
     if peer_ids:
@@ -1702,10 +1710,6 @@ if __name__ == '__main__':
     subscriber_ids = mk_full_id_dict(PATH, SUBSCRIBER_FILE, 'subscriber')
     if subscriber_ids:
         logging.info('ID ALIAS MAPPER: subscriber_ids dictionary is available')
-        
-    local_subscriber_ids = mk_full_id_dict(PATH, LOCAL_SUB_FILE, 'local_subscriber')
-    if subscriber_ids:
-        logging.info('ID ALIAS MAPPER: local_subscriber_ids dictionary is available')
 
     talkgroup_ids = mk_full_id_dict(PATH, TGID_FILE, 'tgid')
     if talkgroup_ids:
@@ -1715,6 +1719,11 @@ if __name__ == '__main__':
     if local_subscriber_ids:
         logging.info('ID ALIAS MAPPER: local_subscriber_ids added to subscriber_ids dictionary')
         subscriber_ids.update(local_subscriber_ids)
+
+    local_talkgroup_ids = mk_full_id_dict(PATH, LOCAL_TGID_FILE, 'tgid')
+    if local_talkgroup_ids:
+        logging.info('ID ALIAS MAPPER: local_talkgroup_ids added to talkgroup_ids dictionary')
+        talkgroup_ids.update(local_talkgroup_ids)
 
     local_peer_ids = mk_full_id_dict(PATH, LOCAL_PEER_FILE, 'peer')
     if local_peer_ids:
