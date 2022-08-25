@@ -1602,6 +1602,15 @@ class web_server(Resource):
         logging.info('static website requested: %s', request)
         session = request.getSession()
         authenticated = IAuthenticated(session)
+        userAgent = auth = request.getHeader('User-Agent')
+
+        try:
+            if userAgent.lower().index("mobile"):
+                MOBILEPHONE = True
+            else:
+                MOBILEPHONE = False
+        except:
+            MOBILEPHONE = False
 
         url = URL.fromText(request.uri.decode('ascii'))
         if len(url.get("admin")) > 0:
