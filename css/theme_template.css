@@ -139,6 +139,7 @@ a:active, .alink:active {
   text-decoration: none;
 }
 .tooltip {
+  width: 100%;
   position: relative;
   opacity: 1;
   display: inline-block;
@@ -521,7 +522,34 @@ color: #569cd6;
   color: #569cd6;
   font-weight: var(--color-fw-msmasters);
 }
+
+#masters tr {
+  line-height: 1.5rem;
+}
+
+.msflag {
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 13px;
+  border: 1px solid #606060;
+  position: absolute;
+}
+
+.mstgflag {
+  position: absolute;
+  margin-top: 1px;
+  margin-left: -2rem;
+}
+
+#masters td {
+  padding: 0;
+  margin: 0;
+  border-collapse: collapse;
+}
+
 .msCallsign {
+  padding-left: 0.5rem;
   color: var(--color-fg-mscallsign);
   font-weight: var(--color-fw-mscallsign);
   /* border-bottom: 1px dotted #000000; */
