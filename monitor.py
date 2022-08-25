@@ -127,6 +127,8 @@ LISTENERSJ          = []
 CONTACTSJ           = []
 BUTTONBAR_HTML      = ""
 
+MOBILEPHONE         = False
+
 # Define setup setings
 CTABLE['SETUP']['LASTHEARD'] = LASTHEARD_INC
 
@@ -252,6 +254,7 @@ def replaceSystemStrings(data):
         .replace("<<<LAST_ACTIVE_SIZE>>>", str(LAST_ACTIVE_SIZE)) \
         .replace("<<<DYNAMIC_TG>>>", str(DYNAMIC_TG)) \
         .replace("<<<TGID_BEACONS>>>", str(TGID_BEACONS)) \
+        .replace("<<<MOBILE>>>", str(MOBILEPHONE)) \
         .replace("<<<HIDE_DMRID>>>", str(HIDE_DMRID))#.replace("class=\"theme-dark\"", "class=\"theme-light\"")
 
 def logMySQL(_data):
@@ -1342,12 +1345,12 @@ class dashboard(WebSocketServerProtocol):
                         _traffic = json.load(infile)
 
                         if _traffic and _traffic["TRAFFIC"]:
-                            INITIALLIST = reversed(_traffic["TRAFFIC"]) 
-                            # _traffic = reversed(_traffic["TRAFFIC"])
-                            # _tglist = list(TGID_ORDER.split(","))
-                            # for record in _traffic:
-                            #     if record["TGID"] in _tglist:
-                            #         INITIALLIST.append(record)
+                            #INITIALLIST = reversed(_traffic["TRAFFIC"]) 
+                            _traffic = reversed(_traffic["TRAFFIC"])
+                            _tglist = list(TGID_ORDER.split(","))
+                            for record in _traffic:
+                                if record["TGID"] in _tglist:
+                                    INITIALLIST.append(record)
                         else:
                             logging.info("Creating empty " + LOG_PATH + "lastheard.json")
                             with open(LOG_PATH + "lastheard.json", 'w') as outfile:
@@ -1593,6 +1596,8 @@ class web_server(Resource):
         return NoResource()
 
     def render_GET(self, request):
+        global MOBILEPHONE
+
         admin_auth = False
         logging.info('static website requested: %s', request)
         session = request.getSession()
@@ -1666,7 +1671,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v2.9.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.0.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
@@ -1710,6 +1715,10 @@ if __name__ == '__main__':
     subscriber_ids = mk_full_id_dict(PATH, SUBSCRIBER_FILE, 'subscriber')
     if subscriber_ids:
         logging.info('ID ALIAS MAPPER: subscriber_ids dictionary is available')
+        
+    local_subscriber_ids = mk_full_id_dict(PATH, LOCAL_SUB_FILE, 'local_subscriber')
+    if subscriber_ids:
+        logging.info('ID ALIAS MAPPER: local_subscriber_ids dictionary is available')
 
     talkgroup_ids = mk_full_id_dict(PATH, TGID_FILE, 'tgid')
     if talkgroup_ids:
