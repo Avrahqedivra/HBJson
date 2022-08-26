@@ -303,7 +303,7 @@
 				peState = record["STATS"]["CONNECTION"] == "YES" ? "peON" : "peOFF";
 
 				content += "<tr><td class='msMasters' rowspan='3'>" + peer;
-				content += "<br><div class='msRepeat'>Mode:&nbsp;" + record["MODE"] + "</div></td></tr>";				
+				content += "<br><div class='msRepeat'>Mode:&nbsp;" + record["MODE"] + "</div></td></tr>";
 
 				content += '<tr><td rowspan="2"><div class="tooltip"><div class="msCallsign">' + record["CALLSIGN"] + '</div>';
 				content += '<span class="msNetID">&nbsp;(Id: ' + record["RADIO_ID"] + ')</span>';
@@ -489,7 +489,7 @@
 										content += '<tr>';
 										content += '<td rowspan="2">';
 										content += '<div class="tooltip">';
-										content += '<img class="msflag" src="' + getMasterFlag(2, netID) + '"/>';
+										content += '<img class="lazyload msflag" src="' + getMasterFlag(2, netID) + '"/>';
 										content += '<div class="msCallsign">' + record["CALLSIGN"] + '</div>';
 										content += '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>';
 										content += '<span class="tooltiptext">';
@@ -511,11 +511,11 @@
 										content += '<td class="' + ts1 + '">TS1</td>';
 										content += '<td class="' + cnx1 + '">';
 										if (record["1"]["SUB"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
+											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
 										content += record["1"]["SUB"] + '</td>';
 										content += '<td class="' + cnx1 + '">'
 										if (record["1"]["DEST"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
+											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
 										content += record["1"]["DEST"] + '</td>';
 										content += '</tr>';
 
@@ -523,11 +523,11 @@
 										content += '<td class="' + ts2 + '">TS2</td>';
 										content += '<td class="' + cnx2 + '">';
 										if (record["2"]["SUB"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
+											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
 										content += record["2"]["SUB"] + '</td>';
 										content += '<td class="' + cnx2 + '">'
 											if (record["2"]["DEST"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
+											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
 										content += record["2"]["DEST"] + '</td>';
 										content += '</tr>'
 								}
@@ -788,7 +788,7 @@
 							if (mobileDevice) {
 								content = '<tr class=' + bgClass + '>';
 								content += "<td class='tdTime'>" +record.TIME + "</td>";
-								content += "<td class='callsign ellipsis'><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
+								content += "<td class='callsign ellipsis'><img class='lazyload tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
 								content += "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
 								if (record.NAME.toUpperCase() == callsign)
 									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
@@ -805,7 +805,7 @@
 								content += "<td class='tdDate'>" + record.DATE + "</td>";
 								content += "<td class='tdTime'>" +record.TIME + "</td>";
 								content += "<td class='slot'>" + record.TS + "</td>";
-								content += "<td class='callsign ellipsis'><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
+								content += "<td class='callsign ellipsis'><img class='lazyload tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
 								content += "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
 								if (record.NAME.toUpperCase() == callsign)
 									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
@@ -818,7 +818,7 @@
 								else
 									content += "<td class='delay'>" + ((delay != undefined) ? delay : "") + "</td>";
 								content += "<td class='netid'>" + netid + "</td>";
-								content += "<td class='infra'>" + record.SYS + "</td>";
+								content += "<td class='infra ellipsis'>" + record.SYS + "</td>";
 								content += "</tr>";
 							}
 
@@ -904,7 +904,7 @@
 							var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
 							if (alias.indexOf("<img") == -1)
-								alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
+								alias = '<img class="lazyload tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
 
 							content = '<tr class=' + bgClass + '>';
 							content += "<td class='tdDate'>" + record.DATE + "</td>";
@@ -920,7 +920,7 @@
 							else
 								content += "<td class='delay'>" + record.DELAY + "</td>";
 							content += "<td class='netid'>" + record.SRC_ID + "</td>";
-							content += "<td class='infra'>" + record.SYS + "</td>";
+							content += "<td class='infra ellipsis'>" + record.SYS + "</td>";
 							content += "</tr>";
 						}
 
@@ -1015,7 +1015,7 @@
 
 			$(".thledate, .thleslot, .thlelog, .thlenetid, .thlemaster").css("display", "none");
 			$("#sysoptables").css("display", "none");
-			$("#footer").css("font-size", "0.5rem");
+			$("#footer, #infoLine").css("font-size", "0.5rem");
 		}
 
 		var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=dashboard";
