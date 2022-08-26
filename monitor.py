@@ -1345,12 +1345,12 @@ class dashboard(WebSocketServerProtocol):
                         _traffic = json.load(infile)
 
                         if _traffic and _traffic["TRAFFIC"]:
-                            #INITIALLIST = reversed(_traffic["TRAFFIC"]) 
-                            _traffic = reversed(_traffic["TRAFFIC"])
-                            _tglist = list(TGID_ORDER.split(","))
-                            for record in _traffic:
-                                if record["TGID"] in _tglist:
-                                    INITIALLIST.append(record)
+                            INITIALLIST = reversed(_traffic["TRAFFIC"]) 
+                            # _traffic = reversed(_traffic["TRAFFIC"])
+                            # _tglist = list(TGID_ORDER.split(","))
+                            # for record in _traffic:
+                            #     if record["TGID"] in _tglist:
+                            #         INITIALLIST.append(record)
                         else:
                             logging.info("Creating empty " + LOG_PATH + "lastheard.json")
                             with open(LOG_PATH + "lastheard.json", 'w') as outfile:
