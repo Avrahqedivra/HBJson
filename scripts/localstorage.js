@@ -179,7 +179,6 @@ function getTgFlag(id) {
 
         switch (id) {
             case "736":
-                if (id.indexOf(callsign) != -1) break; // else fall through
             case "994":
                 return "unlicenced.png"
 
