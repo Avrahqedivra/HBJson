@@ -1,5 +1,6 @@
 *.pyc
 config.py
+speedtest.py
 config_hbjsons.py
 *.csv
 .DS_Store

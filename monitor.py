@@ -769,7 +769,7 @@ def build_stats():
     global build_time, LISTENERSJ
     now = time()
 
-    if True and 'dashboard_server' in locals() or 'dashboard_server' in globals(): #now > build_time + 2:
+    if (now > build_time + 0.5) and ('dashboard_server' in locals() or 'dashboard_server' in globals()):
         for client in dashboard_server.clients:
             if CONFIG:            
                 if client.page != "ccs7":
@@ -968,7 +968,8 @@ def createLogTableJson():
     MESSAGEJ = []
 
     with open(LOG_PATH + "lastheard.log", "r") as lastheard:
-        for row in islice(reversed(list(csv.reader(lastheard))), 2000):
+        subset = islice(reversed(list(csv.reader(lastheard))), 2000)
+        for row in subset:
 
             REPORT_TGID = row[8]
 
@@ -1169,7 +1170,8 @@ def process_message(_bmessage):
                     MESSAGEJ = []
 
                     # remove all previous START packet if any
-                    for record in traffic["TRAFFIC"]:
+                    subset = traffic["TRAFFIC"]
+                    for record in subset:
                         if record["PACKET"] != "START":
                             MESSAGEJ.append(record)
 
