@@ -716,6 +716,7 @@
 							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' +
 							'<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' +
 							'<tr class="headerRow">' +
+							'<th class="thledate" style="display:none;">Date</th>' +
 							'<th class="thletime">Heure</th>' +
 							'<th class="thletx" colspan=2>TX Connectés</th>' +
 							'<th class="thlename">Name</th>' +
@@ -787,6 +788,7 @@
 
 							if (mobileDevice) {
 								content = '<tr class=' + bgClass + '>';
+								content += "<td class='tdDate' style='display:none;'>" + record.DATE + "</td>";
 								content += "<td class='tdTime'>" +record.TIME + "</td>";
 								content += "<td class='callsign ellipsis'><img class='lazyload tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
 								content += "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
@@ -839,12 +841,13 @@
 							if (!item.startsWith("Mise")) {
 								if (mobileDevice) {
 									lastActive.push({
-										TIME: $(this.cells[0]).html(),
-										CALLSIGN: $(this.cells[1]).html(),
-										DMRID: $(this.cells[2]).html(),
-										NAME: $(this.cells[3]).html(),
+										DATE: item,
+										TIME: $(this.cells[1]).html(),
+										CALLSIGN: $(this.cells[2]).html(),
+										DMRID: $(this.cells[3]).html(),
+										NAME: $(this.cells[4]).html(),
 										TGID: tgid,
-										DELAY: $(this.cells[5]).html(),
+										DELAY: $(this.cells[6]).html(),
 									});
 								} else {
 									lastActive.push({
