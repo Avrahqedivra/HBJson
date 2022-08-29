@@ -121,6 +121,7 @@
 							<th class="thletx" colspan=2>TX Connectés</th>
 							<th class="thlename">Name</th>
 							<th class="thletg">TGs</th>
+							<th class="thlepc">%</th>
 							<th class="thlelog"><a target="_self" href="./loglast.html">LOG+ (Cliquez ICI) </a></th>
 							<th class="thledelay">TX (s)</th>
 							<th class="thlenetid">NetID</th>
@@ -664,6 +665,14 @@
 			$("#statisticsModal").show();
 	}
 
+	function getPercentage(rowCount) {
+		nbtables = $(".tgtable");
+		nbrows = 0;
+		for(let i=0; i < nbtables.length; i++)
+			nbrows += $("#"+$(nbtables[i]).attr("id") + ' >tbody >tr').length;
+		return (rowCount * 100 / nbrows) + 0.5;
+	}
+
 	function doTraffic(t) {
 		if (t != null) {
 			if (Array.isArray(t))
@@ -889,6 +898,7 @@
 					for (let i = 0; i < lastActiveLength; i++) {
 						var record = lastActive[i];
 						var link = '\"tgId' + parseInt(record.TGID) + '\"';
+						var rowCount = $('#'+"hblink" + record.TGID +' tr').length;
 
 						if (mobileDevice) {
 							content = '<tr class=' + bgClass + '>';
@@ -898,6 +908,7 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
+							content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
 							else
@@ -917,6 +928,7 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
+							content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
 							content += "<td class='alias ellipsis'>" + alias + "</td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
@@ -1018,7 +1030,7 @@
 
 			$(".thledate, .thleslot, .thlelog, .thlenetid, .thlemaster").css("display", "none");
 			$("#sysoptables").css("display", "none");
-			$("#footer, #infoLine").css("font-size", "0.5rem");
+			$("#footer, #infoLine").css("font-size", "0.6rem");
 		}
 
 		var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=dashboard";

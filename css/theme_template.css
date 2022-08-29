@@ -303,6 +303,10 @@ thead {
   font-weight: normal;
   width: 4em;
 }
+.thlepc {
+  font-weight: normal;
+  width: 1em;
+}
 .thlelog { 
   width: 18rem;
 }
@@ -395,7 +399,7 @@ thead {
 /* #hbtables {
   scrollbar-width: thin;
   display: block;
-  overflow-y: scroll;                
+  overflow-y: scroll;
 }
 #hbtables::-webkit-scrollbar
 {
@@ -444,6 +448,14 @@ thead {
   text-align: end;
   padding-right: 0.5rem;
   width: 4rem;
+}
+.percent {
+  font-size: 0.8rem;
+  font-weight: var(--color-fw-dmrid);
+  color: var(--color-dmrid);
+  text-align: end;
+  padding-right: 0.5rem;
+  width: 1rem;
 }
 .delay {
   font-weight: var(--color-fw-delay);
