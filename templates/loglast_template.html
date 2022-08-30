@@ -199,7 +199,7 @@
                             '<th class="thletx" colspan=2>TX Connectés</th>' +
                             '<th class="thlename">Name</th>' +
                             '<th class="thletg">TG#</th>' +
-                            '<th class="thlelog"><a target="_self" href="./loglast.html">LOG+ (Cliquez ICI) </a></th>' +
+                            '<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' +
                             '<th class="thledelay"TX(s)</th>' +
                             '<th class="thlenetid">NetID</th>' +
                             '<th class="thlemaster">Master Infra</th>' +
@@ -335,7 +335,6 @@
                             if (data.LOGLAST != null) {
                                 this.close();
                                 $("#insertPoint div").remove();
-
                                 treatLogLast(data.LOGLAST);
                             }
                         }

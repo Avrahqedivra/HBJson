@@ -940,7 +940,7 @@ def createlogLastFromSql(EndPacketOnly):
 
                     REPORT_CALLSIGN = row[12]
 
-                    REPORT_FNAME     = row[13]
+                    REPORT_FNAME    = row[13]
 
                     MESSAGEJ.append({
                         'DATE': REPORT_DATE,
@@ -971,7 +971,7 @@ def createLogTableJson():
         subset = islice(reversed(list(csv.reader(lastheard))), 2000)
         for row in subset:
 
-            REPORT_TGID = row[8]
+            REPORT_TGID = row[8][2:]
 
             if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed):
                 REPORT_DATE     = row[0]
@@ -1006,7 +1006,7 @@ def createLogTableJson():
                     'SYS': REPORT_INFRA, 
                     'SRC_ID':  REPORT_NETID })
 
-        return MESSAGEJ
+    return MESSAGEJ
 
 def tableToExcel(tableName):
     if SQL_LOG == True:
@@ -1385,7 +1385,10 @@ class dashboard(WebSocketServerProtocol):
                 logging.info("command received: {}".format(_command))
                 if _command:
                     if _command.get("request"):
-                        if _command["request"] == "user" and _command["callsign"]:
+                        if _command["request"] == "loglast":
+                            # depending on SQL_LOG use SQL or text file option
+                            self.sendMessage(json.dumps({"LOGLAST": createlogLastFromSql(True) if SQL_LOG == True else createLogTableJson()  }, ensure_ascii = False).encode('utf-8'), isBinary)
+                        elif _command["request"] == "user" and _command["callsign"]:
                             response = ""
 
                             with open(PATH + SUBSCRIBER_FILE, 'r') as infile:
@@ -1397,9 +1400,6 @@ class dashboard(WebSocketServerProtocol):
                                         break
 
                                 logging.info("response sent: {}".format(response))
-                        elif _command["request"] == "loglast":
-                            # depending on SQL_LOG use SQL or text file option
-                            self.sendMessage(json.dumps({"LOGLAST": createlogLastFromSql(True) if SQL_LOG == True else createLogTableJson()  }, ensure_ascii = False).encode('utf-8'), isBinary)
                         elif _command["request"] == "userslist":
                             self.sendMessage(json.dumps({"USERS": createlocalUsersFromSql() }, ensure_ascii = False).encode('utf-8'), isBinary)
                     elif _command.get("fileurl") and _command["fileurl"].startswith("http"):
@@ -1662,6 +1662,12 @@ class web_server(Resource):
             authenticated.mode = 0
             return index_template()
 
+# Function to accept offers from the client ..
+def accept(offers):
+    for offer in offers:
+        if isinstance(offer, PerMessageDeflateOffer):
+            return PerMessageDeflateOfferAccept(offer)
+
 if __name__ == '__main__':
     logging.basicConfig(
         level=logging.INFO,
@@ -1682,7 +1688,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.0.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.1.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
@@ -1769,12 +1775,6 @@ if __name__ == '__main__':
     # Create websocket server to push content to clients
     dashboard_server = dashboardFactory('ws://*:{}'.format(SOCKET_SERVER_PORT))
     dashboard_server.protocol = dashboard
-
-    # Function to accept offers from the client ..
-    def accept(offers):
-        for offer in offers:
-            if isinstance(offer, PerMessageDeflateOffer):
-                return PerMessageDeflateOfferAccept(offer)
 
     dashboard_server.setProtocolOptions(perMessageCompressionAccept=accept)
 
