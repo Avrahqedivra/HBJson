@@ -510,11 +510,11 @@
 										content += '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>';
 
 										content += '<td class="' + ts1 + '">TS1</td>';
-										content += '<td class="' + cnx1 + '">';
+										content += '<td class="ellipsis masterflag ' + cnx1 + '">';
 										if (record["1"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
 										content += record["1"]["SUB"] + '</td>';
-										content += '<td class="' + cnx1 + '">'
+										content += '<td class="ellipsis masterflag ' + cnx1 + '">'
 										if (record["1"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
 										content += record["1"]["DEST"] + '</td>';
@@ -522,11 +522,11 @@
 
 										content += '<tr>';
 										content += '<td class="' + ts2 + '">TS2</td>';
-										content += '<td class="' + cnx2 + '">';
+										content += '<td class="ellipsis masterflag ' + cnx2 + '">';
 										if (record["2"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
 										content += record["2"]["SUB"] + '</td>';
-										content += '<td class="' + cnx2 + '">'
+										content += '<td class="ellipsis masterflag ' + cnx2 + '">'
 											if (record["2"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
 										content += record["2"]["DEST"] + '</td>';
