@@ -16,9 +16,9 @@ CLIENT_TIMEOUT  = 0                             # Clients are timed out after th
 
 # Put list of NETWORK_ID from OPB links to don't show local traffic in lastheard, for example: "260210,260211,260212"
 OPB_FILTER = ""
-# tg1, tg2 etc to be excluded, for example "800,801,802,3339"
+# ids of tg to be excluded, for example "800,801,802,3339"
 TGID_FILTER = ""
-# tg order on html monitor page, for example "38,7,39,777"
+# ids of tg order on html monitor page, for example "38,7,39,777"
 TGID_ORDER = ""
 # all tgid not in this list will be excluded. if empty all will be allowed
 TGID_ALLOWED = ""
