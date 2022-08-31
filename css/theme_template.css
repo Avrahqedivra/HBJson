@@ -904,6 +904,10 @@ select {
   filter: var(--color-filter-emaster)
 }
 
+.masterflag {
+  margin-left: 3rem;
+}
+
 /* <div class="bullet bulletLastActiveTG">&#x2022;</div>
 .bulletLastActiveTG {
   float: left;

@@ -1000,7 +1000,7 @@ def createLogTableJson():
                     'CALLSIGN': REPORT_CALLSIGN, 
                     'DMRID': REPORT_DMRID, 
                     'NAME': REPORT_FNAME, 
-                    'TGID': REPORT_TGID[2:], 
+                    'TGID': REPORT_TGID, 
                     'ALIAS': REPORT_LOGP, 
                     'DELAY': REPORT_DELAY,
                     'SYS': REPORT_INFRA, 
@@ -1030,7 +1030,7 @@ def tableToExcel(tableName):
 # "radioid", "https://database.radioid.net/static/users.json");
 # "Francophonie", "http://francophonie.link/local_subscriber_ids.json");
 def fetchRemoteUsersFiles(fileurl):
-    if 'fileurl' != "":
+    if fileurl != "":
         logging.info('requesting: %s', fileurl)
 
         filename = str(fileurl.rsplit('/', 1)[-1])
