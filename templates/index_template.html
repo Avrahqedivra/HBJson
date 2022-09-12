@@ -395,24 +395,24 @@
 
 		switch(src) {
 			case 0:
-				if ((index = str.lastIndexOf("(")) != - 1)
-					str = str.substr(index+1, 3)
+				if ((index = str.lastIndexOf("(")) != -1)
+					str = ""+parseInt(str.substr(index+1));
 				break;
 
 			case 1:
-				if ((index = str.indexOf("(")) != - 1)
+				if ((index = str.indexOf("(")) != -1)
 					str = str.substr(index+1, 3)
 				break;
 			
 			case 2:
-			if ((index = str.indexOf("(Id: ")) != - 1)
-					str = str.substr(index+5, 3)
-				break;
+				if ((index = str.indexOf("(Id: ")) != -1)
+						str = str.substr(index+5, 3)
+					break;
 		}
 
 		return getTgFlag(str);
 	}
-
+	
 	function updateMasters(masters, emaster) {
 		if (masters != null && $('#masters').is(':visible')) {
 				var content = "";
