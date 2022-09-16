@@ -190,6 +190,8 @@
 	</center>
 </body>
 
+<script src="pureknob.js"></script>
+
 <script type="text/javascript">
 	var traffic = [];
 	var sock = null;
@@ -412,7 +414,7 @@
 
 		return getTgFlag(str);
 	}
-	
+
 	function updateMasters(masters, emaster) {
 		if (masters != null && $('#masters').is(':visible')) {
 				var content = "";
@@ -510,11 +512,11 @@
 										content += '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>';
 
 										content += '<td class="' + ts1 + '">TS1</td>';
-										content += '<td class="ellipsis masterflag ' + cnx1 + '">';
+										content += '<td class="' + cnx1 + '">';
 										if (record["1"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
 										content += record["1"]["SUB"] + '</td>';
-										content += '<td class="ellipsis masterflag ' + cnx1 + '">'
+										content += '<td class="' + cnx1 + '">'
 										if (record["1"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
 										content += record["1"]["DEST"] + '</td>';
@@ -522,11 +524,11 @@
 
 										content += '<tr>';
 										content += '<td class="' + ts2 + '">TS2</td>';
-										content += '<td class="ellipsis masterflag ' + cnx2 + '">';
+										content += '<td class="' + cnx2 + '">';
 										if (record["2"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
 										content += record["2"]["SUB"] + '</td>';
-										content += '<td class="ellipsis masterflag ' + cnx2 + '">'
+										content += '<td class="' + cnx2 + '">'
 											if (record["2"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
 										content += record["2"]["DEST"] + '</td>';
@@ -920,6 +922,8 @@
 							if (alias.indexOf("<img") == -1)
 								alias = '<img class="lazyload tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
 
+							var percentage = parseInt(getPercentage(rowCount));
+							
 							content = '<tr class=' + bgClass + '>';
 							content += "<td class='tdDate'>" + record.DATE + "</td>";
 							content += "<td class='tdTime'>" + record.TIME + "</td>";
@@ -928,7 +932,8 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-							content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
+							// content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
+							content += "<td class='percent' style='text-align: right; padding-right: 0.5rem;'><div style='display: inline-block; padding-right: 4px; vertical-align: top;'>" + percentage + "</div><div style='display: inline-block;' id='p"+record.TGID+"'></div></td>";
 							content += "<td class='alias ellipsis'>" + alias + "</td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
@@ -940,6 +945,24 @@
 						}
 
 						$("#lastActiveBody").append(content);
+						
+						var knob = pureknob.createKnob(16, 16);
+						knob.setProperty('angleStart', -0.75 * Math.PI);
+						knob.setProperty('angleEnd', 0.75 * Math.PI);
+						knob.setProperty('colorFG', '#ff0000');
+						knob.setProperty('colorBG', '#00ff00');
+						knob.setProperty('trackWidth', 0.5);
+						knob.setProperty('readonly', true);
+						knob.setProperty('label', null);
+						knob.setProperty('textScale', 0);
+						knob.setProperty('valMin', 0);
+						knob.setProperty('valMax', 100);
+
+						knob.setValue(percentage);
+
+						var node = knob.node();
+						var elem = document.getElementById("p"+record.TGID);
+						elem.appendChild(node);
 					}
 				}
 			}

@@ -305,7 +305,7 @@ thead {
 }
 .thlepc {
   font-weight: normal;
-  width: 1em;
+  width: 3em;
 }
 .thlelog { 
   width: 18rem;
@@ -317,7 +317,7 @@ thead {
   width: 7rem;
 }
 .thlemaster { 
-  width: 11rem;
+  width: 8rem;
 }
 
 /* USERS CLASSES */
@@ -420,7 +420,7 @@ thead {
   padding-left: 0.5rem;
   color: var(--color-firstname);
 }
-.talkgroup {
+.talkgroup, .percent {
   color: var(--color-talkgroup);
 }
 
@@ -448,14 +448,6 @@ thead {
   text-align: end;
   padding-right: 0.5rem;
   width: 4rem;
-}
-.percent {
-  font-size: 0.8rem;
-  font-weight: var(--color-fw-dmrid);
-  color: var(--color-dmrid);
-  text-align: end;
-  padding-right: 0.5rem;
-  width: 1rem;
 }
 .delay {
   font-weight: var(--color-fw-delay);
@@ -902,10 +894,6 @@ select {
 
 .emaster {
   filter: var(--color-filter-emaster)
-}
-
-.masterflag {
-  margin-left: 3rem;
 }
 
 /* <div class="bullet bulletLastActiveTG">&#x2022;</div>
