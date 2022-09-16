@@ -30,6 +30,12 @@
 				background-color: #569cd6;
 			}
 	
+			.talkgroup canvas {
+				position: absolute;
+				top: 0.3rem;
+				left: -0.15rem;
+			}
+
 			@supports (-moz-appearance:none) {
 				div[name="hbtables"] { 
 						overflow-y: scroll;
@@ -932,8 +938,7 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-							// content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
-							content += "<td class='percent' style='text-align: right; padding-right: 0.5rem;'><div style='display: inline-block; padding-right: 4px; vertical-align: top;'>" + percentage + "</div><div style='display: inline-block;' id='p"+record.TGID+"'></div></td>";
+							content += "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
 							content += "<td class='alias ellipsis'>" + alias + "</td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
@@ -945,16 +950,16 @@
 						}
 
 						$("#lastActiveBody").append(content);
-						
-						var knob = pureknob.createKnob(16, 16);
+
+						var knob = pureknob.createKnob(23, 23);
 						knob.setProperty('angleStart', -0.75 * Math.PI);
 						knob.setProperty('angleEnd', 0.75 * Math.PI);
-						knob.setProperty('colorFG', '#ff0000');
-						knob.setProperty('colorBG', '#00ff00');
-						knob.setProperty('trackWidth', 0.5);
+						knob.setProperty('colorFG', '#e52713');
+						knob.setProperty('colorBG', '#6cc43c');
+						knob.setProperty('trackWidth', 0.3);
 						knob.setProperty('readonly', true);
 						knob.setProperty('label', null);
-						knob.setProperty('textScale', 0);
+						knob.setProperty('textScale', 2.5);
 						knob.setProperty('valMin', 0);
 						knob.setProperty('valMax', 100);
 
