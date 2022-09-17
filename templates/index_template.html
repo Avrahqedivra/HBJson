@@ -908,6 +908,8 @@
 						var link = '\"tgId' + parseInt(record.TGID) + '\"';
 						var rowCount = $('#'+"hblink" + record.TGID +' tr').length;
 
+						var percentage = parseInt(getPercentage(rowCount));
+
 						if (mobileDevice) {
 							content = '<tr class=' + bgClass + '>';
 							// content += "<td class='tdDate'>" + record.DATE + "</td>";
@@ -916,7 +918,7 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-							content += "<td class='percent'>" + parseInt(getPercentage(rowCount)) + "</td>";
+							content += "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
 							else
@@ -927,8 +929,6 @@
 
 							if (alias.indexOf("<img") == -1)
 								alias = '<img class="lazyload tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
-
-							var percentage = parseInt(getPercentage(rowCount));
 							
 							content = '<tr class=' + bgClass + '>';
 							content += "<td class='tdDate'>" + record.DATE + "</td>";
