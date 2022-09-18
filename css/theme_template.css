@@ -914,7 +914,7 @@ select {
 .theme-light {
   /* html, body */
   --table-width: 85rem;
-  --color-fz-html: 10pt;
+  --color-fz-html: 11pt;
   --color-font-html: -apple-system,BlinkMacSystemFont,calibri,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 
   /* h1 */  
@@ -980,7 +980,7 @@ select {
   --color-tgLtGreen: #000;
   --color-tgRed: #fba392;
   --color-tgYellow: #585848;
-  --color-tgPurple: #c586c0;
+  --color-tgPurple: #a0579a;
   --color-tgOrange: #ce9178;
   --color-tgWhite: #1e1e1e;
   --color-tgPink: #EBC6FD;
@@ -1052,7 +1052,7 @@ select {
 .theme-dark {
   /* html, body */
   --table-width: 85rem;
-  --color-fz-html: 10pt;
+  --color-fz-html: 11pt;
   --color-font-html: -apple-system,BlinkMacSystemFont,calibri,Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
 
   /* h1 */
