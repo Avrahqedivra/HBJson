@@ -673,21 +673,28 @@
 			$("#statisticsModal").show();
 	}
 
-	function tablehas(tgs, id) {
+	function tgshas(record, tgs) {
 		var tgslength = tgs.length;
 		for (let i = 0; i < tgslength; i++) {
-			if (tgs[i].id == id)
+			if (tgs[i].id == record.TGID)
 				return i;
 		}
 
 		return -1;
 	}
 
-	function getRowCount(tgid) {
-		var trafficlength = traffic.length;
-		for (var i = 0, count = 0; i < trafficlength; i++) {
-			if (traffic[i].TGID == tgid)
-				count++;
+	function updateRowCount(record, tgs) {
+		var count = 0;
+		var tgslength = tgs.length;
+		
+		for (var i = 0; i < tgslength; i++) {
+			if (tgs[i].id == record.TGID) {
+				if (!tgs[i].dmrids.has(record.DMRID)) {
+					tgs[i].dmrids.add(record.DMRID);
+					tgs[i].count = tgs[i].dmrids.size;
+					return tgs[i].count;
+				}
+			}
 		}
 
 		return count;
@@ -724,17 +731,19 @@
 				$(".lastheard tbody tr").remove();
 
 				var tgs = [];
+				var count = 0;
 				var totalrecord = 0;
 				for (var i = 0, count = 0; i < trafficLength; i++) {
-					if (tablehas(tgs, traffic[i].TGID) == -1) {
-						var count = getRowCount(traffic[i].TGID);
-						totalrecord += count;
-						tgs.push({
-							"id": traffic[i].TGID,
-							"count": count
-						});
+					var record = traffic[i];
+					if (tgshas(record, tgs) == -1)
+						tgs.push({ "id": record.TGID, "dmrids": new Set([record.DMRID]), "count": 1 });
+					else {
+						updateRowCount(record, tgs);
 					}
 				}
+
+				for(let i=0; i<tgs.length; i++)
+					totalrecord += tgs[i].count;
 
 				for (var i = 0; i < trafficLength; i++) {
 					var record = traffic[i];
