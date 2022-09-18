@@ -673,8 +673,19 @@
 			$("#statisticsModal").show();
 	}
 
+	function tablehas(tgs, id) {
+		var tgslength = tgs.length;
+		for (let i = 0; i < tgslength; i++) {
+			if (tgs[i].id == id)
+				return i;
+		}
+
+		return -1;
+	}
+
 	function getRowCount(tgid) {
-		for (var i = 0, count = 0; i < traffic.length; i++) {
+		var trafficlength = traffic.length;
+		for (var i = 0, count = 0; i < trafficlength; i++) {
 			if (traffic[i].TGID == tgid)
 				count++;
 		}
@@ -682,19 +693,13 @@
 		return count;
 	}
 
-	function tablehas(table, id) {
-		for (let i = 0; i < table.length; i++) {
-			if (table[i].id == id)
-				return i;
+	function getPercentage(tgs, totalrecord, id) {
+		var tgslength = tgs.length;
+		for (let i = 0; i < tgslength; i++) {
+			if (tgs[i].id == id)
+				return parseInt(((tgs[i].count / totalrecord) * 100) + 0.5);
 		}
 
-		return -1;
-	}
-
-	function getPercentage(table, totalrecord, id) {
-		for (let i = 0; i < table.length; i++)
-			if (table[i].id == id)
-				return parseInt(((table[i].count / totalrecord) * 100) + 0.5);
 		return 0;
 	}
 
@@ -720,7 +725,7 @@
 
 				var tgs = [];
 				var totalrecord = 0;
-				for (var i = 0, count = 0; i < traffic.length; i++) {
+				for (var i = 0, count = 0; i < trafficLength; i++) {
 					if (tablehas(tgs, traffic[i].TGID) == -1) {
 						var count = getRowCount(traffic[i].TGID);
 						totalrecord += count;
@@ -932,13 +937,15 @@
 
 					bgClass = 'tgPurple';
 
+					var globalPercentage = 0;
+
 					// added max length last_active_size
 					for (let i = 0; i < lastActiveLength; i++) {
 						var record = lastActive[i];
 						var link = '\"tgId' + parseInt(record.TGID) + '\"';
-						var rowCount = $('#'+"hblink" + record.TGID +' tr').length;
 
-						var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID))
+						var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID));
+						globalPercentage += percentage;
 
 						if (mobileDevice) {
 							content = '<tr class=' + bgClass + '>';
@@ -1032,6 +1039,8 @@
 				$("#insertPoint").hide();
 			else
 				$("#insertPoint").show();
+
+				saveSettings();
 		});
 
 		$(document).on("click", ".lastheard thead", function () {
@@ -1044,6 +1053,8 @@
 					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(1px)");
 				else
 					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(0)");
+
+					saveSettings();
 			}, 125);
 		});
 
