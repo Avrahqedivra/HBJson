@@ -673,12 +673,29 @@
 			$("#statisticsModal").show();
 	}
 
-	function getPercentage(rowCount) {
-		nbtables = $(".tgtable");
-		nbrows = 0;
-		for(let i=0; i < nbtables.length; i++)
-			nbrows += $("#"+$(nbtables[i]).attr("id") + ' >tbody >tr').length;
-		return (rowCount * 100 / nbrows) + 0.5;
+	function getRowCount(tgid) {
+		for (var i = 0, count = 0; i < traffic.length; i++) {
+			if (traffic[i].TGID == tgid)
+				count++;
+		}
+
+		return count;
+	}
+
+	function tablehas(table, id) {
+		for (let i = 0; i < table.length; i++) {
+			if (table[i].id == id)
+				return i;
+		}
+
+		return -1;
+	}
+
+	function getPercentage(table, totalrecord, id) {
+		for (let i = 0; i < table.length; i++)
+			if (table[i].id == id)
+				return parseInt(((table[i].count / totalrecord) * 100) + 0.5);
+		return 0;
 	}
 
 	function doTraffic(t) {
@@ -700,6 +717,19 @@
 
 				cleaned = true;
 				$(".lastheard tbody tr").remove();
+
+				var tgs = [];
+				var totalrecord = 0;
+				for (var i = 0, count = 0; i < traffic.length; i++) {
+					if (tablehas(tgs, traffic[i].TGID) == -1) {
+						var count = getRowCount(traffic[i].TGID);
+						totalrecord += count;
+						tgs.push({
+							"id": traffic[i].TGID,
+							"count": count
+						});
+					}
+				}
 
 				for (var i = 0; i < trafficLength; i++) {
 					var record = traffic[i];
@@ -908,7 +938,7 @@
 						var link = '\"tgId' + parseInt(record.TGID) + '\"';
 						var rowCount = $('#'+"hblink" + record.TGID +' tr').length;
 
-						var percentage = parseInt(getPercentage(rowCount));
+						var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID))
 
 						if (mobileDevice) {
 							content = '<tr class=' + bgClass + '>';
