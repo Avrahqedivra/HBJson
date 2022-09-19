@@ -188,7 +188,7 @@
 				<div>Copyright (c) 2016-2020, The Regents of the <a href=http://k0usy.mystrikingly.com>K0USY Group. All rights reserved.</a> 
 					<br><a href=https://github.com/sp2ong/HBmonitor>Modified by SP2ONG 2019, 2020</a>
 					&nbsp;- Modified by NumeriX 2019, 2020 
-					<br>JSON, MYSQL version by <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN </a>2021, 2022.<br>
+					<br>JSON, MYSQL version by <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN </a>2021, 2022.
 				</div> 
 			</div> 
 			<!--THIS COPYRIGHT NOTICE MUST BE DISPLAYED AS A CONDITION OF THE LICENCE GRANT FOR THIS SOFTWARE. ALL DERIVATEIVES WORKS MUST CARRY THIS NOTICE -->
@@ -984,7 +984,9 @@
 							content += "<td class='dmrid'>" + record.DMRID + "</td>";
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-							content += "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
+
+							content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
+
 							content += "<td class='alias ellipsis'>" + alias + "</td>";
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
@@ -1049,7 +1051,7 @@
 			else
 				$("#insertPoint").show();
 
-				saveSettings();
+			saveSettings();
 		});
 
 		$(document).on("click", ".lastheard thead", function () {
@@ -1063,12 +1065,14 @@
 				else
 					$("#tbtgId" + $(this).attr('tgid')).css("filter", "blur(0)");
 
-					saveSettings();
+				saveSettings();
 			}, 125);
 		});
 
 		$(document).on("click", ".network thead", function () {
-			$("#" + $(this).attr('tbodyid')).toggle(100);
+			$("#" + $(this).attr('tbodyid')).toggle(100, () => {
+    		saveSettings();
+  		});
 		});
 
 		$(document).on("click", ".close", function () {
@@ -1096,7 +1100,8 @@
 	});
 
 	window.onload = () => {
-		lastActive = [];
+		doApplyConfig = true;
+		lastActive = [];		
 		listeners = 0;
 		lastActiveTG = 0;
 		mobileDevice = "<<<MOBILE>>>" == "True";
@@ -1123,10 +1128,10 @@
 			$("#insertPoint").append($("<div id='tg" + tg + "marker'></div>"));
 		});
 
-		if (hideAllTG)
-			$("#insertPoint").hide();
-		else
-			$("#insertPoint").show();
+		// if (hideAllTG)
+		// 	$("#insertPoint").hide();
+		// else
+		// 	$("#insertPoint").show();
 
 		function WSConnection() {
 			'use strict';
@@ -1155,9 +1160,6 @@
 					var data = null;
 
 					try {
-						if (themeSettings == "auto")
-							adjustTheme();
-
 						data = JSON.parse(e.data);
 
 						// console.log("");
@@ -1204,6 +1206,14 @@
 
 								if (data.STATUS)
 									log(data.STATUS);
+							}
+
+							if (themeSettings == "auto")
+								adjustTheme();
+
+							if (doApplyConfig) {
+								doApplyConfig = false;
+								applyConfig();
 							}
 					}
 					} catch (error) {

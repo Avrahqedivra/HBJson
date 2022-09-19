@@ -1,6 +1,6 @@
 cookieSettingsName = "hbjson_settings";
 settingsValidity = 5;	    // 5 days
-settings = [{ name: "openbridges", "open": true }, { "map": { "zoom" : 6.5 } }, {"name": "masters", "open": true }, { "name": "peers", "open": true }];
+settings = [ { config: { "theme": "theme-dark", hidetg: false } }, { "map": { "zoom" : 6.5 } }, { name: "openbridges", "open": true }, {"name": "masters", "open": true }, { "name": "peers", "open": true }];
 
 // localStorage.setItem('theme', themeName);
 // localStorage.getItem('theme', themeName);
@@ -50,6 +50,15 @@ function enhanceNames(name) {
     return name.capitalize(true);
 }
 
+function getTgTableState(name) {
+    for(let i=0; i < settings.length; i++) {
+        if (settings[i].name != null && settings[i].name == name)
+            return settings[i];
+    }
+
+    return null;
+}
+
 function createCookie(name, value, days) {
     var expires;
 
@@ -61,53 +70,51 @@ function createCookie(name, value, days) {
         expires = "";
     }
     
-    document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+    // document.cookie = encodeURIComponent(name) + "=" + encodeURIComponent(value) + expires + "; path=/";
+    document.cookie = name + "=" + value + expires + "; path=/";
 }
 
 function readCookie(name) {
-    var nameEQ = encodeURIComponent(name) + "=";
+    var nameEQ = name + "=";
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0) === ' ')
             c = c.substring(1, c.length);
         if (c.indexOf(nameEQ) === 0)
-            return decodeURIComponent(c.substring(nameEQ.length, c.length));
+            return c.substring(nameEQ.length, c.length);
     }
-    return null;
-}
-
-function getTgTableState(name) {
-    for(let i=0; i < settings.length; i++) {
-        if (settings[i].name != null && settings[i].name == name)
-            return settings[i];
-    }
-
     return null;
 }
 
 function saveSettings() {
     themeSettings = document.documentElement.className;
+    var ob = document.getElementById("openbridges").style.display != "none";
+    var ma = document.getElementById("masters").style.display != "none";
+    var pe = document.getElementById("peers").style.display != "none";
+
     settings = [
         { "config": { "theme": themeSettings, hidetg: hideAllTG } },
         { "map": { "zoom" : (map != null) ? map.getZoom() : 6.5 } },
-        { "name": "openbridges",    "open": $('#openbridges').is(':visible'), "colspan": $("#theadOpenbridges tr th").length }, 
-        { "name": "masters",        "open": $('#masters').is(':visible'), "colspan": $("#theadMasters tr th").length }, 
-        { "name": "peers",          "open": $('#peers').is(':visible'), "colspan": $("#theadPeers tr th").length }
+        { "name": "openbridges",    "open": ob, "colspan": $("#theadOpenbridges tr th").length }, 
+        { "name": "masters",        "open": ma, "colspan": $("#theadMasters tr th").length }, 
+        { "name": "peers",          "open": pe, "colspan": $("#theadPeers tr th").length }
     ];
 
     if (tgorder != null) {
         tgorder.forEach(tg => {
             var tgName = "tgId"+tg;
             var tgId = "hblink"+tg;
-            if (document.getElementById(tgName) != null)
-                settings.push({ "name": tgId, "open": $("#" + tgId).is(":visible"), "colspan": $("#" + tgName + " tr th").length });
+            if (document.getElementById(tgName) != null) {
+                var visible = document.getElementById(tgId).style.display != "none";
+                settings.push({ "name": tgId, "open": visible, "colspan": $("#" + tgName + " tr th").length });
+            }
         });
     }
     
     createCookie(cookieSettingsName, JSON.stringify(settings), settingsValidity);
 
-    alert("Sauvegarde effectuée");
+    // alert("Sauvegarde effectuée");
 }
 
 function eraseCookie(name) {
@@ -129,8 +136,34 @@ function adjustTheme() {
     }
 }
 
+function applyConfig() {
+    for(let i=0; i < settings.length; i++) {
+        var tbs = settings[i];
+
+        if (tbs.config) {
+            themeSettings = tbs.config.theme;
+            if (hideAllTG = tbs.config.hidetg)
+			    $("#insertPoint").hide();
+		    else
+			    $("#insertPoint").show();
+    
+            if (themeSettings == "auto")
+                adjustTheme();
+            else
+                document.documentElement.className = themeSettings;
+        }
+        else if (tbs.map)
+            currentZoom = tbs.map.zoom;
+        else if (tbs.open)
+            $("#"+tbs.name).show();
+        else
+            $("#"+tbs.name).hide();
+    }
+}
+
 function getConfigFromLocalStorage() {
     map = null;
+    themeSettings = "theme-dark";
 
     // retrieve settings
     if ((cookie = JSON.parse(readCookie(cookieSettingsName))) == null) {
@@ -139,38 +172,6 @@ function getConfigFromLocalStorage() {
     }
     else    
         settings = cookie;
-
-    themeSettings = "theme-dark";
-
-    for(let i=0; i < settings.length; i++) {
-        var tbs = settings[i];
-
-        if (tbs.config) {
-            themeSettings = tbs.config.theme;
-            hideAllTG = tbs.config.hidetg;
-
-            if (themeSettings == "auto")
-                adjustTheme();
-            else
-                document.documentElement.className = themeSettings;
-        }
-        else {            
-            if (tbs.map) {
-                currentZoom = tbs.map.zoom;
-            }
-            else {
-                if (tbs.open) {
-                    $("#"+tbs.name).show();
-                    // var count = tbs.colspan;
-                    // if (count == null)
-                    //     count = 5;
-                    // $("#"+tbs.name).append("<tr><td class='infoline' colspan="+(count+1)+">Mise à jour au prochain appel entrant...</td></tr>");
-                }
-                else
-                    $("#"+tbs.name).hide();
-            }
-        }
-    }
 }
 
 function getTgFlag(id) {

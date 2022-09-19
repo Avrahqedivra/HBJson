@@ -113,6 +113,7 @@ html, body {
 /***************************************************************/
 #footer {
   margin-top: 2rem;
+  padding-bottom: 0.5rem;
   color:var(--color-footer);
   font-size: 0.8rem; 
   font-weight:normal; 
@@ -420,8 +421,11 @@ thead {
   padding-left: 0.5rem;
   color: var(--color-firstname);
 }
-.talkgroup, .percent {
+.talkgroup {
   color: var(--color-talkgroup);
+}
+.percentage {
+  color: var(--color-percentage);
 }
 
 .alias {
@@ -448,6 +452,14 @@ thead {
   text-align: end;
   padding-right: 0.5rem;
   width: 4rem;
+}
+.percent {
+  font-size: 0.8rem;
+  font-weight: var(--color-fw-dmrid);
+  color: var(--color-dmrid);
+  text-align: end;
+  padding-right: 0.5rem;
+  width: 1rem;
 }
 .delay {
   font-weight: var(--color-fw-delay);
@@ -958,6 +970,7 @@ select {
 
   --color-firstname: #004bbb;
   --color-talkgroup: #3974a5;
+  --color-percentage: #000000;
   --color-alias: #478d22;
   --color-callsign:#ce9178;
   --color-callsign-a:#9b593f;
@@ -1096,6 +1109,7 @@ select {
 
   --color-firstname: #569cd6;
   --color-talkgroup: #569cd6;
+  --color-percentage: #ffffff;
   --color-alias: #b5cea8;
   --color-callsign:#ce9178;
   --color-callsign-a:#9b593f;
