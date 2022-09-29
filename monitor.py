@@ -254,6 +254,7 @@ def replaceSystemStrings(data):
         .replace("<<<LAST_ACTIVE_SIZE>>>", str(LAST_ACTIVE_SIZE)) \
         .replace("<<<DYNAMIC_TG>>>", str(DYNAMIC_TG)) \
         .replace("<<<TGID_BEACONS>>>", str(TGID_BEACONS)) \
+        .replace("<<<DISPLAY_PERCENT>>>", str(DISPLAY_PERCENT)) \
         .replace("<<<MOBILE>>>", str(MOBILEPHONE)) \
         .replace("<<<HIDE_DMRID>>>", str(HIDE_DMRID))#.replace("class=\"theme-dark\"", "class=\"theme-light\"")
 
