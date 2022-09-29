@@ -1,4 +1,4 @@
-cookieSettingsName = "hbjson_settings";
+cookieSettingsName = window.location.hostname+"_hbjson_settings";
 settingsValidity = 5;	    // 5 days
 settings = [ { config: { "theme": "theme-dark", hidetg: false } }, { "map": { "zoom" : 6.5 } }, { name: "openbridges", "open": true }, {"name": "masters", "open": true }, { "name": "peers", "open": true }];
 
