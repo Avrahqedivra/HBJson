@@ -210,6 +210,7 @@
 	tghilite = new Set("<<<TGID_HILITE>>>".split(','));
 	dynamic_tg = ("<<<DYNAMIC_TG>>>" == "True") ? true : false;
 	hide_dmrid = new Set("<<<HIDE_DMRID>>>".split(','));
+	displayPercent = "<<<DISPLAY_PERCENT>>>" != "False"
 	last_active_tg = ("<<<LAST_ACTIVE_TG>>>" == "True") ? true : false;
 
 	try {
@@ -224,6 +225,9 @@
 
 	if (last_active_tg == true) {
 		$("#lastActive").css("display", "table");
+
+		if (!displayPercent)
+			$(".thlepc").css("display", "none");
 	}
 
 	//   https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
@@ -975,7 +979,7 @@
 
 							if (alias.indexOf("<img") == -1)
 								alias = '<img class="lazyload tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
-							
+
 							content = '<tr class=' + bgClass + '>';
 							content += "<td class='tdDate'>" + record.DATE + "</td>";
 							content += "<td class='tdTime'>" + record.TIME + "</td>";
@@ -985,7 +989,8 @@
 							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
 							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
 
-							content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
+							if (displayPercent)
+								content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
 
 							content += "<td class='alias ellipsis'>" + alias + "</td>";
 							if (record.DELAY == "ONLINE")
@@ -1101,7 +1106,7 @@
 
 	window.onload = () => {
 		doApplyConfig = true;
-		lastActive = [];		
+		lastActive = [];
 		listeners = 0;
 		lastActiveTG = 0;
 		mobileDevice = "<<<MOBILE>>>" == "True";

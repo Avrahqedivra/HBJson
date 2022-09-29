@@ -59,6 +59,8 @@ LAST_ACTIVE_SIZE = 0
 LAST_HEARD_SIZE = 2000
 # Nb lines in first packet sent to dashboard
 TRAFFIC_SIZE    = 500
+# Display percent
+DISPLAY_PERCENT = True
 
 # Files and stuff for loading alias files for mapping numbers to names
 PATH            = './'                           # MUST END IN '/'
