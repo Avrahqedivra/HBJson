@@ -19,3 +19,4 @@ html/container.html
 peer_ids.json
 talkgroup_ids_i.json
 .vscode/*.*
+assets/active_subscriber_ids.json
