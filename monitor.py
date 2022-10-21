@@ -40,7 +40,7 @@ import logging
 import time as ptime
 import datetime
 import base64
-import urllib
+import urllib.request
 import platform
 import os
 import binascii
@@ -1028,6 +1028,28 @@ def tableToExcel(tableName):
             if LOGINFO == True:
                 logging.info('MYSQL ERROR: {}'.format(e))
 
+def daydiff(t2):
+    return (time()-t2)/1000/3600/24
+
+def checkdownload(fileurl):
+    if fileurl != "":
+        logging.info('requesting: %s', fileurl)
+
+        filename = str(fileurl.rsplit('/', 1)[-1])
+        filepath = PATH + "assets/" + filename
+
+        if os.path.exists(filepath):
+            # check if file needs new download from remote
+            if daydiff(creation_date(filepath)) < 7:
+                return filename
+
+        # file is older than 7 days, download 
+        with urllib.request.urlopen(fileurl) as url:
+            with open(filepath, 'w') as users_json:
+                users_json.write(url.read().decode("utf-8"))
+                return filename
+        
+
 # "radioid", "https://database.radioid.net/static/users.json");
 # "Francophonie", "http://francophonie.link/local_subscriber_ids.json");
 def fetchRemoteUsersFiles(fileurl):
@@ -1037,19 +1059,19 @@ def fetchRemoteUsersFiles(fileurl):
         filename = str(fileurl.rsplit('/', 1)[-1])
         filepath = PATH + "assets/" + filename
 
-        # keep shield file always updated
-        if filename != "local_subscriber_ids.json":
-            if os.path.exists(filepath):
-                _time = int(time()) - int(creation_date(filepath))
-                # check if file needs new download from remote
-                if int(_time/60/60/24) < 7:
-                    return filename
-
-        # file is older than 7 days, download 
-        with urllib.request.urlopen(fileurl) as url:
-            with open(filepath, 'w') as users_json:
-                users_json.write(url.read().decode("utf-8"))
+        # local_subscriber_ids.json is in root folder
+        if filename == "local_subscriber_ids.json":
+            if os.path.exists("./" + filename):
                 return filename
+            else:
+                return ""
+        elif filename == "active_subscriber_ids.json":
+            if os.path.exists(PATH + "/assets/" + filename):
+                return filename
+            else:
+                return ""
+        else:
+            return checkdownload(fileurl)
 
     return ""
 
@@ -1406,7 +1428,7 @@ class dashboard(WebSocketServerProtocol):
                     elif _command.get("fileurl") and _command["fileurl"].startswith("http"):
                         filename = fetchRemoteUsersFiles(_command["fileurl"])
                         self.sendMessage(json.dumps({"FILENAME": filename }, ensure_ascii = False).encode('utf-8'), isBinary)
-                        # with open(filename, 'r') as infile:                            
+                        # with open(filename, 'r') as infile:
                         #     self.sendMessage(json.dumps(json.load(infile), ensure_ascii = False).encode('UTF-8'))
                         #     infile.close()
             

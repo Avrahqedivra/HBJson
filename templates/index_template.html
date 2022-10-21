@@ -117,6 +117,14 @@
 				</div>
 			</div>
 
+			<!-- The Modal -->
+			<div id="inputModal" class="modal">
+				<!-- Modal content -->
+				<div class="modal-content-input">
+						<input type="search" id="search" name="search" placeholder="DMRID or CALLSIGN"><button type="button" onclick="followupdmrid()">Search</button>
+				</div>
+			</div>
+
 			<div name="hbtables" id="hbtables">
 				<table id="lastActive" class="tables lastActive tablefixed" style="display: none;">
 					<thead>
@@ -598,7 +606,7 @@
 		var bgClass = "";
 
 		traffic.forEach(om => {
-			if (om.PACKET == "END" && om.DMRID == dmrid) {
+			if (om.PACKET == "END" && (om.DMRID == dmrid || om.CALLSIGN == dmrid)) {
 				if (tghilite.has(om.TGID))
 					bgClass = 'tgWhite';
 				else
@@ -618,6 +626,13 @@
 
 		$("#followup").append(content);
 		$("#followUpModal").show();
+	}
+
+	function followupdmrid() {
+		var val = $('#search').val();
+		$("#inputModal").hide();
+		if (val != "")
+			followUpdUser(val.toUpperCase());
 	}
 
 	function stats() {
@@ -1102,6 +1117,14 @@
 				$("#listenersModal").show();
 			}
 		});
+
+		document.getElementById("search").addEventListener('keyup', (event) => {
+  		const keyName = event.key;
+			// As the user releases the Ctrl key, the key is no longer active,
+			// so event.ctrlKey is false.
+			if (keyName === 'Escape')
+				document.getElementById("inputModal").style.display = 'none';
+		}, false);
 	});
 
 	window.onload = () => {

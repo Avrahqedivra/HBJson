@@ -39,8 +39,10 @@
 <div class="dropdown">
     <div class="button noiconbutton">Mode</div>
     <div class="dropdown-content">
-        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-dark';saveSettings();">Dark</a>
-        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-light';saveSettings();">Light</a>
-        <a target="_blank" onclick="javascript:themeSettings='auto';adjustTheme();saveSettings();">Auto</a>
+        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-dark';">Dark</a>
+        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-light';">Light</a>
+        <a target="_blank" onclick="javascript:themeSettings='auto';adjustTheme()">Auto</a>
     </div>
 </div>
+
+<a target="_blank" onclick="javascript:$('#inputModal').show();document.getElementById('search').focus()"><div class="button noiconbutton">Search</div></a>
