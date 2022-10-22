@@ -1,0 +1,16 @@
+2022-10-22 11:11:47 INFO monitor.py starting up
+2022-10-22 11:11:47 INFO 
+
+	Copyright (c) 2016, 2017, 2018, 2019
+	The Regents of the K0USY Group. All rights reserved.
+
+	Python 3 port:
+	2019 Steve Miller, KC1AWV <smiller@kc1awv.net>
+
+	HBMonitor v1 SP2ONG 2019-2021
+
+	HBJSON v3.1.0:
+	2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>
+
+
+2022-10-22 11:11:55 INFO ID ALIAS MAPPER: 'peer_ids.json' successfully downloaded

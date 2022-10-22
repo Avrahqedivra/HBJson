@@ -864,7 +864,7 @@
 						if ($('#tb' + tgName + ' >tbody >tr').length < displayLines) {
 							var flagUrl = getFlag(record.CALLSIGN, record.DMRID);
 							if (flagUrl == "")
-								flagUrl = "shield.png";
+								flagUrl = flag64["shield"]; // "shield.png";
 
 							if (mobileDevice) {
 								content = '<tr class=' + bgClass + '>';

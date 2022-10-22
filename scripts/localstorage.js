@@ -174,6 +174,27 @@ function getConfigFromLocalStorage() {
         settings = cookie;
 }
 
+flag64 = [];
+
+flag64["be"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAUBAMAAACUkLs9AAAAElBMVEXtKTkAAAD64ELyZTtUTBZVTRYE41wOAAAAG0lEQVQY02MQFBQUVVJSUmYAASBHZMRw4N4GAFi9EENfoBrcAAAAAElFTkSuQmCC";
+flag64["bo"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAUBAMAAACDsiv0AAAAD1BMVEXVKx4AeTT54wBTnSPhZhQzAYZEAAAAIUlEQVQY02NgoDFwQQEODEooQIHqfGMUYMAgiAIEqM0HACBCGM/oCyk+AAAAAElFTkSuQmCC";
+flag64["ca"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAMAAADImI+JAAAAM1BMVEX/AAD/MDD/EBD/19f/QED/ICD/r6//////wMD/8PD/oKD/YGD/gID/b2//cHD/UFD/kJAQFQNAAAAAgUlEQVQoz62S2woDIQxEj5doou7l/7+2DwXbwupa2nkIjBwyGAa68oW40vdgKUugmUi2BVAOOGQBjADxFtS8A+xZZ6DW5s8CUJpvVYegAcQ+bBzt3r0bR6fPhzTemPzL+jT7dejhLszPY/I0Yjd3NOJW6xaxhVKoLrbn/2AIvzT8AWsMCOs6h1CtAAAAAElFTkSuQmCC";
+flag64["ch"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMCAIAAAAPshHVAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAZRJREFUKFM9ktlOwzAQRe1Z7JT//wzEQ58Qa0FtoUmbNHvSIhCID+FOgmpdWc5kju+MbbfxvCNNOexFDqp5CE1I+hi7EMaYQL2GIbFIq4rFKVngV8viVkRvrNCO4kzWakkAjAlx5gGcF1fgC2WoJnWP3r2wvkswW72CM8hOdF2e+q75Hb9GlY/EIpUI9j2GUInJPZGH7UY0Fd7zAiSijchP+d11XY+hAgzmMGymXsoYwYPkFQlIFGywSMnRyOMnqHEcTxIg6w0txIiK4FyougfiZ5ZXEZwTPJeOyrKsqqppGnhiBjwMw43YmcEKAgaD2XOqlkPGvHQO2SDrum6ngTXma0KfxswYkt1KFNXCc7ZFqCHfMo2HM+C67wZyI7kjWf84fFNgI1EtbIFtNUx3o3CGPrIz3IaiQs/AEIGVuYlhRt57Qp+wXbNsSXA9OyZoU+RF9t6meY7LmDTtaEwmEcnuznk7JO9f/eVJ/GuvBJOcOBNvjYi9NiQAQ7K79QwYtzqTeIwXGNtv1aUhuXxiRl3IfPb+D5N+8dpNzahiAAAAAElFTkSuQmCC";
+flag64["co"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUAgMAAADnxWVXAAAACVBMVEUAOJPOESb80RYoeTcGAAAAF0lEQVQI12NYBQELGKjOIAmEQkAAMQwA+9NB7HYGMdMAAAAASUVORK5CYII=";
+flag64["de"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAUBAMAAADxfUlCAAAAD1BMVEXdAAAAAAD/zgD0igBKAABdJSNsAAAAIUlEQVQY02MQRAMCDLQTcUEDDgz0BMZowIBBCQ0o0E4EAL4AHCF2rs9hAAAAAElFTkSuQmCC";
+flag64["es"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUCAMAAACtdX32AAAAVFBMVEX/xACzTwzTsbr8wgDUiSvFawfvwy/GCx7uwBrdmDK/rDnztgDZkjPblALJcSSyZgexOhHNsCfNsCjHjmXnvjC9j068d1F4RUKYUB18TVWvSxy6kqEyHguVAAAAVklEQVQoz83RSRLAIAhEUVQgzpp5uv89cwKsuEr+9lU1C2BoBl/y26xtqSNyIoaQiJIx4nKtWov7mMtx64zS5Xjt5+aiwLyoohSzwJPHdUY/Qmf/fegDe6kKdhTlmsEAAAAASUVORK5CYII=";
+flag64["fk"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAMAAADImI+JAAAA8FBMVEUBIWlgdKHUeY4jdLnYVmvyxs1nbprIEC7AyNoOLHElQH0gPHv6+Pm/x9kTfMfg5O1icJ7f4+xklr////8CWmX88fP21dqlbVO3jnmytsDZ3OfOu7aDsdUfdbuBj5y6vb8cOXmwg24zTISwlooJKG6+zdja2tqftsiigXRroc+81epXgLAggcmanYH13uN2bYIxfL2PaGCRlqwwfL2hYD+VvNgwh8Wpvs5godBvUkWNn7tHV4ijj4tOaZtSlcSLm7Tu7u7O0tUAYY8faXCMrsfAmYNzg5Osp5mysX3JiGJooMevm2aorYO1gWPJw6hikagBkklFAAAA+0lEQVQoz8XQ126DMBSA4UOAGFOTKFA2guyddO+9m3S9/9vUJ8ZSLyJ82f8COJxPQhgMs6UBzyLEwnu9ZpiwLVwgFRCnpgZQQRFWMstxnGQZ+B4hLPBZwkdHbNo7m9olJFvaLOjRyXmDt09V0B0MR6OzU72EFi9hfsAI8fxgmeAsoO4O2T3LJATQWqZRq+PPaE18Kl9TvfFQxMWthILJ4/lDqf74tMuTUC7kgSMVMPPG6ffCyyhU15/M3z8Wn/NJXwFhNvh5e86LmcrBzfrl1Y3yK5Wz02v3a5XHoa2AcRrdTaeXneMDBTzs9HrjizCM9pTfpna3yy/w3/0CuwMWbh/ZsdkAAAAASUVORK5CYII=";
+flag64["fr"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUAgMAAADnxWVXAAAACVBMVEUAI5XtKTn///+i/AH+AAAAFElEQVQI12NgYOBatSo0NIBh6DAATSAu4Xxi9HsAAAAASUVORK5CYII=";
+flag64["frs"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAMAAAAhxq8pAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA8UExURf8AAP8HB/9aWv8GBv8ICP8hIf8YGP8yMv84OP9BQf9CQv8fH/8MDP9lZf8pKf8iIv9FRf8CAv8BAQAAAMJjVhgAAAAUdFJOU/////////////////////////8AT0/nEQAAAAlwSFlzAAAK8AAACvABQqw0mAAAAGFJREFUKFNtjkkSwCAIBMm+r/P/v4ZBSksjIg2NBwWVUEnfKIQZiJZd52seI6fe5BCl5ehdJqe/lHmpSKwKpf+gkHzGOcrQedWy7XGdpMjhXZLAaSjkZbhzqfcBXgo3RQAfnmEQfMJBNFUAAAAASUVORK5CYII=";
+flag64["jp"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUBAMAAABohZD3AAAAElBMVEW8AC3////NP2Dmn7DADzn77/GuzSpGAAAAP0lEQVQY02MQRAUM5PGNXJSR+UEMDAyqSHwFIJ8JwRdmAAFDOF8IzFeE80XAfEecfHT16Oah24fhHnT3ku9/AB+iE2XMgOg6AAAAAElFTkSuQmCC";
+flag64["ma"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUBAMAAABohZD3AAAAFVBMVEXBJy1iQi5MSS+nLi2SNC2rLi15PC6Ld+IEAAAAKElEQVQY02NgGBjggsoNFjRF4TspqaDw2ZQSUPiMggIofGYGg4HxBwB4BQJD/6PdEAAAAABJRU5ErkJggg==";
+flag64["mc"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAUAQMAAABCuQT+AAAABlBMVEXOESb///9W4q7JAAAAEklEQVQI12NgIBn8//+/gSQCAHAUIuOMnBoSAAAAAElFTkSuQmCC";
+flag64["noflag"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAANCAMAAACTkM4rAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAEXUExURQAAAJKSktXV1lNTUzs7O4mJibW1tVJSUtPT04iIiVVWVnd3eJqamr6+vuvr6/b29nJzc01NTygnJ8nHx+jo6PDw8Ovr7MrJyCMiIrGwsHx9fVFRUaioqJ2dnU9PT4aGhrOzsyMjIg4ODnd3dyoqKh8fH3h4eG5ubx0dHTMzM4B/fg8PDwQEBHRzc2xtbWlpaY6OjouLjGtra3V1dXd2djAwMKmop9LR0YyMjIyLi9PS0qOjozExMQUFBRkZGYeHiKCgoaKiooqLjH5+fmFhYp+goL2+vnBxcKOjore3tri4t2lqa7i5uZCQkWZmZhISEmlpare3uGpqapGRknx+fy0tLggICCMjJCQkJQkJCSwtLX+AgRsbGxD+1OUAAAAJcEhZcwAADr8AAA6/ATgFUyQAAACfSURBVBhXdcjXAoEAGEDhX5JVIdl7r+w9ighZZe/3fw4u/kvO3fngdwbCSJooykSaLVYkm51mWIeDZWin6z8B52Z5j4f3+jgEAH8gGApHorF4AgEgmUpnsrl8oVhCABDKlWqt3mi2BIRv7U631x8MR7gAojSeyAwjT2eSiKTMF0t1tVY327mCtCM0fX84HHWNOCFJ5wtcb/cHPF9vAPgAEyIU6qDlHbIAAAAASUVORK5CYII=";
+flag64["re"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAUAgMAAADnxWVXAAAACVBMVEUAI5XtKTn///+i/AH+AAAAFElEQVQI12NgYOBatSo0NIBh6DAATSAu4Xxi9HsAAAAASUVORK5CYII=";
+flag64["shield"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAANCAMAAACTkM4rAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABUUExURQAAAAUFBQoKCv///wEBAQ0NDQ8PDwMDAw4ODgICAhAQEC8vL6urqwYGBqqqqoGBgQQEBDExMQwMDBgYGM7OzgcHBxsbGxoaGggICB0dHT4+Pj09PdDhOekAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB5SURBVBhXXY3bDoJADETH6aILaOUqIP//n7RdSYjz0uTMaQvc+BeAlEucpIo2zwirVFD090f29opyfSK3i1U3BYGt8Bno5a2dt48aGpvMt7IzlNiHFg/7wfaAbjRNJyc6umTa/FGXRHSZQzK2bl+Dum/rjzjyQxEAB6niBHSSJ9cvAAAAAElFTkSuQmCC";
+flag64["unlicenced"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAANCAMAAACTkM4rAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABUUExURQAAAAUFBQoKCv///wEBAQ0NDQ8PDwMDAw4ODgICAhAQEC8vL6urqwYGBqqqqoGBgQQEBDExMQwMDBgYGM7OzgcHBxsbGxoaGggICB0dHT4+Pj09PdDhOekAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB5SURBVBhXXY3bDoJADETH6aILaOUqIP//n7RdSYjz0uTMaQvc+BeAlEucpIo2zwirVFD090f29opyfSK3i1U3BYGt8Bno5a2dt48aGpvMt7IzlNiHFg/7wfaAbjRNJyc6umTa/FGXRHSZQzK2bl+Dum/rjzjyQxEAB6niBHSSJ9cvAAAAAElFTkSuQmCC";
+flag64["us"] = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAUCAMAAADWUb86AAAANlBMVEXGWWZ5eJtdQ25tbJI8O25IR3dUU4DZkZqyIjT///+VlbCFhKRgX4mrU2fY1+KaJj+5fpCqqcBFmxQnAAAAh0lEQVQoz8XPSwrDMAxFUau6T0ks9bf/zXYQKBTs4kGhZ6CR0LUbQhAEBOK+DzVchSpK4VI8tqEGqSiZwmXidgw1GaZIWajLaxql406PMnUxjRomEg91PGZRSMLo5+DaxmSk9CRLHfPZGhhR72tff0qS5wNn1y6fZmvHkvZbi9FtSduX/CX6Asb+ET4hHaT8AAAAAElFTkSuQmCC";
+
 function getTgFlag(id) {
     if (id.length > 2 && parseInt(id) > 100) {
         id = id.substring(0, 3);
@@ -181,24 +202,27 @@ function getTgFlag(id) {
         switch (id) {
             case "736":
             case "994":
-                return "unlicenced.png"
+                return flag64["unlicenced"]; // return "unlicenced.png"
 
             case "206":
-                return "be.png";
+                return flag64["be"]; // return "be.png";
+
             case "214":
-                return "es.png";
+                return flag64["es"]; // return "es.png";
+
             case "228":
-                return "ch.png";
+                return flag64["ch"]; // return "ch.png";
+
             case "262":
             case "264":
-                return "de.png";
+                return flag64["de"]; // return "de.png";
 
             case "102":
             case "302":
-                return "ca.png";
+                return flag64["ca"]; // return "ca.png";
 
             case "604":
-                return "ma.png";
+                return flag64["ma"]; // return "ma.png";
 
             case "340":
             case "546":
@@ -206,62 +230,70 @@ function getTgFlag(id) {
             case "742":
             case "647":
             case "208":
-                return "fr.png";
+                return flag64["fr"]; // return "fr.png";
 
             default:
                 break;
         }
 
         for (let i = 0; i < mcc.length; i++) {
-            if (mcc[i].dmrid == id)
-                return "https://flagcdn.com/h20/" + mcc[i].code.toLowerCase() + ".png";
+            if (mcc[i].dmrid == id) {
+                code = mcc[i].code.toLowerCase();
+                if (flag64[code] != null)
+                    return flag64[code];
+
+                return "https://flagcdn.com/h20/" + code + ".png";
+            }
         }
     }
 
-    return "shield.png";
+    return flag64["shield"]; // "shield.png";
 }
 
 function getFlag(callsign, dmrid) {
     if (dmrid.length > 2 && parseInt(dmrid) > 100) {
         // check if beacon has specific bitmap
         for (var key in tgbeacons) {
-            if (dmrid == key)
+            if (dmrid == key) {
+                if (flag64[tgbeacons[key]] != null)
+                    return flag64[tgbeacons[key]];
                 return tgbeacons[key];
+            }
         }
 
         dmrid = dmrid.substring(0, 3);
 
         if (callsign.startsWith("FS"))
-            return "shield.png";
+            return flag64["shield"]; // return "shield.png";
 
         if (callsign.startsWith("14FRS") || callsign.startsWith("FRS"))
-            return "frs.png";
+            return flag64["frs"]; // return "frs.png";
 
         if (callsign.startsWith("BALISE") || dmrid.startsWith(14))
-            return "unlicenced.png";
+            return flag64["unlicenced"]; // return "unlicenced.png";
 
         switch (dmrid) {
             case "736":
                 if (dmrid.indexOf(callsign) != -1) break; // else fall through
             case "994":
-                return "unlicenced.png"
+                return flag64["unlicenced"]; // return "unlicenced.png";
 
             case "206":
-                return "be.png";
+                return flag64["be"]; // return "be.png";
             case "214":
-                return "es.png";
+                return flag64["es"]; // return "es.png";
             case "228":
-                return "ch.png";
+                return flag64["ch"]; // 
             case "262":
             case "264":
-                return "de.png";
+                return flag64["de"]; // return "de.png";
 
             case "102":
             case "302":
-                return "ca.png";
+                return flag64["ca"]; // return "ca.png";
 
             case "604":
-                return "ma.png";
+                return flag64["ma"]; // return "ma.png";
 
             case "340":
             case "546":
@@ -269,19 +301,24 @@ function getFlag(callsign, dmrid) {
             case "742":
             case "647":
             case "208":
-                return "fr.png";
+                return flag64["fr"]; // return "fr.png";
 
             default:
                 break;
         }
 
         for (let i = 0; i < mcc.length; i++) {
-            if (mcc[i].dmrid == dmrid)
-                return "https://flagcdn.com/h20/" + mcc[i].code.toLowerCase() + ".png";
+            if (mcc[i].dmrid == dmrid) {
+                code = mcc[i].code.toLowerCase();
+                if (flag64[code] != null)
+                    return flag64[code];
+                    
+                return "https://flagcdn.com/h20/" + code + ".png";
+            }
         }
     }
 
-    return "noflag.png";
+    return flag64["noflag"]; // noflag.png";
 }
 
 mcc = [
@@ -1491,3 +1528,4 @@ mcc = [
     "code": "FK"
 }
 ];
+
