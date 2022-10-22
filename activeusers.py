@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 #
-#!/usr/bin/env python3
-#
 ###############################################################################
 #   Copyright (C) 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>
 #
