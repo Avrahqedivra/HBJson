@@ -39,6 +39,17 @@ from config import *
 # from mysql.connector import connect, Error
 # import pandas as pd
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 def creation_date(path_to_file):
     """
     Try to get the date that a file was created, falling back to when it was
@@ -131,21 +142,23 @@ def fetchRemoteUsersFiles(fileurl):
 
                                         # if count not 0, start to work
                                         if count > 0:
-                                            print("found " + str(count) + " activeUsers")
-
                                             jsonStr = {
                                                     "count": count,
                                                     "results": []
                                                 }
 
                                             # prepare progression bar
-                                            maxprogbarlength = 100
-                                            ratio = int(maxprogbarlength / count * 100)
+                                            print("\r\nParsing the " + str(count) + " active users found")
+                                            maxprogbarlength = 40
+                                            ratio = maxprogbarlength / count
                                             cursor.hide()
 
                                             # loop throughout the dict (enumerate to get the loop index)
                                             for index, key in enumerate(activeUsers):
-                                                print(str(int(index*100/count)).rjust(3, ' ') + "% [" + "■"*int(index*(maxprogbarlength / count)) + "]" , end="\r")
+                                                green = int((index+1)*ratio)
+                                                white = int(maxprogbarlength-green)
+                                                #     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 4.2 MB/s eta 0:00:00
+                                                print(" "*5+f"{bcolors.OKGREEN}"+"━"*green + f"{bcolors.ENDC}" + "━"*white + str(index+1).rjust(6, ' ') + "/" + str(count), end="\r")
 
                                                 record = activeUsers[key]
                                                 found = False
@@ -213,7 +226,7 @@ def fetchRemoteUsersFiles(fileurl):
                                                 json.dump(jsonStr, file, indent=4)
                                                 file.truncate()
 
-                                            print("done! ")
+                                            print("done! \r\n")
                                         else:
                                             print("zero records found")
                                     else:
