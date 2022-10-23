@@ -31,6 +31,7 @@ import cursor
 
 # Specific functions to import from standard modules
 from time import time
+from datetime import timedelta
 
 # Configuration variables and constants
 from config import *
@@ -38,6 +39,17 @@ from config import *
 # MYSQL stuff (pip install mysql-connector-python)
 # from mysql.connector import connect, Error
 # import pandas as pd
+
+class bcolors:
+    HEADER = '\033[95m'
+    BLUE = '\033[94m'
+    CYAN = '\033[96m'
+    GREEN = '\033[92m'
+    RED = '\033[91m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def creation_date(path_to_file):
     """
@@ -74,7 +86,7 @@ def getRadioIdUserFile():
             print("yes, and  " + filename + " is recent, no download needed")
             return filename
 
-    print(filename + " is older than 7 days or missing, download")
+    print(filename + " is missing or older than 7 days, download")
     with urllib.request.urlopen(fileurl) as url:
         with open(filepath, 'w') as users_json:
             users_json.write(url.read().decode("utf-8"))
@@ -131,21 +143,31 @@ def fetchRemoteUsersFiles(fileurl):
 
                                         # if count not 0, start to work
                                         if count > 0:
-                                            print("found " + str(count) + " activeUsers")
-
                                             jsonStr = {
                                                     "count": count,
                                                     "results": []
                                                 }
 
                                             # prepare progression bar
-                                            maxprogbarlength = 100
-                                            ratio = int(maxprogbarlength / count * 100)
+                                            print("\r\nParsing the " + str(count) + " active users found")
+                                            maxprogbarlength = 40
+                                            ratio = maxprogbarlength / count
                                             cursor.hide()
+                                            t1 = time()*1000-1
+                                            treated = 0
 
                                             # loop throughout the dict (enumerate to get the loop index)
                                             for index, key in enumerate(activeUsers):
-                                                print(str(int(index*100/count)).rjust(3, ' ') + "% [" + "■"*int(index*(maxprogbarlength / count)) + "]" , end="\r")
+                                                elapsed = (time()*1000 - t1)
+                                                speed = int(elapsed/(index+1))
+                                                eta = timedelta(seconds=int((count-index)/speed))
+
+                                                green = int((index+1)*ratio)
+                                                white = int(maxprogbarlength-green)
+                                                #     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 4.2 MB/s eta 0:00:00
+                                                print(" "*5+f"{bcolors.GREEN}"+"━"*green + f"{bcolors.ENDC}" + "━"*white + str(index+1).rjust(6, ' ') + "/" + str(count) \
+                                                    + " "+f"{bcolors.RED}" + str(speed) + " rec/s"+ f"{bcolors.ENDC}" \
+                                                    + " "+f"{bcolors.ENDC}" + "eta " + str(eta), end="\r")
 
                                                 record = activeUsers[key]
                                                 found = False
@@ -213,7 +235,7 @@ def fetchRemoteUsersFiles(fileurl):
                                                 json.dump(jsonStr, file, indent=4)
                                                 file.truncate()
 
-                                            print("done! ")
+                                            print("done! \r\n")
                                         else:
                                             print("zero records found")
                                     else:
