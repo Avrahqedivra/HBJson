@@ -83,14 +83,14 @@ def getRadioIdUserFile():
     if os.path.exists(filepath):
         print("checking if " + filename + " needs new download from remote")
         if daydiff(creation_date(filepath)) < 7:
-            print("yes, and  " + filename + " is recent, no download needed")
+            print("yes, and  " + filename + " recent enough, no download needed")
             return filename
 
     print(filename + " is missing or older than 7 days, download")
     with urllib.request.urlopen(fileurl) as url:
         with open(filepath, 'w') as users_json:
             users_json.write(url.read().decode("utf-8"))
-            print(filename + " downloaded and stored")
+            print(filename + " downloaded and saved")
             return filename
 
 def fetchRemoteUsersFiles(fileurl):
