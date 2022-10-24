@@ -166,7 +166,7 @@ def fetchRemoteUsersFiles(fileurl):
                                                 white = int(maxprogbarlength-green)
                                                 #     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 4.2 MB/s eta 0:00:00
                                                 print(" "*5+f"{bcolors.GREEN}"+"━"*green + f"{bcolors.ENDC}" + "━"*white + str(index+1).rjust(6, ' ') + "/" + str(count) \
-                                                    + " "+f"{bcolors.RED}" + str(speed) + " rec/s"+ f"{bcolors.ENDC}" \
+                                                    + " "+f"{bcolors.RED}" + str(speed) + "rec/s"+ f"{bcolors.ENDC}" \
                                                     + " "+f"{bcolors.ENDC}" + "eta " + str(eta), end="\r")
                                                 record = activeUsers[key]
                                                 found = False
