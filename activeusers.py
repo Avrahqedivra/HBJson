@@ -109,7 +109,7 @@ def fetchRemoteUsersFiles(fileurl):
                 print("ok, load radioidusers")
                 with open(PATH + "assets/" + radioidusers, 'r') as radioidfile:
                     radioidsubscribers = json.load(radioidfile)
-                    print("checking for valid radioid file")
+                    print("checking radioid file validity")
                     if radioidsubscribers.get("users"):
                         radioidsubscribers = radioidsubscribers["users"]
 
