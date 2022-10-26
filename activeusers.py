@@ -27,7 +27,6 @@ import logging
 import urllib.request
 import platform
 import os
-import cursor
 
 # Specific functions to import from standard modules
 from time import time
@@ -50,6 +49,8 @@ class bcolors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    CURSORON = '\033[?25h'
+    CURSOROFF = '\033[?25l'
 
 def creation_date(path_to_file):
     """
@@ -149,10 +150,9 @@ def fetchRemoteUsersFiles(fileurl):
                                                 }
 
                                             # prepare progression bar
-                                            print("\r\nParsing the " + str(count) + " active users found")
+                                            print("\r\nParsing the " + str(count) + " active users found" + f"{bcolors.CURSOROFF}")
                                             maxprogbarlength = 40
                                             ratio = maxprogbarlength / count
-                                            cursor.hide()
                                             t1 = time()*1000-1
                                             treated = 0
 
@@ -243,7 +243,7 @@ def fetchRemoteUsersFiles(fileurl):
                                 print("bad local subscribers file")
                     else:
                         print("bad radioid file")
-    cursor.show()
+    print(f"{bcolors.CURSORON}")
 
 if __name__ == '__main__':
     fetchRemoteUsersFiles("http://francophonie.link/active_subscriber_ids.json")
