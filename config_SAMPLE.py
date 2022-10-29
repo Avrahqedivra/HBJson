@@ -14,8 +14,10 @@ JSON_SERVER_PORT = 9990                         # Has to be above 1024 if you're
 DISPLAY_LINES =  20                             # number of lines displayed in index_template
 CLIENT_TIMEOUT  = 0                             # Clients are timed out after this many seconds, 0 to disable
 
-# Put list of NETWORK_ID from OPB links to don't show local traffic in lastheard, for example: "260210,260211,260212"
+# list of NETWORK_ID from OPB links not to show in local "lastheard" traffic, for example: "260210,260211,260212"
 OPB_FILTER = ""
+# allowed Backend OBP, if specified, precise all allowed SRC_ID, for example { "OBP-GLOBAL": { "20881", "20883" } }
+OPB_BACKEND = {}
 # ids of tg to be excluded, for example "800,801,802,3339"
 TGID_FILTER = ""
 # ids of tg order on html monitor page, for example "38,7,39,777"

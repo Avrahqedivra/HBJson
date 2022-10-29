@@ -1166,14 +1166,19 @@ def process_message(_bmessage):
 
         REPORT_TYPE     = p[0]
         REPORT_RXTX     = p[2]
+        REPORT_SYS      = p[3]
         REPORT_SRC_ID   = p[5]
         REPORT_TGID     = p[8]
+
+        # check for filtered BACKEND OBP
+        if REPORT_SYS in OPB_BACKEND and REPORT_SRC_ID not in OPB_BACKEND[REPORT_SYS]:
+            logging.debug('BACKEND OBP "{}" WITH ID="{}" NOT ALLOWED'.format(REPORT_SYS, REPORT_SRC_ID))
+            return
 
         if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
             REPORT_DATE     = _now[0:10]
             REPORT_TIME     = _now[11:19]
             REPORT_PACKET   = p[1]
-            REPORT_SYS      = p[3]
             REPORT_DMRID    = p[6]
             REPORT_TS       = p[7]
             REPORT_ALIAS    = alias_tgid(int(REPORT_TGID), talkgroup_ids)
@@ -1269,7 +1274,7 @@ def process_message(_bmessage):
         logging.debug('got unknown opcode: {}, message: {}'.format(repr(opcode), repr(_message[1:])))
 
     # for key, value in OPCODE.items():
-    #     if value == opcode:            
+    #     if value == opcode:
     #         logging.info('Process [' + key + '] Message Took ' + str(int((ptime.perf_counter() - start))) + 'ms')
     #         break
 
@@ -1711,7 +1716,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.1.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.2.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
