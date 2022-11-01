@@ -251,6 +251,19 @@ thead {
   height: 15px;
   cursor: pointer;
 }
+.titleRow {
+  background-color: var(--color-bg-headerRow);
+  color: var(--color-fg-headerRow);
+  height: 2rem;
+}
+.titleCell {
+  text-align: left;
+  font-size: 1.6rem;
+  padding-left: 0.5rem;
+}
+.entitledTables {
+  width: var(--table-width);
+}
 .tgBlue {
   color: var(--color-tgBlue);
 }

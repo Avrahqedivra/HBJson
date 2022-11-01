@@ -22,6 +22,8 @@ OPB_BACKEND = {}
 TGID_FILTER = ""
 # ids of tg order on html monitor page, for example "38,7,39,777"
 TGID_ORDER = ""
+# tg optional settings, for example "tgid": { "title-before": "title", "hide-dmrid": "208, 206" }
+TGID_SETTINGS = '{ "00": { "title-before": "TITLE" }, "01": { "title-before": "Another title", "hide-dmrid": "208, 206" } }'
 # all tgid not in this list will be excluded. if empty all will be allowed
 TGID_ALLOWED = ""
 # TG to hilite

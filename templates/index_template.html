@@ -227,6 +227,12 @@
 		tgbeacons = {};
 	}
 
+	try {
+		tgsettings = JSON.parse('<<<TGID_SETTINGS>>>');
+	} catch(e) {
+		tgsettings = {};
+	}
+
 	last_active_size = parseInt("<<<LAST_ACTIVE_SIZE>>>");
 	if (last_active_size == 0)
 		last_active_size = tgorder.size;
@@ -507,50 +513,42 @@
 
 										hardwareType = (record["RX_FREQ"] == "N/A" && record["TX_FREQ"] == "N/A") ? "IP Network" : "Radio";
 
-										content += '<tr>';
-										content += '<td rowspan="2">';
-										content += '<div class="tooltip">';
-										content += '<img class="lazyload msflag" src="' + getMasterFlag(2, netID) + '"/>';
-										content += '<div class="msCallsign">' + record["CALLSIGN"] + '</div>';
-										content += '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>';
-										content += '<span class="tooltiptext">';
-										content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
-										content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">' + hardwareType + '</font></b><br>';
-										content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + record["SLOTS"];
-										content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + record["SOFTWARE_ID"];
-										content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + record["PACKAGE_ID"];
-										content += '</span>';
-										content += '</span>';
-										content += '</div>';
-										content += '<br>';
+										content += '<tr>'
+											+ '<td rowspan="2">'
+											+ '<div class="tooltip">'
+											+ '<img class="lazyload msflag" src="' + getMasterFlag(2, netID) + '"/>'
+											+ '<div class="msCallsign">' + record["CALLSIGN"] + '</div>'
+											+ '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>'
+											+ '<span class="tooltiptext">'
+											+ '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">'
+											+ '&nbsp;&nbsp;&nbsp;<b><font color="yellow">' + hardwareType + '</font></b><br>'
+											+ '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + record["SLOTS"]
+											+ '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + record["SOFTWARE_ID"]
+											+ '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + record["PACKAGE_ID"]
+											+ '</span></span></div><br>'
+											+ '<div class="msLocation">' + record["LOCATION"] + '</div></td>'
+											+ '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>'
+											+ '<td class="' + ts1 + '">TS1</td><td class="' + cnx1 + '">';
 
-										content += '<div class="msLocation">' + record["LOCATION"] + '</div>';
-										content += '</td>';
-
-										content += '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>';
-
-										content += '<td class="' + ts1 + '">TS1</td>';
-										content += '<td class="' + cnx1 + '">';
 										if (record["1"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
-										content += record["1"]["SUB"] + '</td>';
-										content += '<td class="' + cnx1 + '">'
+										
+										content += record["1"]["SUB"] + '</td><td class="' + cnx1 + '">'
+										
 										if (record["1"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
-										content += record["1"]["DEST"] + '</td>';
-										content += '</tr>';
 
-										content += '<tr>';
-										content += '<td class="' + ts2 + '">TS2</td>';
-										content += '<td class="' + cnx2 + '">';
+										content += record["1"]["DEST"] + '</td></tr><tr><td class="' + ts2 + '">TS2</td><td class="' + cnx2 + '">';
+
 										if (record["2"]["SUB"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
-										content += record["2"]["SUB"] + '</td>';
-										content += '<td class="' + cnx2 + '">'
-											if (record["2"]["DEST"] != "")
+
+										content += record["2"]["SUB"] + '</td><td class="' + cnx2 + '">';
+
+										if (record["2"]["DEST"] != "")
 											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
-										content += record["2"]["DEST"] + '</td>';
-										content += '</tr>'
+
+										content += record["2"]["DEST"] + '</td></tr>'
 								}
 							}
 						} catch (error) {
@@ -806,8 +804,21 @@
 							'</thead>' +
 							'<tbody id="hblink' + tgid + '"></tbody></table>';
 						} else {
-							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' +
-							'<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' +
+
+							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
+
+							Object.keys(tgsettings).forEach(function(tg) {
+								if (tg == record.TGID) {
+									var tgsetting = tgsettings[tg];
+									if (tgsetting["title-before"] != null) {
+										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + tgsetting["title-before"] + '</td></tr></thead></table>';
+										emptyTable += '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+									}
+									return;
+								}
+            	});
+
+							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' +
 							'<tr class="headerRow">' +
 							'<th class="thledate">Date</th>' +
 							'<th class="thletime">Heure</th>' +
@@ -853,6 +864,24 @@
 							callsign = "XXXXX";
 							dmrid = "0000000";
 							netid = "XXXXX";
+						}
+					});
+
+					Object.keys(tgsettings).forEach(function(tg) {
+						if (tg == record.TGID) {
+							var tgsetting = tgsettings[tg];
+							if (tgsetting["hide-dmrid"] != null) {
+								hide_those = new Set(tgsetting["hide-dmrid"]);
+								hide_those.forEach(dh => {
+									if (dh.length > 0 && dmrid.startsWith(dh) && !(dmrid in tgbeacons)) {
+										callsign = "XXXXX";
+										dmrid = "0000000";
+										netid = "XXXXX";
+										return;
+									}
+								});
+							}
+							return;
 						}
 					});
 

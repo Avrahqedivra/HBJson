@@ -248,6 +248,7 @@ def replaceSystemStrings(data):
         .replace("<<<TGID_ORDER>>>", str(TGID_ORDER)) \
         .replace("<<<TGID_HILITE>>>", str(TGID_HILITE)) \
         .replace("<<<TGID_COLORS>>>", str(TGID_COLORS)) \
+        .replace("<<<TGID_SETTINGS>>>", str(TGID_SETTINGS)) \
         .replace("<<<SOCKET_SERVER_PORT>>>", str(SOCKET_SERVER_PORT)) \
         .replace("<<<DISPLAY_LINES>>>", str(DISPLAY_LINES)) \
         .replace("<<<LAST_ACTIVE_TG>>>", str(LAST_ACTIVE_TG)) \
