@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="theme-light" manifest="hbjson.appcache">
+<html class="<<<THEME>>>" manifest="hbjson.appcache">
 
 <head>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
@@ -265,7 +265,7 @@
 		if (bridges != null) {
 			var content = "";
 
-			console.log(JSON.stringify(bridges));
+			// console.log(JSON.stringify(bridges));
 		}
 	}
 
@@ -281,8 +281,7 @@
 
 			for (let openBridge in openBridges) {
 				record = openBridges[openBridge];
-				content += "<tr><td class='obName'>" + openBridge + "</td>";
-				content += "<td class='obNetID'>NetID:&nbsp;" + record["NETWORK_ID"] + "</td>";
+				content += "<tr><td class='obName'>" + openBridge + "</td><td class='obNetID'>NetID:&nbsp;" + record["NETWORK_ID"] + "</td>";
 
 				var entry = "";
 				var data = null;
@@ -329,32 +328,31 @@
 
 				peState = record["STATS"]["CONNECTION"] == "YES" ? "peON" : "peOFF";
 
-				content += "<tr><td class='msMasters' rowspan='3'>" + peer;
-				content += "<br><div class='msRepeat'>Mode:&nbsp;" + record["MODE"] + "</div></td></tr>";
+				content += "<tr><td class='msMasters' rowspan='3'>" + peer
+					+ "<br><div class='msRepeat'>Mode:&nbsp;" + record["MODE"] + "</div></td></tr>"
 
-				content += '<tr><td rowspan="2"><div class="tooltip"><div class="msCallsign">' + record["CALLSIGN"] + '</div>';
-				content += '<span class="msNetID">&nbsp;(Id: ' + record["RADIO_ID"] + ')</span>';
-				content += '<span class="tooltiptext"><span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
-				content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">Linked Time Slot:&nbsp;</font></b>' + record["SLOTS"];
-				content += '</span></span></div><br><div class="msLocation">' + record["LOCATION"] + '</div></td>';
+					+ '<tr><td rowspan="2"><div class="tooltip"><div class="msCallsign">' + record["CALLSIGN"] + '</div>'
+					+ '<span class="msNetID">&nbsp;(Id: ' + record["RADIO_ID"] + ')</span>'
+					+ '<span class="tooltiptext"><span style="font: 9pt arial,sans-serif;color:#FFFFFF">'
+					+ '&nbsp;&nbsp;&nbsp;<b><font color="yellow">Linked Time Slot:&nbsp;</font></b>' + record["SLOTS"]
+					+ '</span></span></div><br><div class="msLocation">' + record["LOCATION"] + '</div></td>'
 
+					+ '<td class="' + peState + '" rowspan="2">'
+					+ record["STATS"]["CONNECTED"] 
+					+ '<br><div style="font: 8pt arial, sans-serif">'
+					+ record["STATS"]["PINGS_SENT"] 
+					+ " / " + record["STATS"]["PINGS_ACKD"] 
+					+ " / " + (record["STATS"]["PINGS_SENT"] - record["STATS"]["PINGS_ACKD"]) 
+					+ "</div></td>"
 
-				content += '<td class="' + peState + '" rowspan="2">';
-				content += record["STATS"]["CONNECTED"] 
-						+ '<br><div style="font: 8pt arial, sans-serif">'
-						+ record["STATS"]["PINGS_SENT"] 
-						+ " / " + record["STATS"]["PINGS_ACKD"] 
-						+ " / " + (record["STATS"]["PINGS_SENT"] - record["STATS"]["PINGS_ACKD"]) 
-						+ "</div></td>";
+					+ '<td class="' + ts1 + '">TS1</td>'
+					+ '<td class="' + cnx1 + '">' + record["1"]["SUB"] + '</td>'
+					+ '<td class="' + cnx1 + '">' + record["1"]["DEST"] + '</td>'
+					+ '</tr>'
 
-				content += '<td class="' + ts1 + '">TS1</td>';
-				content += '<td class="' + cnx1 + '">' + record["1"]["SUB"] + '</td>';
-				content += '<td class="' + cnx1 + '">' + record["1"]["DEST"] + '</td>';
-				content += '</tr>';
-
-				content += '<tr><td class="' + ts2 + '">TS2</td>';
-				content += '<td class="' + cnx2 + '">' + record["2"]["SUB"] + '</td>';
-				content += '<td class="' + cnx2 + '">' + record["2"]["DEST"] + '</td></tr>'
+					+ '<tr><td class="' + ts2 + '">TS2</td>'
+					+ '<td class="' + cnx2 + '">' + record["2"]["SUB"] + '</td>'
+					+ '<td class="' + cnx2 + '">' + record["2"]["DEST"] + '</td></tr>';
 			}
 
 			$("#peers").append(content);
@@ -454,10 +452,7 @@
 										continue;
 
 								rowspan = Math.max(1, length) * 2 + 1;
-								content += "<tr>";
-								content += "<td class='msMasters' rowspan='" + rowspan + "'>" + entry;
-								content += "<br><div class='msRepeat'>" + masters[entry]["REPEAT"] + "</div></td>";
-								content += '</tr>';
+								content += "<tr><td class='msMasters' rowspan='" + rowspan + "'>" + entry + "<br><div class='msRepeat'>" + masters[entry]["REPEAT"] + "</div></td></tr>";
 								done = true;
 						}
 
@@ -467,36 +462,36 @@
 						try {
 							if (peersLength == 0) {
 									content += '<tr>';
-									content += '<td rowspan="2">';
-									content += '<div class="tooltip">';
-									content += '<div class="msCallsign">N/A</div>';
-									content += '<span class="msNetID">&nbsp;(Id: n/a)</span>';
-									content += '<span class="tooltiptext">';
-									content += '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">';
-									content += '&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>';
-									content += '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + "N/A";
-									content += '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + "N/A";
-									content += '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + "N/A";
-									content += '</span>';
-									content += '</span>';
-									content += '</div>';
-									content += '<br>';
+									+ '<td rowspan="2">'
+									+ '<div class="tooltip">'
+									+ '<div class="msCallsign">N/A</div>'
+									+ '<span class="msNetID">&nbsp;(Id: n/a)</span>'
+									+ '<span class="tooltiptext">'
+									+ '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">'
+									+ '&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>'
+									+ '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + "N/A"
+									+ '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + "N/A"
+									+ '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + "N/A"
+									+ '</span>'
+									+ '</span>'
+									+ '</div>'
+									+ '<br>'
 
-									content += '<div class="msLocation">' + "N/A" + '</div>';
-									content += '</td>';
+									+ '<div class="msLocation">' + "N/A" + '</div>'
+									+ '</td>'
 
-									content += '<td class="tdGradient" rowspan="2">' + "N/A" + '</td>';
+									+ '<td class="tdGradient" rowspan="2">' + "N/A" + '</td>'
 
-									content += '<td class="msTS1">TS1</td>';
-									content += '<td class="msTSE">' + "N/A" + '</td>';
-									content += '<td class="msTSE">' + "N/A" + '</td>';
-									content += '</tr>';
+									+ '<td class="msTS1">TS1</td>'
+									+ '<td class="msTSE">' + "N/A" + '</td>'
+									+ '<td class="msTSE">' + "N/A" + '</td>'
+									+ '</tr>'
 
-									content += '<tr>';
-									content += '<td class="msTS2">TS2</td>';
-									content += '<td class="msTSE">' + "N/A" + '</td>';
-									content += '<td class="msTSE">' + "N/A" + '</td>';
-									content += '</tr>'
+									+ '<tr>'
+									+ '<td class="msTS2">TS2</td>'
+									+ '<td class="msTSE">' + "N/A" + '</td>'
+									+ '<td class="msTSE">' + "N/A" + '</td>'
+									+ '</tr>'
 							} else {
 									for (let i = 0; i < peersLength; i++) {
 										netID = peers[i][0];
@@ -516,7 +511,7 @@
 										content += '<tr>'
 											+ '<td rowspan="2">'
 											+ '<div class="tooltip">'
-											+ '<img class="lazyload msflag" src="' + getMasterFlag(2, netID) + '"/>'
+											+ '<img class="msflag" src="' + getMasterFlag(2, netID) + '"/>'
 											+ '<div class="msCallsign">' + record["CALLSIGN"] + '</div>'
 											+ '<span class="msNetID">&nbsp;(Id: ' + netID + ')</span>'
 											+ '<span class="tooltiptext">'
@@ -531,24 +526,24 @@
 											+ '<td class="' + ts1 + '">TS1</td><td class="' + cnx1 + '">';
 
 										if (record["1"]["SUB"] != "")
-											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
+											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
 										
 										content += record["1"]["SUB"] + '</td><td class="' + cnx1 + '">'
 										
 										if (record["1"]["DEST"] != "")
-											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
+											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
 
 										content += record["1"]["DEST"] + '</td></tr><tr><td class="' + ts2 + '">TS2</td><td class="' + cnx2 + '">';
 
 										if (record["2"]["SUB"] != "")
-											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
+											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
 
 										content += record["2"]["SUB"] + '</td><td class="' + cnx2 + '">';
 
 										if (record["2"]["DEST"] != "")
-											content += '<img class="lazyload tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
+											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
 
-										content += record["2"]["DEST"] + '</td></tr>'
+										content += record["2"]["DEST"] + '</td></tr>';
 								}
 							}
 						} catch (error) {
@@ -593,7 +588,13 @@
 
 		const el = document.getElementById(id);
 		if (el != null) {
-			el.scrollIntoView(true);
+
+			const yOffset = -50;
+			const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+			window.scrollTo({top: y, behavior: 'smooth'});
+
+			// el.scrollIntoView(true);
 			el.focus();
 		}
 	}
@@ -616,9 +617,9 @@
 
 				var alias = om.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
-				content += "<tr class='" + bgClass + "'><td class='firstname ellipsis'>" + enhanceNames(om.NAME) +
-					"</td><td class='tdDate'>" + om.DATE + "</td><td class'tdTime'>" + om.TIME + "</td><td class=''>" + om
-					.TGID + "</td><td class='alias ellipsis'>" + alias + "</td><td class='delay'>" + delay + "</td></tr>";
+				content += "<tr class='" + bgClass + "'><td class='firstname ellipsis'>" + enhanceNames(om.NAME) 
+					+ "</td><td class='tdDate'>" + om.DATE + "</td><td class'tdTime'>" + om.TIME + "</td><td class=''>" 
+					+ om.TGID + "</td><td class='alias ellipsis'>" + alias + "</td><td class='delay'>" + delay + "</td></tr>";
 			}
 		});
 
@@ -683,7 +684,8 @@
 				else
 					delay = parseInt(cnxTime / 3600) + " hrs";
 
-				content += "<tr class='"+ (stat.cnxCount == 0 ? "trstatisticsred":"trstatisticsgreen") + "'><td class='tdstattg'>" + stat.tgid + "</td><td class='tdstatcnt'>" + stat.cnxCount + "</td><td class='tdstatdelay'>" + delay + "</td></tr>";
+				content += "<tr class='"+ (stat.cnxCount == 0 ? "trstatisticsred":"trstatisticsgreen") + "'><td class='tdstattg'>" 
+					+ stat.tgid + "</td><td class='tdstatcnt'>" + stat.cnxCount + "</td><td class='tdstatdelay'>" + delay + "</td></tr>";
 			});
 
 			$("#statistics").append(content);
@@ -725,6 +727,54 @@
 		}
 
 		return 0;
+	}
+
+	function showEmptyTables() {
+			var tgsetting;
+
+			if ((tgsetting = tgsettings["*"]) != null) {
+					showColumnsDefault = tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"];
+					showEmptyDefault = tgsetting["show-empty"] == null ? "false":tgsetting["show-empty"];
+			}
+
+			Object.keys(tgsettings).forEach(function(tgid) {
+				var tgName = "tgId" + tgid;
+				if (document.getElementById(tgName) == null) {
+					tgsetting = tgsettings[tgid];
+					
+					var showEmpty = tgsetting["show-empty"] == null ? showEmptyDefault:tgsetting["show-empty"];
+
+					if (tgid != "*" && tgsetting["title-before"] != null && showEmpty == true) {
+						var showColumns = tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault;
+						
+						var emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">'
+						 	+ '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' 
+							+ tgsetting["title-before"] + '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
+							+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+							+ '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
+							+ '<tr class="headerRow">' 
+							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>'
+							+	'<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>'
+							+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
+							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>'
+							+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>'
+							+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
+							+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
+							+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
+							+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
+							+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
+							+ '</tr>' 
+							+ '</thead>' 
+							+ '<tbody id="hblink' + tgid + '"></tbody></table>';
+
+						/* insert new table into tg tables area regarding tgorder */
+						if (document.getElementById("tg" + tgid + "marker") != null)
+							$(emptyTable).insertBefore("#tg" + tgid + "marker");
+						else
+							$('#insertPoint').append(emptyTable);
+					}
+				}
+		});
 	}
 
 	function doTraffic(t) {
@@ -785,54 +835,59 @@
 					else
 						bgClass = 'tgGreen';
 
+					var showColumns = showColumnsDefault;
+					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
+
 					/* check if table already exists */
 					if (document.getElementById(tgName) == null) {
 						/* build the missing table */
 						var emptyTable = "";
 
 						if (mobileDevice) {
-							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' +
-							'<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' +
-							'<tr class="headerRow">' +
-							'<th class="thledate" style="display:none;">Date</th>' +
-							'<th class="thletime">Heure</th>' +
-							'<th class="thletx" colspan=2>TX Connectés</th>' +
-							'<th class="thlename">Name</th>' +
-							'<th class="thletg">TG' + tgid + '</th>' +
-							'<th class="thledelay">TX (s)</th>' +
-							'</tr>' +
-							'</thead>' +
-							'<tbody id="hblink' + tgid + '"></tbody></table>';
+							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' 
+							+ '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
+							+ '<tr class="headerRow">' 
+							+ '<th class="thledate" style="display:none;">Date</th>' 
+							+ '<th class="thletime">Heure</th>' 
+							+ '<th class="thletx" colspan=2>TX Connectés</th>' 
+							+ '<th class="thlename">Name</th>' 
+							+ '<th class="thletg">TG' + tgid + '</th>' 
+							+ '<th class="thledelay">TX (s)</th>' 
+							+ '</tr>' 
+							+ '</thead>' 
+							+ '<tbody id="hblink' + tgid + '"></tbody></table>';
 						} else {
 
 							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
-
 							Object.keys(tgsettings).forEach(function(tg) {
-								if (tg == record.TGID) {
+								if (tg == "*" || tg == record.TGID) {
 									var tgsetting = tgsettings[tg];
+									if (tgsetting["show-columns"] != null)
+										showColumns = tgsetting["show-columns"];
 									if (tgsetting["title-before"] != null) {
-										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + tgsetting["title-before"] + '</td></tr></thead></table>';
-										emptyTable += '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
+											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
+											+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
 									}
 									return;
 								}
             	});
 
-							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' +
-							'<tr class="headerRow">' +
-							'<th class="thledate">Date</th>' +
-							'<th class="thletime">Heure</th>' +
-							'<th class="thleslot">Slot</th>' +
-							'<th class="thletx" colspan=2>TX Connectés</th>' +
-							'<th class="thlename">Name</th>' +
-							'<th class="thletg">TG' + tgid + '</th>' +
-							'<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' +
-							'<th class="thledelay">TX (s)</th>' +
-							'<th class="thlenetid">NetID</th>' +
-							'<th class="thlemaster">Master Infra</th>' +
-							'</tr>' +
-							'</thead>' +
-							'<tbody id="hblink' + tgid + '"></tbody></table>';
+							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
+								+ '<tr class="headerRow">' 
+								+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>' 
+								+ '<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>' 
+								+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
+								+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>' 
+								+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>' 
+								+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
+								+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
+								+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
+								+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
+								+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
+								+ '</tr>' 
+								+ '</thead>' 
+								+ '<tbody id="hblink' + tgid + '"></tbody></table>';
 						}
 
 						/* insert new table into tg tables area regarding tgorder */
@@ -852,7 +907,6 @@
 					var dmrid = record.DMRID;
 					var delay = record.DELAY;
 					var netid = record.SRC_ID;
-					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
 					if (delay > 9999)
 						delay = parseInt(delay / 1000);
@@ -870,6 +924,10 @@
 					Object.keys(tgsettings).forEach(function(tg) {
 						if (tg == record.TGID) {
 							var tgsetting = tgsettings[tg];
+
+							if (tgsetting["show-columns"] != null)
+								showColumns = tgsetting["show-columns"];
+
 							if (tgsetting["hide-dmrid"] != null) {
 								hide_those = new Set(tgsetting["hide-dmrid"]);
 								hide_those.forEach(dh => {
@@ -896,41 +954,51 @@
 								flagUrl = flag64["shield"]; // "shield.png";
 
 							if (mobileDevice) {
-								content = '<tr class=' + bgClass + '>';
-								content += "<td class='tdDate' style='display:none;'>" + record.DATE + "</td>";
-								content += "<td class='tdTime'>" +record.TIME + "</td>";
-								content += "<td class='callsign ellipsis'><img class='lazyload tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
-								content += "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
+								content = '<tr class=' + bgClass + '>'
+									+ "<td class='tdDate' style='display:none;'>" + record.DATE + "</td>"
+									+ "<td class='tdTime'>" +record.TIME + "</td>"
+									+ "<td class='callsign ellipsis'><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>"
+									+ "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
+								
 								if (record.NAME.toUpperCase() == callsign)
 									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
 								else
 									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
+
 								content += "<td class='talkgroup'>" + tgid + "</td>";
+
 								if (record.PACKET == "START")
 									content += "<td class='online'>ONLINE</td>";
 								else
 									content += "<td class='delay'>" + ((delay != undefined) ? delay : "") + "</td>";
+
 								content += "</tr>";
 							} else {
-								content = '<tr class=' + bgClass + '>';
-								content += "<td class='tdDate'>" + record.DATE + "</td>";
-								content += "<td class='tdTime'>" +record.TIME + "</td>";
-								content += "<td class='slot'>" + record.TS + "</td>";
-								content += "<td class='callsign ellipsis'><img class='lazyload tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>";
-								content += "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
+								content = '<tr class=' + bgClass + '>'
+									+ "<td class='tdDate"+ ((showColumns.charAt(0) == '-') ? " visible'":"'") + ">" + record.DATE + "</td>"
+									+ "<td class='tdTime"+ ((showColumns.charAt(1) == '-') ? " visible'":"'") + ">" +record.TIME + "</td>"
+									+ "<td class='slot"+ ((showColumns.charAt(2) == '-') ? " visible'":"'") + ">" + record.TS + "</td>"
+
+								// they both depend on TX connected
+									+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>"
+									+ "<td dmrid=" + record.DMRID + " class='dmrid"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + ">(" + dmrid + ")</td>";
+
 								if (record.NAME.toUpperCase() == callsign)
-									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
+									content += "<td class='alink firstname ellipsis"+ ((showColumns.charAt(4) == '-') ? " visible'":"'") + " onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
 								else
-									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
-								content += "<td class='talkgroup'>" + tgid + "</td>";
-								content += "<td class='alias ellipsis'>" + alias + "</td>";
+									content += "<td class='alink firstname ellipsis"+ ((showColumns.charAt(4) == '-') ? " visible'":"'") + " onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
+
+								content += "<td class='talkgroup"+ ((showColumns.charAt(5) == '-') ? " visible'":"'") + ">" + tgid + "</td>"
+									+ "<td class='alias ellipsis"+ ((showColumns.charAt(6) == '-') ? " visible'":"'") + ">" + alias + "</td>";
+
 								if (record.PACKET == "START")
-									content += "<td class='online'>ONLINE</td>";
+									content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">ONLINE</td>";
 								else
-									content += "<td class='delay'>" + ((delay != undefined) ? delay : "") + "</td>";
-								content += "<td class='netid'>" + netid + "</td>";
-								content += "<td class='infra ellipsis'>" + record.SYS + "</td>";
-								content += "</tr>";
+									content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((delay != undefined) ? delay : "") + "</td>";
+
+								content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + netid + "</td>"
+									+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '9') ? " visible'":"'") + ">" + record.SYS + "</td>"
+									+ "</tr>";
 							}
 
 							$("#hblink" + tgid).append(content);
@@ -1007,43 +1075,45 @@
 						if (mobileDevice) {
 							content = '<tr class=' + bgClass + '>';
 							// content += "<td class='tdDate'>" + record.DATE + "</td>";
-							content += "<td class='tdTime'>" + record.TIME + "</td>";
-							content += "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>";
-							content += "<td class='dmrid'>" + record.DMRID + "</td>";
-							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
-							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-							content += "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
-							if (record.DELAY == "ONLINE")
-								content += "<td class='online'>" + record.DELAY + "</td>";
-							else
-								content += "<td class='delay'>" + record.DELAY + "</td>";
-							content += "</tr>";
+								+ "<td class='tdTime'>" + record.TIME + "</td>"
+								+ "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>"
+								+ "<td class='dmrid'>" + record.DMRID + "</td>"
+								+ "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>"
+								+ "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>"
+								+ "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
+
+								if (record.DELAY == "ONLINE")
+									content += "<td class='online'>" + record.DELAY + "</td>";
+								else
+									content += "<td class='delay'>" + record.DELAY + "</td>";
+
+								content += "</tr>";
 						} else {
 							var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
 							if (alias.indexOf("<img") == -1)
-								alias = '<img class="lazyload tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
+								alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
 
-							content = '<tr class=' + bgClass + '>';
-							content += "<td class='tdDate'>" + record.DATE + "</td>";
-							content += "<td class='tdTime'>" + record.TIME + "</td>";
-							content += "<td class='slot'>" + record.TS + "</td>";
-							content += "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>";
-							content += "<td class='dmrid'>" + record.DMRID + "</td>";
-							content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>";
-							content += "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
+							content = '<tr class=' + bgClass + '>'
+								+ "<td class='tdDate'>" + record.DATE + "</td>"
+								+ "<td class='tdTime'>" + record.TIME + "</td>"
+								+ "<td class='slot'>" + record.TS + "</td>"
+								+ "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>"
+								+ "<td class='dmrid'>" + record.DMRID + "</td>"
+								+ "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>"
+								+ "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
 
 							if (displayPercent)
 								content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
 
-							content += "<td class='alias ellipsis'>" + alias + "</td>";
+							content += "<td class='alias ellipsis clickable' onclick='scrollIntoViewFromId(" + link + ")'>" + alias + "</td>";
+
 							if (record.DELAY == "ONLINE")
 								content += "<td class='online'>" + record.DELAY + "</td>";
 							else
 								content += "<td class='delay'>" + record.DELAY + "</td>";
-							content += "<td class='netid'>" + record.SRC_ID + "</td>";
-							content += "<td class='infra ellipsis'>" + record.SYS + "</td>";
-							content += "</tr>";
+
+							content += "<td class='netid'>" + record.SRC_ID + "</td><td class='infra ellipsis'>" + record.SYS + "</td></tr>";
 						}
 
 						$("#lastActiveBody").append(content);
@@ -1163,6 +1233,9 @@
 		lastActiveTG = 0;
 		mobileDevice = "<<<MOBILE>>>" == "True";
 
+		showColumnsDefault = "";
+		showEmptyDefault = "";
+
 		if (mobileDevice)	{
 			var r = document.querySelector(':root');
 			r.style.setProperty('--table-width', '100%');
@@ -1184,11 +1257,6 @@
 		tgorder.forEach(tg => {
 			$("#insertPoint").append($("<div id='tg" + tg + "marker'></div>"));
 		});
-
-		// if (hideAllTG)
-		// 	$("#insertPoint").hide();
-		// else
-		// 	$("#insertPoint").show();
 
 		function WSConnection() {
 			'use strict';
@@ -1241,8 +1309,12 @@
 									$("#btnlisteners").text("\uD83D\uDD75 SWL " + data.CONFIG.BIGEARS);
 								}
 
-								if (data.CONFIG.PACKETS)
+								if (data.CONFIG.PACKETS) {
+									// will be done only once
+									showEmptyTables();
+
 									doTraffic(data.CONFIG.PACKETS.TRAFFIC);
+								}
 
 								if (data.CONFIG.LISTENERS)
 									listenerList = data.CONFIG.LISTENERS;
@@ -1258,11 +1330,11 @@
 								if (data.TRAFFIC)
 									doTraffic(data.TRAFFIC);
 
-								if (data.BTABLE)
-									log(JSON.stringify(data.BTABLE));
+								// if (data.BTABLE)
+								// 	log(JSON.stringify(data.BTABLE));
 
-								if (data.STATUS)
-									log(data.STATUS);
+								// if (data.STATUS)
+								// 	log(data.STATUS);
 							}
 
 							if (themeSettings == "auto")

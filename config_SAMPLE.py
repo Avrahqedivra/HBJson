@@ -1,4 +1,4 @@
-REPORT_NAME     = "Name of the monitored HBlink" # Name of the monitored HBlink system
+REPORT_NAME     = "HBJSON Monitor for HBLINK"   # Name of the monitored HBlink system
 #
 CONFIG_INC      = True                          # Include HBlink stats
 HOMEBREW_INC    = True                          # Display Homebrew Peers status
@@ -17,13 +17,19 @@ CLIENT_TIMEOUT  = 0                             # Clients are timed out after th
 # list of NETWORK_ID from OPB links not to show in local "lastheard" traffic, for example: "260210,260211,260212"
 OPB_FILTER = ""
 # allowed Backend OBP, if specified, precise all allowed SRC_ID, for example { "OBP-GLOBAL": { "20881", "20883" } }
-OPB_BACKEND = {}
+OPB_BACKEND = { "": { "" } }
 # ids of tg to be excluded, for example "800,801,802,3339"
 TGID_FILTER = ""
 # ids of tg order on html monitor page, for example "38,7,39,777"
 TGID_ORDER = ""
 # tg optional settings, for example "tgid": { "title-before": "title", "hide-dmrid": "208, 206" }
-TGID_SETTINGS = '{ "00": { "title-before": "TITLE" }, "01": { "title-before": "Another title", "hide-dmrid": "208, 206" } }'
+# "*" are the default settings, you can override default by specifying a setting in tg
+TGID_SETTINGS = '{ \
+                     "*": { "show-empty": false, "show-columns": "++++++++++" }, \
+                    "38": { "title-before": "SHIELD", "hide-dmrid": "208", "show-empty": true }, \
+                    "39": { "title-before": "SHIELD Test", "hide-dmrid": "208", "show-columns": "+++++++-++" }, \
+                    "75": { "title-before": "DMR75 National", "hide-dmrid": "208" }, \
+                }'
 # all tgid not in this list will be excluded. if empty all will be allowed
 TGID_ALLOWED = ""
 # TG to hilite
@@ -33,9 +39,11 @@ TGID_COLORS = '{ "tx":"#fbd379", "ind":"#fefefe", "38":"#569cd6", "7":"#fca33c",
 # dynamic tg, if not filtred by TGID_FILTER, tg will be added dynamicaly to dashboard beside those in TG_ORDER
 DYNAMIC_TG = False
 # hide OMs with DMRID starting with, for example with "208,206"
-HIDE_DMRID = ""
-# beacons/icons pairs, for example '{ "2080000":"unlicenced.png", "2060000":"unlicenced.png" }'
-TGID_BEACONS = '{ "2080000":"unlicenced.png" }'
+HIDE_DMRID = "#"
+# beacons/icons pairs, for example '{ "2080000":"shield.png", "2060000":"shield.png" }'
+TGID_BEACONS = '{ "2000008":"shield.png" }'
+# sets default theme (dark or light)
+THEME = "theme-dark"
 
 # Authorization of access to dashboard as admin
 # use http://mysite:port?admin to log as admin

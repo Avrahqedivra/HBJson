@@ -257,6 +257,7 @@ def replaceSystemStrings(data):
         .replace("<<<TGID_BEACONS>>>", str(TGID_BEACONS)) \
         .replace("<<<DISPLAY_PERCENT>>>", str(DISPLAY_PERCENT)) \
         .replace("<<<MOBILE>>>", str(MOBILEPHONE)) \
+        .replace("<<<THEME>>>", THEME) \
         .replace("<<<HIDE_DMRID>>>", str(HIDE_DMRID))#.replace("class=\"theme-dark\"", "class=\"theme-light\"")
 
 def logMySQL(_data):
