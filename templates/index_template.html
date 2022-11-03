@@ -737,7 +737,7 @@
 					showEmptyDefault = tgsetting["show-empty"] == null ? "false":tgsetting["show-empty"];
 			}
 
-			Object.keys(tgsettings).forEach(function(tgid) {
+			Object.keys(tgsettings).forEach(tgid => {
 				var tgName = "tgId" + tgid;
 				if (document.getElementById(tgName) == null) {
 					tgsetting = tgsettings[tgid];
@@ -836,6 +836,8 @@
 						bgClass = 'tgGreen';
 
 					var showColumns = showColumnsDefault;
+					var hideDmrid = hideDmridDefault;
+
 					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
 					/* check if table already exists */
@@ -844,6 +846,7 @@
 						var emptyTable = "";
 
 						if (mobileDevice) {
+
 							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' 
 							+ '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
 							+ '<tr class="headerRow">' 
@@ -859,19 +862,21 @@
 						} else {
 
 							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
-							Object.keys(tgsettings).forEach(function(tg) {
+							for(const tg in tgsettings) {
 								if (tg == "*" || tg == record.TGID) {
 									var tgsetting = tgsettings[tg];
+
 									if (tgsetting["show-columns"] != null)
 										showColumns = tgsetting["show-columns"];
+
 									if (tgsetting["title-before"] != null) {
 										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
 											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
 											+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
 									}
-									return;
+									break;
 								}
-            	});
+            	};
 
 							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
 								+ '<tr class="headerRow">' 
@@ -913,35 +918,42 @@
 					else if (delay < 2)
 						delay = "PTT";
 
-					hide_dmrid.forEach(dh => {
-						if (dh.length > 0 && dmrid.startsWith(dh)) {
+					for(const dh in hide_dmrid) {
+						dhl = dh.trim();
+						if (dhl.length > 0 && dmrid.startsWith(dhl)) {
 							callsign = "XXXXX";
 							dmrid = "0000000";
 							netid = "XXXXX";
+							break;
 						}
-					});
+					};
 
-					Object.keys(tgsettings).forEach(function(tg) {
+					for(let tg in tgsettings) {
 						if (tg == record.TGID) {
 							var tgsetting = tgsettings[tg];
 
 							if (tgsetting["show-columns"] != null)
 								showColumns = tgsetting["show-columns"];
 
-							if (tgsetting["hide-dmrid"] != null) {
-								hide_those = new Set(tgsetting["hide-dmrid"]);
-								hide_those.forEach(dh => {
-									if (dh.length > 0 && dmrid.startsWith(dh) && !(dmrid in tgbeacons)) {
+							var hideDmrid = tgsetting["hide-dmrid"] != null ? tgsetting["hide-dmrid"]:hideDmridDefault;
+							if (hideDmrid != null && hideDmrid != "") {
+								var hide_those = hideDmrid.split(",");
+
+								for (const dh of hide_those) {
+									var dht = dh.trim();
+									if (dht.length > 0 && dmrid.startsWith(dht) && !(parseInt(dmrid) in tgbeacons)) {
 										callsign = "XXXXX";
 										dmrid = "0000000";
 										netid = "XXXXX";
-										return;
+
+										break;
 									}
-								});
+								};
 							}
-							return;
+
+							break;
 						}
-					});
+					};
 
 					if (callsign == "")
 						callsign = dmrid;
@@ -997,7 +1009,7 @@
 									content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((delay != undefined) ? delay : "") + "</td>";
 
 								content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + netid + "</td>"
-									+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '9') ? " visible'":"'") + ">" + record.SYS + "</td>"
+									+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '-') ? " visible'":"'") + ">" + record.SYS + "</td>"
 									+ "</tr>";
 							}
 
@@ -1208,8 +1220,7 @@
 				listenerList = uniqByKeepLast(listenerList, swl => swl.NETID);
 
 				listenerList.forEach(swl => {
-					content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl
-						.PORT + "</td><td>" + swl.NETID + "</td></tr>";
+					content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl.PORT + "</td><td>" + swl.NETID + "</td></tr>";
 				});
 
 				$("#listeners").append(content);
@@ -1234,6 +1245,7 @@
 		mobileDevice = "<<<MOBILE>>>" == "True";
 
 		showColumnsDefault = "";
+		hideDmridDefault = "";
 		showEmptyDefault = "";
 
 		if (mobileDevice)	{

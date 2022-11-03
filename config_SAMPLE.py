@@ -24,12 +24,15 @@ TGID_FILTER = ""
 TGID_ORDER = ""
 # tg optional settings, for example "tgid": { "title-before": "title", "hide-dmrid": "208, 206" }
 # "*" are the default settings, you can override default by specifying a setting in tg
+# IMPORTANT keep the "*" line at the END
 TGID_SETTINGS = '{ \
-                     "*": { "show-empty": false, "show-columns": "++++++++++" }, \
-                    "38": { "title-before": "SHIELD", "hide-dmrid": "208", "show-empty": true }, \
-                    "39": { "title-before": "SHIELD Test", "hide-dmrid": "208", "show-columns": "+++++++-++" }, \
-                    "75": { "title-before": "DMR75 National", "hide-dmrid": "208" }, \
+                    "38": { "title-before": "SHIELD", "hide-dmrid": "208, 206", "show-columns": "+++++++---" }, \
+                    "39": { "title-before": "SHIELD Test", "hide-dmrid": "208, 206" }, \
+                    "75": { "title-before": "DMR75 National", "hide-dmrid": "208, 206" }, \
+                  "3392": { "title-before": "TACTIC 3392", "hide-dmrid": "208, 206" }, \
+                     "*": { "show-empty": true, "show-columns": "++++++++++" } \
                 }'
+
 # all tgid not in this list will be excluded. if empty all will be allowed
 TGID_ALLOWED = ""
 # TG to hilite
