@@ -1,5 +1,5 @@
 /* --Buttons HTML code-- */
-.siteHeader {
+#siteHeader {
     width: var(--table-width);
 }
 
