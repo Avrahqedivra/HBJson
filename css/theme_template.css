@@ -252,8 +252,8 @@ thead {
   cursor: pointer;
 }
 .titleRow {
-  background-color: var(--color-bg-headerRow);
-  color: var(--color-fg-headerRow);
+  background-color: var(--color-bg-title);
+  color: var(--color-fg-title);  
   height: 1.8rem;
 }
 .titleCell {
@@ -1110,6 +1110,9 @@ select {
 
   --color-close: #ffffff;
   --color-filter-emaster: 0.80;
+
+  --color-bg-title: #5ea6f8;
+  --color-fg-title: #ffffff;
 }
 
 .theme-dark {
@@ -1250,4 +1253,8 @@ select {
   --color-close: #ffffff;
 
   --color-filter-emaster: 1.20;
+
+  --color-bg-title: #37373d;
+  --color-fg-title: gold;
 }
+
