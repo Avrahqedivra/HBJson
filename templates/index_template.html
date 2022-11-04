@@ -735,37 +735,42 @@
 			if ((tgsetting = tgsettings["*"]) != null) {
 					showColumnsDefault = tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"];
 					showEmptyDefault = tgsetting["show-empty"] == null ? "false":tgsetting["show-empty"];
+					hideDmridDefault = tgsetting["hide-dmrid"] == null ? "false":tgsetting["hide-dmrid"];
 			}
 
-			Object.keys(tgsettings).forEach(tgid => {
+			Object.keys(tgsettings).forEach((tgid) => {
 				var tgName = "tgId" + tgid;
-				if (document.getElementById(tgName) == null) {
+				if (tgid != "*" && document.getElementById(tgName) == null) {
 					tgsetting = tgsettings[tgid];
 					
 					var showEmpty = tgsetting["show-empty"] == null ? showEmptyDefault:tgsetting["show-empty"];
 
-					if (tgid != "*" && tgsetting["title-before"] != null && showEmpty == true) {
+					if (showEmpty == true) {
+						var emptyTable = "";
 						var showColumns = tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault;
+
+						if (tgsetting["title-before"] != null)
+							emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + tgsetting["title-before"] 
+									+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
+									+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
+						else
+							emptyYable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
 						
-						var emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">'
-						 	+ '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' 
-							+ tgsetting["title-before"] + '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
-							+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
-							+ '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
-							+ '<tr class="headerRow">' 
-							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>'
-							+	'<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>'
-							+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
-							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>'
-							+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>'
-							+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
-							+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
-							+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
-							+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
-							+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
-							+ '</tr>' 
-							+ '</thead>' 
-							+ '<tbody id="hblink' + tgid + '"></tbody></table>';
+						emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
+						+ '<tr class="headerRow">' 
+						+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>'
+						+	'<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>'
+						+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
+						+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>'
+						+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>'
+						+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
+						+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
+						+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
+						+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
+						+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
+						+ '</tr>' 
+						+ '</thead>' 
+						+ '<tbody id="hblink' + tgid + '"></tbody></table>';
 
 						/* insert new table into tg tables area regarding tgorder */
 						if (document.getElementById("tg" + tgid + "marker") != null)
@@ -869,11 +874,12 @@
 									if (tgsetting["show-columns"] != null)
 										showColumns = tgsetting["show-columns"];
 
-									if (tgsetting["title-before"] != null) {
+									if (tgsetting["title-before"] != null)
 										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
 											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
 											+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
-									}
+									else
+										emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
 									break;
 								}
             	};
@@ -1266,8 +1272,9 @@
 		if (isNaN(displayLines))
 			displayLines = 10;
 
-		tgorder.forEach(tg => {
-			$("#insertPoint").append($("<div id='tg" + tg + "marker'></div>"));
+		tgorder.forEach(tgid => {
+			if (!tgfilter.has('' + tgid))
+				$("#insertPoint").append($("<div id='tg" + tgid + "marker'></div>"));
 		});
 
 		function WSConnection() {
