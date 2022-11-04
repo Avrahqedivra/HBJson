@@ -1,10 +1,14 @@
 /* --Buttons HTML code-- */
-#siteHeader {
+.siteHeader {
     width: var(--table-width);
 }
 
+.mobilesiteHeader {
+    width: 100%;
+}
+
 #siteLogo {
-    width: 23rem;
+    height: 6rem;
     margin-top: 0.5rem;
     margin-left: 0rem;
     margin-bottom: 0.3rem;
@@ -18,9 +22,11 @@
 }
 #marquee {
     height:2rem;
-    width:70rem;
+    width: 100%;
+    max-width: var(--table-width);
     color: var(--color-fg-marquee);
 }
+
 h1 {
     font-size: 17px;  
     color: var(--color-fg-h1);

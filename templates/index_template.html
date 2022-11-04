@@ -136,7 +136,7 @@
 							<th class="thlename">Name</th>
 							<th class="thletg">TGs</th>
 							<th class="thlepc">%</th>
-							<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>
+							<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Cliquez ICI)</a></th>
 							<th class="thledelay">TX (s)</th>
 							<th class="thlenetid">NetID</th>
 							<th class="thlemaster">Master Infra</th>
@@ -236,13 +236,6 @@
 	last_active_size = parseInt("<<<LAST_ACTIVE_SIZE>>>");
 	if (last_active_size == 0)
 		last_active_size = tgorder.size;
-
-	if (last_active_tg == true) {
-		$("#lastActive").css("display", "table");
-
-		if (!displayPercent)
-			$(".thlepc").css("display", "none");
-	}
 
 	//   https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
 	function uniqByKeepFirst(a, key) {
@@ -732,8 +725,20 @@
 	function showEmptyTables() {
 			var tgsetting;
 
+			if (mobileDevice) {
+					$(".thledate, .thleslot, .thlelog, .thlenetid, .thlemaster").css("display", "none");
+					showColumnsDefault = "-+-+++-+--";
+			}
+
+			if (last_active_tg) {
+				if (mobileDevice || !displayPercent)
+					$(".thlepc").css("display", "none");
+
+				$("#lastActive").css("display", "table");
+			}
+
 			if ((tgsetting = tgsettings["*"]) != null) {
-					showColumnsDefault = tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"];
+					showColumnsDefault = mobileDevice ? showColumnsDefault : (tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"]);
 					showEmptyDefault = tgsetting["show-empty"] == null ? "false":tgsetting["show-empty"];
 					hideDmridDefault = tgsetting["hide-dmrid"] == null ? "false":tgsetting["hide-dmrid"];
 			}
@@ -747,7 +752,7 @@
 
 					if (showEmpty == true) {
 						var emptyTable = "";
-						var showColumns = tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault;
+						var showColumns = (mobileDevice ? showColumnsDefault:tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault);
 
 						if (tgsetting["title-before"] != null)
 							emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + tgsetting["title-before"] 
@@ -782,6 +787,99 @@
 		});
 	}
 
+	function doLastActiveNew(tgs) {
+		if (last_active_tg == true) {
+			var totalrecord = 0;
+
+			for(let i=0; i<tgs.length; i++)
+					totalrecord += tgs[i].count;
+
+			$("#lastActive tbody tr").remove();
+
+			bgClass = 'tgPurple';
+
+			var globalPercentage = 0;
+
+			// keeps the n first unique items
+			lastActive = uniqByKeepFirst(traffic, it => it.TGID);
+
+			let lastActiveLength = Math.min(lastActive.length, last_active_size);
+
+			if (lastActiveLength > 0) {
+				var showColumns = showColumnsDefault;
+
+				// added max length last_active_size
+				for (let i = 0; i < lastActiveLength; i++) {
+					var record = lastActive[i];
+					var link = '\"tgId' + parseInt(record.TGID) + '\"';
+
+					var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID));
+					globalPercentage += percentage;
+
+					var flagUrl = getFlag(record.CALLSIGN, record.DMRID);
+					if (flagUrl == "")
+						flagUrl = flag64["shield"]; // "shield.png";
+
+					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
+
+					if (alias.indexOf("<img") == -1)
+						alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
+
+					content = '<tr class=' + bgClass + '>'
+						+ "<td class='tdDate"+ ((showColumns.charAt(0) == '-') ? " visible'":"'") + ">" + record.DATE + "</td>"
+						+ "<td class='tdTime"+ ((showColumns.charAt(1) == '-') ? " visible'":"'") + ">" +record.TIME + "</td>"
+						+ "<td class='slot"+ ((showColumns.charAt(2) == '-') ? " visible'":"'") + ">" + record.TS + "</td>"
+
+					// they both depend on TX connected
+						+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + record.CALLSIGN + ">" + record.CALLSIGN + "</a></td>"
+						+ "<td dmrid=" + record.DMRID + " class='dmrid"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + ">(" + record.DMRID + ")</td>";
+
+					if (record.NAME.toUpperCase() == record.CALLSIGN)
+						content += "<td class='alink firstname ellipsis"+ ((showColumns.charAt(4) == '-') ? " visible'":"'") + " onclick='followUpdUser(" + record.DMRID + ")'>" + record.CALLSIGN + "</td>";
+					else
+						content += "<td class='alink firstname ellipsis"+ ((showColumns.charAt(4) == '-') ? " visible'":"'") + " onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
+
+					content += "<td class='talkgroup"+ ((showColumns.charAt(5) == '-') ? " visible'":"'") + ">" + record.TGID + "</td>";
+
+					if (!mobileDevice && displayPercent)
+						content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
+
+					content += "<td class='alias ellipsis"+ ((showColumns.charAt(6) == '-') ? " visible'":"'") + ">" + alias + "</td>";
+
+					if (record.PACKET == "START")
+						content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">ONLINE</td>";
+					else
+						content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((record.DELAY != undefined) ? record.DELAY : "") + "</td>";
+
+					content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + record.SRC_ID + "</td>"
+						+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '-') ? " visible'":"'") + ">" + record.SYS + "</td>"
+						+ "</tr>";
+
+					$("#lastActiveBody").append(content);
+
+					var elem = document.getElementById("p"+record.TGID);
+					
+					if (elem != null) {
+						var knob = pureknob.createKnob(23, 23);
+						knob.setProperty('angleStart', -0.75 * Math.PI);
+						knob.setProperty('angleEnd', 0.75 * Math.PI);
+						knob.setProperty('colorFG', '#e52713');
+						knob.setProperty('colorBG', '#6cc43c');
+						knob.setProperty('trackWidth', 0.3);
+						knob.setProperty('readonly', true);
+						knob.setProperty('label', null);
+						knob.setProperty('textScale', 2.5);
+						knob.setProperty('valMin', 0);
+						knob.setProperty('valMax', 100);
+
+						knob.setValue(percentage);
+						elem.appendChild(knob.node());
+					}
+				}
+			}
+		}
+	}
+
 	function doTraffic(t) {
 		if (t != null) {
 			if (Array.isArray(t))
@@ -804,7 +902,7 @@
 
 				var tgs = [];
 				var count = 0;
-				var totalrecord = 0;
+
 				for (var i = 0, count = 0; i < trafficLength; i++) {
 					var record = traffic[i];
 					if (tgshas(record, tgs) == -1)
@@ -813,9 +911,6 @@
 						updateRowCount(record, tgs);
 					}
 				}
-
-				for(let i=0; i<tgs.length; i++)
-					totalrecord += tgs[i].count;
 
 				for (var i = 0; i < trafficLength; i++) {
 					var record = traffic[i];
@@ -848,58 +943,39 @@
 					/* check if table already exists */
 					if (document.getElementById(tgName) == null) {
 						/* build the missing table */
-						var emptyTable = "";
+						var emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
+						for(const tg in tgsettings) {
+							if (tg == "*" || tg == record.TGID) {
+								var tgsetting = tgsettings[tg];
 
-						if (mobileDevice) {
+								if (!mobileDevice && tgsetting["show-columns"] != null)
+									showColumns = tgsetting["show-columns"];
 
-							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">' 
-							+ '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
+								if (tgsetting["title-before"] != null)
+									emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
+										+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
+										+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+								else
+									emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
+								break;
+							}
+						};
+
+						emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
 							+ '<tr class="headerRow">' 
-							+ '<th class="thledate" style="display:none;">Date</th>' 
-							+ '<th class="thletime">Heure</th>' 
-							+ '<th class="thletx" colspan=2>TX Connectés</th>' 
-							+ '<th class="thlename">Name</th>' 
-							+ '<th class="thletg">TG' + tgid + '</th>' 
-							+ '<th class="thledelay">TX (s)</th>' 
+							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>' 
+							+ '<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>' 
+							+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
+							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>' 
+							+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>' 
+							+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
+							+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
+							+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
+							+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
+							+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
 							+ '</tr>' 
 							+ '</thead>' 
 							+ '<tbody id="hblink' + tgid + '"></tbody></table>';
-						} else {
-
-							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
-							for(const tg in tgsettings) {
-								if (tg == "*" || tg == record.TGID) {
-									var tgsetting = tgsettings[tg];
-
-									if (tgsetting["show-columns"] != null)
-										showColumns = tgsetting["show-columns"];
-
-									if (tgsetting["title-before"] != null)
-										emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
-											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
-											+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
-									else
-										emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
-									break;
-								}
-            	};
-
-							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
-								+ '<tr class="headerRow">' 
-								+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>' 
-								+ '<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>' 
-								+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
-								+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>' 
-								+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>' 
-								+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
-								+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
-								+ '<th class="thledelay'+ ((showColumns.charAt(7) == "-") ? ' visible"':'"') + '>TX (s)</th>' 
-								+ '<th class="thlenetid'+ ((showColumns.charAt(8) == "-") ? ' visible"':'"') + '>NetID</th>' 
-								+ '<th class="thlemaster'+ ((showColumns.charAt(9) == "-") ? ' visible"':'"') + '>Master Infra</th>' 
-								+ '</tr>' 
-								+ '</thead>' 
-								+ '<tbody id="hblink' + tgid + '"></tbody></table>';
-						}
 
 						/* insert new table into tg tables area regarding tgorder */
 						if (document.getElementById("tg" + tgid + "marker") != null)
@@ -938,7 +1014,7 @@
 						if (tg == record.TGID) {
 							var tgsetting = tgsettings[tg];
 
-							if (tgsetting["show-columns"] != null)
+							if (!mobileDevice && tgsetting["show-columns"] != null)
 								showColumns = tgsetting["show-columns"];
 
 							var hideDmrid = tgsetting["hide-dmrid"] != null ? tgsetting["hide-dmrid"]:hideDmridDefault;
@@ -971,27 +1047,6 @@
 							if (flagUrl == "")
 								flagUrl = flag64["shield"]; // "shield.png";
 
-							if (mobileDevice) {
-								content = '<tr class=' + bgClass + '>'
-									+ "<td class='tdDate' style='display:none;'>" + record.DATE + "</td>"
-									+ "<td class='tdTime'>" +record.TIME + "</td>"
-									+ "<td class='callsign ellipsis'><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>"
-									+ "<td dmrid=" + record.DMRID + " class='dmrid'>(" + dmrid + ")</td>";
-								
-								if (record.NAME.toUpperCase() == callsign)
-									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + callsign + "</td>";
-								else
-									content += "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
-
-								content += "<td class='talkgroup'>" + tgid + "</td>";
-
-								if (record.PACKET == "START")
-									content += "<td class='online'>ONLINE</td>";
-								else
-									content += "<td class='delay'>" + ((delay != undefined) ? delay : "") + "</td>";
-
-								content += "</tr>";
-							} else {
 								content = '<tr class=' + bgClass + '>'
 									+ "<td class='tdDate"+ ((showColumns.charAt(0) == '-') ? " visible'":"'") + ">" + record.DATE + "</td>"
 									+ "<td class='tdTime"+ ((showColumns.charAt(1) == '-') ? " visible'":"'") + ">" +record.TIME + "</td>"
@@ -1017,7 +1072,6 @@
 								content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + netid + "</td>"
 									+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '-') ? " visible'":"'") + ">" + record.SYS + "</td>"
 									+ "</tr>";
-							}
 
 							$("#hblink" + tgid).append(content);
 						}
@@ -1025,137 +1079,7 @@
 				}
 			}
 
-			if (last_active_tg == true) {
-				lastActive = [];
-				for (const tgid of tgorder) {
-					const tbody = document.getElementById("hblink" + tgid);
-					if (tbody != null) {
-						var tr = $(tbody).children('tr:first')
-						tr.each(function () {
-							var item = $(this.cells[0]).html();
-							if (!item.startsWith("Mise")) {
-								if (mobileDevice) {
-									lastActive.push({
-										DATE: item,
-										TIME: $(this.cells[1]).html(),
-										CALLSIGN: $(this.cells[2]).html(),
-										DMRID: $(this.cells[3]).html(),
-										NAME: $(this.cells[4]).html(),
-										TGID: tgid,
-										DELAY: $(this.cells[6]).html(),
-									});
-								} else {
-									lastActive.push({
-										DATE: item,
-										TIME: $(this.cells[1]).html(),
-										TS: $(this.cells[2]).html(),
-										CALLSIGN: $(this.cells[3]).html(),
-										DMRID: $(this.cells[4]).html(),
-										NAME: $(this.cells[5]).html(),
-										TGID: tgid,
-										ALIAS: $(this.cells[7]).html(),
-										DELAY: $(this.cells[8]).html(),
-										SRC_ID: $(this.cells[9]).html(),
-										SYS: $(this.cells[10]).html()
-									});
-								}
-							}
-						});
-					}
-				}
-
-				let lastActiveLength = Math.min(lastActive.length, last_active_size);
-
-				if (lastActiveLength > 0) {
-					// sort in reverse order
-					lastActive.sort((a, b) => {
-						aa = a.DATE + " " + a.TIME;
-						bb = b.DATE + " " + b.TIME;
-
-						if (aa > bb) return -1;
-						if (aa <= bb) return 1;
-					});
-
-					$("#lastActive tbody tr").remove();
-
-					bgClass = 'tgPurple';
-
-					var globalPercentage = 0;
-
-					// added max length last_active_size
-					for (let i = 0; i < lastActiveLength; i++) {
-						var record = lastActive[i];
-						var link = '\"tgId' + parseInt(record.TGID) + '\"';
-
-						var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID));
-						globalPercentage += percentage;
-
-						if (mobileDevice) {
-							content = '<tr class=' + bgClass + '>';
-							// content += "<td class='tdDate'>" + record.DATE + "</td>";
-								+ "<td class='tdTime'>" + record.TIME + "</td>"
-								+ "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>"
-								+ "<td class='dmrid'>" + record.DMRID + "</td>"
-								+ "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>"
-								+ "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>"
-								+ "<td class='talkgroup'><div id='p"+record.TGID+"'></div></td>";
-
-								if (record.DELAY == "ONLINE")
-									content += "<td class='online'>" + record.DELAY + "</td>";
-								else
-									content += "<td class='delay'>" + record.DELAY + "</td>";
-
-								content += "</tr>";
-						} else {
-							var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
-
-							if (alias.indexOf("<img") == -1)
-								alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
-
-							content = '<tr class=' + bgClass + '>'
-								+ "<td class='tdDate'>" + record.DATE + "</td>"
-								+ "<td class='tdTime'>" + record.TIME + "</td>"
-								+ "<td class='slot'>" + record.TS + "</td>"
-								+ "<td class='callsign ellipsis'>" + record.CALLSIGN + "</td>"
-								+ "<td class='dmrid'>" + record.DMRID + "</td>"
-								+ "<td class='alink firstname ellipsis' onclick='followUpdUser(" + record.DMRID + ")'>" + record.NAME + "</td>"
-								+ "<td class='alink' onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
-
-							if (displayPercent)
-								content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
-
-							content += "<td class='alias ellipsis clickable' onclick='scrollIntoViewFromId(" + link + ")'>" + alias + "</td>";
-
-							if (record.DELAY == "ONLINE")
-								content += "<td class='online'>" + record.DELAY + "</td>";
-							else
-								content += "<td class='delay'>" + record.DELAY + "</td>";
-
-							content += "<td class='netid'>" + record.SRC_ID + "</td><td class='infra ellipsis'>" + record.SYS + "</td></tr>";
-						}
-
-						$("#lastActiveBody").append(content);
-
-						var knob = pureknob.createKnob(23, 23);
-						knob.setProperty('angleStart', -0.75 * Math.PI);
-						knob.setProperty('angleEnd', 0.75 * Math.PI);
-						knob.setProperty('colorFG', '#e52713');
-						knob.setProperty('colorBG', '#6cc43c');
-						knob.setProperty('trackWidth', 0.3);
-						knob.setProperty('readonly', true);
-						knob.setProperty('label', null);
-						knob.setProperty('textScale', 2.5);
-						knob.setProperty('valMin', 0);
-						knob.setProperty('valMax', 100);
-
-						knob.setValue(percentage);
-
-						var node = knob.node();
-						var elem = document.getElementById("p"+record.TGID);
-						elem.appendChild(node);
-					}
-				}
-			}
+			doLastActiveNew(tgs);
 		}
 	}
 
@@ -1183,7 +1107,7 @@
 		});
 
 		$(document).on("click", "#lastActive thead", function () {
-			if (hideAllTG = hideAllTG ? false:true)
+			if (hideAllTG = !hideAllTG)
 				$("#insertPoint").hide();
 			else
 				$("#insertPoint").show();
@@ -1252,16 +1176,15 @@
 
 		showColumnsDefault = "";
 		hideDmridDefault = "";
-		showEmptyDefault = "";
+		showEmptyDefault = false;
 
 		if (mobileDevice)	{
 			var r = document.querySelector(':root');
 			r.style.setProperty('--table-width', '100%');
 			r.style.setProperty('--color-fz-html', '20pt');
 
-			$(".thledate, .thleslot, .thlelog, .thlenetid, .thlemaster").css("display", "none");
 			$("#sysoptables").css("display", "none");
-			$("#footer, #infoLine").css("font-size", "0.6rem");
+			$("#footer, #infoLine").css("font-size", "0.4rem");
 		}
 
 		var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=dashboard";
