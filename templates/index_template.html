@@ -811,7 +811,14 @@
 				// added max length last_active_size
 				for (let i = 0; i < lastActiveLength; i++) {
 					var record = lastActive[i];
-					var link = '\"tgId' + parseInt(record.TGID) + '\"';
+					var link = '"tgId' + parseInt(record.TGID) + '"';
+					var delay = record.DELAY;
+
+					if (delay > 9999)
+						delay = parseInt(delay / 1000);
+					else 
+					if (delay < 2)
+						delay = "PTT";
 
 					var percentage = parseInt(getPercentage(tgs, totalrecord, record.TGID));
 					globalPercentage += percentage;
@@ -839,17 +846,17 @@
 					else
 						content += "<td class='alink firstname ellipsis"+ ((showColumns.charAt(4) == '-') ? " visible'":"'") + " onclick='followUpdUser(" + record.DMRID + ")'>" + enhanceNames(record.NAME) + "</td>";
 
-					content += "<td class='talkgroup"+ ((showColumns.charAt(5) == '-') ? " visible'":"'") + ">" + record.TGID + "</td>";
+					content += "<td class='talkgroup alink"+ ((showColumns.charAt(5) == '-') ? " visible'":"'") + " onclick='scrollIntoViewFromId(" + link + ")'>" + record.TGID + "</td>";
 
 					if (!mobileDevice && displayPercent)
 						content += "<td class='percentage'><div id='p"+record.TGID+"'></div></td>";
 
-					content += "<td class='alias ellipsis"+ ((showColumns.charAt(6) == '-') ? " visible'":"'") + ">" + alias + "</td>";
+					content += "<td class='alias ellipsis clickable" + ((showColumns.charAt(6) == '-') ? " visible'":"'") + " onclick='scrollIntoViewFromId(" + link + ")'>" + alias + "</td>";
 
 					if (record.PACKET == "START")
 						content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">ONLINE</td>";
 					else
-						content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((record.DELAY != undefined) ? record.DELAY : "") + "</td>";
+						content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((delay != undefined) ? delay : "") + "</td>";
 
 					content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + record.SRC_ID + "</td>"
 						+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '-') ? " visible'":"'") + ">" + record.SYS + "</td>"
