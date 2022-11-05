@@ -242,7 +242,7 @@ function getTgFlag(id) {
 
         for (let i = 0; i < mcc.length; i++) {
             if (mcc[i].dmrid == id) {
-                code = mcc[i].code.toLowerCase();
+                var code = mcc[i].code.toLowerCase();
                 if (flag64[code] != null)
                     return flag64[code];
 
@@ -273,7 +273,7 @@ function getFlag(callsign, dmrid) {
         if (callsign.startsWith("14FRS") || callsign.startsWith("FRS"))
             return flag64["frs"]; // return "frs.png";
 
-        if (callsign.startsWith("BALISE") || dmrid.startsWith(14))
+        if (callsign.startsWith("BALISE") || dmrid.startsWith("14"))
             return flag64["unlicenced"]; // return "unlicenced.png";
 
         switch (dmrid) {
@@ -313,7 +313,7 @@ function getFlag(callsign, dmrid) {
 
         for (let i = 0; i < mcc.length; i++) {
             if (mcc[i].dmrid == dmrid) {
-                code = mcc[i].code.toLowerCase();
+                var code = mcc[i].code.toLowerCase();
                 if (flag64[code] != null)
                     return flag64[code];
                     
