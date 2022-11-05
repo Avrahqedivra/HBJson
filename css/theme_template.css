@@ -441,6 +441,10 @@ thead {
   color: var(--color-percentage);
 }
 
+.percentage div div {
+  vertical-align: middle;
+}
+
 .homearrow {
   float:right; 
   padding-right:0.5rem;
