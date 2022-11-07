@@ -12,13 +12,13 @@
     <meta name="description" content="Copyright (c) 2016, 2017, 2018, 2019.The Regents of the K0USY Group. All rights reserved. Version SP2ONG 2019-2020 (v20200629)" />
 
 		<style>
-			#xhbtables {
+			/* #hbtables {
 				margin-top: 0rem;
 				height: calc(100vh - 16rem);
 				overflow-y: scroll;
 				width: fit-content;
 				scrollbar-width: thin;
-			}
+			} */
 	
 			#hbtables::-webkit-scrollbar {
 				display: block;
@@ -754,12 +754,12 @@
 						var emptyTable = "";
 						var showColumns = (mobileDevice ? showColumnsDefault:tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault);
 
-						if (tgsetting["title-before"] != null)
-							emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + tgsetting["title-before"] 
-									+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
-									+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
+						if (tgsetting["title-before"] != null) {
+							emptyTable =  '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + tgsetting["title-before"] 
+								+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+						}
 						else
-							emptyYable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
+							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
 						
 						emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
 						+ '<tr class="headerRow">' 
@@ -787,8 +787,21 @@
 		});
 	}
 
-	function doLastActiveNew(tgs) {
+	function doLastActiveNew() {
 		if (last_active_tg == true) {
+			let trafficLength = traffic.length;
+			let tgs = [];
+			let count = 0;
+
+			for (let i = 0, count = 0; i < trafficLength; i++) {
+				var record = traffic[i];
+				if (tgshas(record, tgs) == -1)
+					tgs.push({ "id": record.TGID, "dmrids": new Set([record.DMRID]), "count": 1 });
+				else {
+					updateRowCount(record, tgs);
+				}
+			}
+
 			var totalrecord = 0;
 
 			for(let i=0; i<tgs.length; i++)
@@ -923,18 +936,6 @@
 				cleaned = true;
 				$(".lastheard tbody tr").remove();
 
-				var tgs = [];
-				var count = 0;
-
-				for (var i = 0, count = 0; i < trafficLength; i++) {
-					var record = traffic[i];
-					if (tgshas(record, tgs) == -1)
-						tgs.push({ "id": record.TGID, "dmrids": new Set([record.DMRID]), "count": 1 });
-					else {
-						updateRowCount(record, tgs);
-					}
-				}
-
 				for (var i = 0; i < trafficLength; i++) {
 					var record = traffic[i];
 					var tgid = parseInt(record.TGID);
@@ -974,10 +975,10 @@
 								if (!mobileDevice && tgsetting["show-columns"] != null)
 									showColumns = tgsetting["show-columns"];
 
-								if (tgsetting["title-before"] != null)
-									emptyTable = '<table class="tgidtitle tables lastheard tablefixed"><thead><tr class="titleRow"><td class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
-										+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></td></tr></thead></table>'
-										+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+								if (tgsetting["title-before"] != null) {
+									emptyTable =  '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
+											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+								}
 								else
 									emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
 								break;
@@ -1102,7 +1103,7 @@
 				}
 			}
 
-			doLastActiveNew(tgs);
+			doLastActiveNew();
 		}
 	}
 
