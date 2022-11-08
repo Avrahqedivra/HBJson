@@ -41,7 +41,7 @@ TGID_HILITE = ""
 TGID_COLORS = '{ "tx":"#fbd379", "ind":"#fefefe", "38":"#569cd6", "7":"#fca33c", "39":"#a3e978", "777":"#bc7ebb" }'
 # dynamic tg, if not filtred by TGID_FILTER, tg will be added dynamicaly to dashboard beside those in TG_ORDER
 DYNAMIC_TG = False
-# hide OMs with DMRID starting with, for example with "208,206"
+# hide OMs with DMRID starting with, for example with "208,206" (superseded by TGID_SETTINGS)
 HIDE_DMRID = "#"
 # beacons/icons pairs, for example '{ "2080000":"shield.png", "2060000":"shield.png" }'
 TGID_BEACONS = '{ "2000008":"shield.png" }'

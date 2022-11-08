@@ -229,6 +229,7 @@
 
 	try {
 		tgsettings = JSON.parse('<<<TGID_SETTINGS>>>');
+		hide_dmrid = null;
 	} catch(e) {
 		tgsettings = {};
 	}
@@ -839,12 +840,39 @@
 					if (callsign == "")
 						callsign = dmrid;
 
-					for(const dh in hide_dmrid) {
-						dhl = dh.trim();
-						if (dhl.length > 0 && dmrid.startsWith(dhl)) {
-							callsign = "XXXXX";
-							dmrid = "0000000";
-							netid = "XXXXX";
+					if (hide_dmrid) {
+						for(const dh in hide_dmrid) {
+							dhl = dh.trim();
+							if (dhl.length > 0 && dmrid.startsWith(dhl)) {
+								callsign = "XXXXX";
+								dmrid = "0000000";
+								netid = "XXXXX";
+								break;
+							}
+						};
+					}
+
+					for(let tg in tgsettings) {
+						if (tg == record.TGID) {
+							var tgsetting = tgsettings[tg];
+
+							if (!mobileDevice && tgsetting["show-columns"] != null)
+								showColumns = tgsetting["show-columns"];
+
+							var hideDmrid = tgsetting["hide-dmrid"] != null ? tgsetting["hide-dmrid"]:hideDmridDefault;
+							if (hideDmrid != null && hideDmrid != "") {
+								var hide_those = hideDmrid.split(",");
+
+								for (const dh of hide_those) {
+									var dht = dh.trim();
+									if (dht.length > 0 && dmrid.startsWith(dht) && !(parseInt(dmrid) in tgbeacons)) {
+										callsign = "XXXXX";
+										dmrid = "0000000";
+										netid = "XXXXX";
+										break;
+									}
+								};
+							}
 							break;
 						}
 					};
@@ -1025,15 +1053,17 @@
 					else if (delay < 2)
 						delay = "PTT";
 
-					for(const dh in hide_dmrid) {
-						dhl = dh.trim();
-						if (dhl.length > 0 && dmrid.startsWith(dhl)) {
-							callsign = "XXXXX";
-							dmrid = "0000000";
-							netid = "XXXXX";
-							break;
-						}
-					};
+					if (hide_dmrid) {
+						for(const dh in hide_dmrid) {
+							dhl = dh.trim();
+							if (dhl.length > 0 && dmrid.startsWith(dhl)) {
+								callsign = "XXXXX";
+								dmrid = "0000000";
+								netid = "XXXXX";
+								break;
+							}
+						};
+					}
 
 					for(let tg in tgsettings) {
 						if (tg == record.TGID) {
@@ -1052,7 +1082,6 @@
 										callsign = "XXXXX";
 										dmrid = "0000000";
 										netid = "XXXXX";
-
 										break;
 									}
 								};
