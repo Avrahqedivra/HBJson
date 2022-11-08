@@ -755,8 +755,8 @@
 						var showColumns = (mobileDevice ? showColumnsDefault:tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault);
 
 						if (tgsetting["title-before"] != null) {
-							emptyTable =  '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + tgsetting["title-before"] 
-								+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+							emptyTable = '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + tgsetting["title-before"] + '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div>'
+											+ '</div><div class="titlePadding"><div class="titleFiller">&nbsp;</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
 						}
 						else
 							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
@@ -976,8 +976,9 @@
 									showColumns = tgsetting["show-columns"];
 
 								if (tgsetting["title-before"] != null) {
-									emptyTable =  '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
-											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
+									emptyTable = '<div class="tgidtitle"><div class="titleRow"><div class="titleCell">' + ((tg == "*") ? alias:tgsetting["title-before"]) 
+											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div>'
+											+ '</div><div class="titlePadding"><div class="titleFiller">&nbsp;</div></div></div></div><table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">'
 								}
 								else
 									emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';

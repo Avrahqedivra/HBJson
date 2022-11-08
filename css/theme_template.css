@@ -228,13 +228,15 @@ table, td, th {
   padding: 1px;
   border-collapse: collapse;
   text-align: center;
+  border-top-width: 0;
 }
 tr {
   background-color:var(--color-trbg);
 }
 thead {
   font-size: 1.1rem;
-}			 
+}
+
 ::selection {
   background-color: #C3CFE2;
 }
@@ -256,23 +258,34 @@ thead {
   text-align: left;
 }
 .titleRow {
-  background-color: var(--color-bg-title);
-  color: var(--color-fg-title);  
-  height: 1.8rem;  
-  width: 400px;
-
-  border-radius: 8px 8px 0 0;
-  width: fit-content;  
+  color: var(--color-fg-title);
+  width: fit-content;
 }
 .titleCell {
   text-align: left;
   font-size: 1.4rem;
   padding-left: 0.5rem;
+  display: inline-block;
+  border-radius: 8px 8px 0 0;
+  background-color: var(--color-bg-title);
+}
+.titlePadding {
+  font-size: 1.4rem;
+  display: inline-block;
+  background-color: var(--color-bg-title);
+  width: 2rem;
+}
+.titleFiller {
+  font-size: 1.4rem;
+  display: inline-block;
+  background-color: var(--color-page);
+  border-bottom-left-radius: 8px;
+  width: 2rem;
 }
 .homearrow {
   float:right; 
   cursor: pointer;
-  padding: 0 0.5rem 0 4rem;
+  padding: 0 0.5rem 0 2rem;
 }
 .entitledTables {
   width: var(--table-width);
