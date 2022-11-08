@@ -177,7 +177,7 @@ def fetchRemoteUsersFiles(fileurl):
                                                 for om in radioidsubscribers:
                                                     if om["id"] == int(record["DMRID"]):
                                                         om["surname"] = om["surname"].strip()
-                                                        if om["remarks"] is None:
+                                                        if not om.get("remarks"):
                                                             om["remarks"] = ""
 
                                                         jsonStr["results"].append(om)
@@ -192,7 +192,7 @@ def fetchRemoteUsersFiles(fileurl):
                                                         for om in localidsubscribers:
                                                             if om["id"] == int(record["DMRID"]):
                                                                 om["surname"] = om["surname"].strip()
-                                                                if om["remarks"] is None:
+                                                                if not om.get("remarks"):
                                                                     om["remarks"] = ""
 
                                                                 jsonStr["results"].append({
