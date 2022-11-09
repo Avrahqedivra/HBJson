@@ -739,7 +739,7 @@
 			}
 
 			if ((tgsetting = tgsettings["*"]) != null) {
-				showColumnsDefault = mobileDevice ? showColumnsDefault : (tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"]);
+					showColumnsDefault = mobileDevice ? showColumnsDefault : (tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"]);
 					showEmptyDefault = tgsetting["show-empty"] ? tgsetting["show-empty"]: false;
 					hideDmridDefault = tgsetting["hide-dmrid"] ? tgsetting["hide-dmrid"]: "#";
 					showStyleDefault = tgsetting["title-style"] ? tgsetting["title-style"]: "";
@@ -1016,9 +1016,24 @@
 									showColumns = tgsetting["show-columns"];
 
 								showStyle = tgsetting["title-style"] ? tgsetting["title-style"]:showStyleDefault;
-								showTitle = tgsetting["title-before"] ? ((tgsetting["title-before"] == "auto" || tgsetting["title-before"] == "") ? alias : tgsetting["title-before"]) : alias;
+								
+								if (tg == "*") {
+									if (showTitleDefault == "auto")
+										showTitle = alias;	
+									else
+										showTitle = "";
+								} else {
+									if (tgsetting["title-before"])
+										showTitle = tgsetting["title-before"];
+									else {
+										if (showTitleDefault == "auto")
+											showTitle = alias;
+										else
+										showTitle = "";
+									}
+								}
 
-								if (showTitle) {
+								if (showTitle != "") {
 									emptyTable = '<div class="titleRow"><div class="titleCell" style="' + showStyle + '">' + showTitle + '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div><div class="titlePadding">&nbsp;</div><div class="titleFiller">&nbsp;</div></div>' 
 															+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
 								}

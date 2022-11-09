@@ -110,6 +110,37 @@ html, body {
   position: sticky;
 }
 /*End*/
+
+/* progressbar */
+.progressBar {
+  height: 1.2rem;
+  padding: 0.1rem;
+}
+
+.redBar {
+  border-radius: 4px;
+  background-color: var(--color-red-progressbar);
+  width: 100%;
+  height: 100%;
+}
+
+.greenBar {
+  border-radius: 4px;
+  position: relative;
+  background-color: var(--color-green-progressbar);
+  height: 100%;
+  top: -100%;
+  width: 100%;
+  left: 0%;
+}
+
+.percentageText {
+  color: var(--color-text-progressbar); 
+  position: relative;
+  top: -2.45rem;
+}
+/* end progressbar */
+
 /***************************************************************/
 #footer {
   margin-top: 2rem;
@@ -1140,6 +1171,10 @@ select {
 
   --color-bg-title: #5ea6f8;
   --color-fg-title: #ffffff;
+
+  --color-red-progressbar: #c00303;
+  --color-green-progressbar: #02b102;
+  --color-text-progressbar: white;  
 }
 
 .theme-dark {
@@ -1283,5 +1318,8 @@ select {
 
   --color-bg-title: #37373d;
   --color-fg-title: gold;
-}
 
+  --color-red-progressbar: #ad0000;
+  --color-green-progressbar: #035f03;
+  --color-text-progressbar: #ffffff;
+}
