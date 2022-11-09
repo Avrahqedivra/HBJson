@@ -1,4 +1,4 @@
-/* utf-8 */
+/* latin-ext */
 @font-face {
   font-family: 'Public Sans';
   font-style: normal;
@@ -253,38 +253,40 @@ thead {
   height: 15px;
   cursor: pointer;
 }
-.tgidtitle {
+.titleRow {
+  float: left;
   margin-top: 1rem;
   text-align: left;
-}
-.titleRow {
   color: var(--color-fg-title);
-  width: fit-content;
+  width: fit-content;  
 }
 .titleCell {
   text-align: left;
   font-size: 1.3rem;
   padding-left: 0.5rem;
   display: inline-block;
-  border-radius: 8px 8px 0 0;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   background-color: var(--color-bg-title);
 }
 .titlePadding {
-  font-size: 1.4rem;
-  display: inline-block;
   background-color: var(--color-bg-title);
+  display: inline-block;
+  font-size: 1.3rem;
   width: 2rem;
 }
 .titleFiller {
-  font-size: 1.4rem;
-  display: inline-block;
   background-color: var(--color-page);
-  border-bottom-left-radius: 8px;
+  font-size: 1.3rem;
+  display: inline-block;
   width: 2rem;
+  left: -2rem;
+  position: relative;
+  border-bottom-left-radius: 8px;
 }
 .homearrow {
-  float:right; 
   cursor: pointer;
+  display: inline-block;
   padding: 0 0.5rem 0 2rem;
 }
 .entitledTables {
