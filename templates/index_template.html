@@ -739,9 +739,9 @@
 			}
 
 			if ((tgsetting = tgsettings["*"]) != null) {
-					showColumnsDefault = mobileDevice ? showColumnsDefault : (tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"]);
-					showEmptyDefault = tgsetting["show-empty"] == null ? tgsetting["show-empty"]: false;
-					hideDmridDefault = tgsetting["hide-dmrid"] == null ? tgsetting["hide-dmrid"]: "#";
+				showColumnsDefault = mobileDevice ? showColumnsDefault : (tgsetting["show-columns"] == null ? "++++++++++":tgsetting["show-columns"]);
+					showEmptyDefault = tgsetting["show-empty"] ? tgsetting["show-empty"]: false;
+					hideDmridDefault = tgsetting["hide-dmrid"] ? tgsetting["hide-dmrid"]: "#";
 					showStyleDefault = tgsetting["title-style"] ? tgsetting["title-style"]: "";
 					showTitleDefault = tgsetting["title-before"] ? "auto" : ""; // any value ends with ""
 			}
