@@ -293,7 +293,7 @@ thead {
 }
 .titleCell {
   text-align: left;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   padding-left: 0.5rem;
   display: inline-block;
   border-top-left-radius: 8px;
@@ -303,12 +303,12 @@ thead {
 .titlePadding {
   background-color: var(--color-bg-title);
   display: inline-block;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   width: 2rem;
 }
 .titleFiller {
   background-color: var(--color-page);
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   display: inline-block;
   width: 2rem;
   left: -2rem;
