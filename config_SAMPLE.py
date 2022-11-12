@@ -25,11 +25,11 @@ TGID_ORDER = ""
 # tg optional settings, for example "tgid": { "title-before": "title", "hide-dmrid": "208, 206" }
 # "*" are the default settings, you can override default by specifying a setting in tg
 # IMPORTANT keep the "*" line at the END. "title-before" present will name tg from ALIAS field 
-TGID_SETTINGS = '{  "33": { "title-before": "F4KNH Radio-Club", "show-columns": "+++++++---", "title-style": "color: orange;" }, \
-                    "38": { "title-before": "SHIELD", "hide-dmrid": "208, 206" }, \
+TGID_SETTINGS = '{  "33": { "title-before": "F4KNH Radio-Club", "show-columns": "+++++++---", "title-style": "color: orange;", "header-before": "Licensed HAM" }, \
+                    "38": { "title-before": "SHIELD", "hide-dmrid": "208, 206", "header-before": "VOIP and Unlicensed" }, \
                     "39": { "title-before": "SHIELD Test", "hide-dmrid": "208, 206" }, \
                     "75": { "title-before": "DMR75 National", "hide-dmrid": "208, 206" }, \
-                     "*": { "title-before": "auto", "show-empty": false, "show-columns": "++++++++++", "title-style": "color: gold;" } \
+                     "*": { "title-before": "auto", "show-empty": false, "show-columns": "++++++++++", "title-style": "color: gold;", "header-before": "auto", "header-style": "color: white;" } \
                 }'
 
 # all tgid not in this list will be excluded. if empty all will be allowed

@@ -745,31 +745,56 @@
 					hideDmridDefault = tgsetting["hide-dmrid"] ? tgsetting["hide-dmrid"]: "#";
 					showStyleDefault = tgsetting["title-style"] ? tgsetting["title-style"]: "";
 					showTitleDefault = tgsetting["title-before"] ? "auto" : ""; // any value ends with ""
+					
+					showHeaderDefault = tgsetting["header-before"] ? "auto" : ""; // any value ends with ""
+					showHeaderStyleDefault = tgsetting["header-style"] ? tgsetting["header-style"]: "";
 			}
 
 			Object.keys(tgsettings).forEach((tgid) => {
 				var tgName = "tgId" + tgid;
+				var hdName = "hdId" + tgid;
 
-				if (tgid != "*" && document.getElementById(tgName) == null) {
+				if (tgid != "*") {
 					tgsetting = tgsettings[tgid];
-					
-					var showEmpty = tgsetting["show-empty"] ? tgsetting["show-empty"] : showEmptyDefault;
 
-					if (showEmpty == true) {
-						var showColumns = (mobileDevice ? showColumnsDefault:tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault);
-						var showStyle = tgsetting["title-style"] ? tgsetting["title-style"] : "";
-						var showTitle = tgsetting["title-before"] ? tgsetting["title-before"] : showTitleDefault;
-
+					// treat headers
+					if (tgsetting["header-before"] && document.getElementById(hdName) == null) {
 						var emptyTable = "";
+						var showHeaderStyle = tgsetting["header-style"] ? tgsetting["header-style"] : showHeaderStyleDefault;
+						var showHeader = tgsetting["header-before"] ? tgsetting["header-before"] : showHeaderDefault;
 
-						if (showTitle != "auto" && showTitle != "") {
-							emptyTable = '<div class="titleRow"><div class="titleCell" style="' + showStyle + '">' + showTitle + '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div><div class="titlePadding">&nbsp;</div><div class="titleFiller">&nbsp;</div></div>' 
-							+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
+						if (showHeader != "auto" && showHeader != "") {
+								emptyTable = '<div id=' + hdName + ' class="titleHeaderRow"><div class="titleHeaderCell" style="' + showHeaderStyle + '">' + showHeader + '</div></div>';
 						}
+
+						/* insert new table into tg tables area regarding tgorder */
+						if (document.getElementById("tg" + tgid + "marker") != null)
+							$(emptyTable).insertBefore("#tg" + tgid + "marker");
 						else
-							emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
-						
-						emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">'
+							$('#insertPoint').append(emptyTable);
+
+							console.log(emptyTable);
+					} 
+					
+					// treat title
+					if (document.getElementById(tgName) == null) {
+						var emptyTable = "";
+						var showEmpty = tgsetting["show-empty"] ? tgsetting["show-empty"] : showEmptyDefault;
+
+						if (showEmpty == true) {
+							var showColumns = (mobileDevice ? showColumnsDefault:tgsetting["show-columns"] ? tgsetting["show-columns"] : showColumnsDefault);
+							var showStyle = tgsetting["title-style"] ? tgsetting["title-style"] : showStyleDefault;
+							var showTitle = tgsetting["title-before"] ? tgsetting["title-before"] : showTitleDefault;
+
+							if (showTitle != "auto" && showTitle != "") {
+								emptyTable = '<div class="titleRow"><div class="titleCell" style="' + showStyle + '">' + showTitle 
+									+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div><div class="titlePadding">&nbsp;</div><div class="titleFiller">&nbsp;</div></div>' 
+									+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
+							}
+							else
+								emptyTable = '<table id=tb' + tgName + ' class="tgtable tables lastheard tablefixed">';
+							
+							emptyTable += '<thead id="' + tgName + '" tgid="' + tgid + '" tbodyid=hblink' + tgid + '">' 
 							+ '<tr class="headerRow">' 
 							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>'
 							+	'<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>'
@@ -784,6 +809,8 @@
 							+ '</tr>' 
 							+ '</thead>' 
 							+ '<tbody id="hblink' + tgid + '"></tbody></table>';
+
+						}
 
 						/* insert new table into tg tables area regarding tgorder */
 						if (document.getElementById("tg" + tgid + "marker") != null)

@@ -284,6 +284,7 @@ thead {
   height: 15px;
   cursor: pointer;
 }
+/* title style */
 .titleRow {
   float: left;
   margin-top: 1rem;
@@ -323,6 +324,22 @@ thead {
 .entitledTables {
   width: var(--table-width);
 }
+/* end title styles */
+
+/* header style */
+.titleHeaderRow {
+  margin-top: 1rem;
+  text-align: left;
+  color: var(--color-fg-title);
+}
+.titleHeaderCell {
+  text-align: left;
+  font-size: 2.0rem;
+  padding-left: 0.5rem;
+  background-color: var(--color-bg-page);
+}
+/* end header styles */
+
 .tgBlue {
   color: var(--color-tgBlue);
 }
