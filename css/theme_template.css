@@ -139,6 +139,7 @@ html, body {
   color: var(--color-text-progressbar); 
   position: relative;
   top: -0.75rem;
+  font-size: 0.90rem;
 }
 /* end progressbar */
 
