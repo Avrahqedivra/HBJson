@@ -220,7 +220,7 @@
 	hide_dmrid = new Set("<<<HIDE_DMRID>>>".split(','));
 	displayPercent = "<<<DISPLAY_PERCENT>>>" != "False"
 	last_active_tg = ("<<<LAST_ACTIVE_TG>>>" == "True") ? true : false;
-	percentGauge = 0;
+	percentGauge = 1;
 
 	try {
 		tgbeacons = JSON.parse('<<<TGID_BEACONS>>>');
@@ -456,37 +456,11 @@
 
 						try {
 							if (peersLength == 0) {
-									content += '<tr>';
-									+ '<td rowspan="2">'
-									+ '<div class="tooltip">'
-									+ '<div class="msCallsign">N/A</div>'
-									+ '<span class="msNetID">&nbsp;(Id: n/a)</span>'
-									+ '<span class="tooltiptext">'
-									+ '<span style="font: 9pt arial,sans-serif;color:#FFFFFF">'
-									+ '&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>'
-									+ '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: ' + "N/A"
-									+ '<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: ' + "N/A"
-									+ '<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: ' + "N/A"
-									+ '</span>'
-									+ '</span>'
-									+ '</div>'
-									+ '<br>'
-
-									+ '<div class="msLocation">' + "N/A" + '</div>'
-									+ '</td>'
-
-									+ '<td class="tdGradient" rowspan="2">' + "N/A" + '</td>'
-
-									+ '<td class="msTS1">TS1</td>'
-									+ '<td class="msTSE">' + "N/A" + '</td>'
-									+ '<td class="msTSE">' + "N/A" + '</td>'
-									+ '</tr>'
-
-									+ '<tr>'
-									+ '<td class="msTS2">TS2</td>'
-									+ '<td class="msTSE">' + "N/A" + '</td>'
-									+ '<td class="msTSE">' + "N/A" + '</td>'
-									+ '</tr>'
+									content += '<tr><td rowspan="2"><div class="tooltip"><div class="msCallsign">N/A</div><span class="msNetID">&nbsp;(Id: n/a)</span>'
+									+ '<span class="tooltiptext"><span style="font: 9pt arial,sans-serif;color:#FFFFFF">&nbsp;&nbsp;&nbsp;<b><font color="yellow">N/A</font></b><br>'
+									+ '&nbsp;&nbsp;&nbsp;<b>Type/Slot</b>: N/A<br>&nbsp;&nbsp;&nbsp;<b>Soft_Ver</b>: N/A<br>&nbsp;&nbsp;&nbsp;<b>Hardware</b>: N/A</span></span></div><br>'
+									+ '<div class="msLocation">N/A</div></td><td class="tdGradient" rowspan="2">N/A</td><td class="msTS1">TS1</td><td class="msTSE">N/A</td><td class="msTSE">N/A</td></tr>'
+									+ '<tr><td class="msTS2">TS2</td><td class="msTSE">N/A</td><td class="msTSE">N/A</td></tr>'
 							} else {
 									for (let i = 0; i < peersLength; i++) {
 										netID = peers[i][0];
@@ -949,10 +923,13 @@
 
 					content += "<td class='alias ellipsis clickable" + ((showColumns.charAt(6) == '-') ? " visible'":"'") + " onclick='scrollIntoViewFromId(" + link + ")'>" + alias + "</td>";
 
-					if (record.PACKET == "START")
-						content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">ONLINE</td>";
-					else
+					if (record.PACKET == "START") {
+						addTicker(record.TGID);
+						content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + "><div class='ticker" + record.TGID + "'>00:00</div></td>";
+					} else {
+						deleteTicker(record.TGID);
 						content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((delay != undefined) ? delay : "") + "</td>";
+					}
 
 					content += "<td class='netid"+ ((showColumns.charAt(8) == '-') ? " visible'":"'") + ">" + netid + "</td>"
 						+ "<td class='infra ellipsis"+ ((showColumns.charAt(9) == '-') ? " visible'":"'") + ">" + record.SYS + "</td>"
@@ -988,6 +965,8 @@
 		}
 	}
 
+
+
 	function doTraffic(t) {
 		if (t != null) {
 			if (Array.isArray(t))
@@ -999,6 +978,7 @@
 
 			if (trafficLength > 0) {
 				checkDeadOnline();
+				checkDeadTicker();
 
 				// keeps the n first unique items
 				// traffic = uniqByKeepFirst(traffic, it => it.DMRID);
@@ -1177,7 +1157,7 @@
 									+ "<td class='alias ellipsis"+ ((showColumns.charAt(6) == '-') ? " visible'":"'") + ">" + alias + "</td>";
 
 								if (record.PACKET == "START")
-									content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">ONLINE</td>";
+									content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + "><div class='ticker" + record.TGID + "'>00:00</div></td>";
 								else
 									content += "<td class='delay"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + ">" + ((delay != undefined) ? delay : "") + "</td>";
 
@@ -1277,7 +1257,45 @@
 			if (keyName === 'Escape')
 				document.getElementById("inputModal").style.display = 'none';
 		}, false);
-	});
+	})
+	
+	function checkDeadTicker() {
+		if (ticker != null) {
+			for(let i=tickerTG.length-1; i >= 0; i--) {
+				if (tickerTG[i].delay > 240) {
+					// console.log("deleting dead ticker for tg " + tickerTG[i].tg);
+					tickerTG.splice(i, 1);
+				}
+			}
+		}
+	}
+
+	function deleteTicker(tg) {
+		if (ticker != null) {
+			for(let i=0; i<tickerTG.length; i++) {
+				if (tickerTG[i].tg == tg) {
+					// console.log("deleting ticker for tg " + tg);
+					tickerTG.splice(i, 1);
+					break;
+				}
+			}
+		}
+	}
+
+	function addTicker(tg) {
+		if (ticker != null) {
+			// console.log("adding ticker for tg " + tg);
+			var found = false;
+
+			for(let i=0; i<tickerTG.length; i++) {
+				if (found = (tickerTG[i].tg == tg))
+					break;
+			}
+
+			if (!found)
+				tickerTG.push({ "tg": tg, "delay": 0 });
+		}
+	}
 
 	window.onload = () => {
 		doApplyConfig = true;
@@ -1291,6 +1309,9 @@
 		showTitleDefault = "";
 		showStyleDefault = "";
 		showEmptyDefault = false;
+
+		ticker = null;
+		tickerTG = [];
 
 		if (mobileDevice)	{
 			var r = document.querySelector(':root');
@@ -1334,6 +1355,22 @@
 
 				this.socket.onopen = () => {
 					log("Connected to " + url)
+
+					ticker = setInterval(() => {
+						for(let i=0; i<tickerTG.length; i++) {
+							tickerTG[i].delay++;
+
+							var elements = document.getElementsByClassName("ticker"+tickerTG[i].tg);
+							if (elements != null && elements.length > 1) {
+								var value = new Date(tickerTG[i].delay * 1000).toISOString().slice(14, 19);
+
+								for(let j=0; j<elements.length; j++) {
+									elements[j].innerHTML = value;
+								}
+							}
+						}
+					}, 1000);
+		
 					resolve();
 				};
 
@@ -1412,27 +1449,33 @@
 				};
 
 				socket.onclose = function (e) {
-					log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e
-						.reason + "')");
+					log("Connection closed (wasClean = " + e.wasClean + ", code = " + e.code + ", reason = '" + e.reason + "')");
+					if (ticker != null) {
+						clearInterval(ticker);
+						ticker = null;
+					}
 					this.sock = null;
-				};
-			});
-		};
+				}
+			})
+		}
 
 		WSConnection.prototype.disconnect = () => {
 			'use strict';
 			console.log("Disconnect request from local app layer");
 			this.socket.close();
-		};
-
+		}
 
 		setTimeout(() => {
 			socket = new WSConnection().connect(wsuri);
 		}, 250);
-	};
+	}
 
 	window.onunload = () => {
 		socket = null;
+		if (ticker != null) {
+			clearInterval(ticker);
+			ticker = null;
+		}
 	}
 </script>
 
