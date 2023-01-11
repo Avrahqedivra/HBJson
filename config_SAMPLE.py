@@ -50,12 +50,12 @@ THEME = "theme-dark"
 # Authorization of access to dashboard as admin
 # use http://mysite:port?admin to log as admin
 ADMIN_USER = 'admin'
-ADMIN_PASS = 'admin'
 
 # Authorization of access to dashboard# as user
 WEB_AUTH =  False
-WEB_USER =  'hblink'
-WEB_PASS =  'hblink'
+
+# secret salt key for passcode generator
+WEB_SECRETKEY = "SECRETKEY"
 
 # Authorization of access to SQL
 SQL_LOG       = False

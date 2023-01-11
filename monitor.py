@@ -85,8 +85,10 @@ from config import *
 from extracommand import *
 
 # MYSQL stuff (pip install mysql-connector-python)
-from mysql.connector import connect, Error
-import pandas as pd
+# from mysql.connector import connect, Error
+# import pandas as pd
+
+from crc16 import *
 
 # support for xlsx files
 import xlsxwriter
@@ -1650,29 +1652,30 @@ class web_server(Resource):
 
         if WEB_AUTH or admin_auth:
             admin_login = ADMIN_USER.encode('utf-8')
-            admin_password = ADMIN_PASS.encode('utf-8')
-
-            user = WEB_USER.encode('utf-8')
-            password = WEB_PASS.encode('utf-8')
 
             auth = request.getHeader('Authorization')
             if auth and auth.split(' ')[0] == 'Basic':
                 decodeddata = base64.b64decode(auth.split(' ')[1])
-                if (decodeddata.split(b':') == [user, password] and not admin_auth) or (decodeddata.split(b':') == [admin_login, admin_password] and admin_auth):
+
+                user, password = decodeddata.split(b':')
+                
+                print(str(user, "utf-8").upper() + " " + str(password, "utf-8") + " " + str(crc16(str(user, "utf-8").upper(), WEB_SECRETKEY)))
+
+                if (str(crc16(str(user, "utf-8").upper(), WEB_SECRETKEY)) == str(password, "utf-8")):
                     global BUTTONBAR_HTML
 
                     logging.info('Authorization OK')
                     authenticated.value = True
-                    if decodeddata.split(b':') == [user, password]:
-                        authenticated.mode = 0
-                        # update button bar template
-                        logging.info('user logging, switching to user menu')
-                        BUTTONBAR_HTML = get_template(PATH + "templates/buttonbar.html")
-                    else:
+                    if str(user, "utf-8").upper() == str(admin_login, "utf-8").upper():
                         authenticated.mode = 1
                         # update button bar template
                         logging.info('admin logging, switching to admin menu')
                         BUTTONBAR_HTML = get_template(PATH + "templates/admin_buttonbar.html")
+                    else:
+                        authenticated.mode = 0
+                        # update button bar template
+                        logging.info('user logging, switching to user menu')
+                        BUTTONBAR_HTML = get_template(PATH + "templates/buttonbar.html")
 
                     return index_template()
 
@@ -1718,7 +1721,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.2.0:\n\t2021, 2022 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.3.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
