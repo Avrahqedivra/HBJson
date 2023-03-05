@@ -758,6 +758,22 @@ color: #569cd6;
   filter: var(--map-tiles-filter);
 }
 
+#statusdiv {
+  position: absolute;
+  z-index: 9;
+  background-color: #f1f1f1;
+  text-align: center;
+  border: 1px solid #d3d3d3;
+}
+
+#statusdivheader {
+  padding: 10px;
+  cursor: move;
+  z-index: 10;
+  background-color: #2196F3;
+  color: #fff;
+}
+
 /* modal */
 /* The Modal (background) */
 .modal {  
@@ -777,7 +793,8 @@ color: #569cd6;
 
 .modal-content-followup::-webkit-scrollbar, 
   .modal-content-listeners::-webkit-scrollbar,
-    .modal-content-statistics::-webkit-scrollbar {
+    .modal-content-statistics::-webkit-scrollbar,
+    .modal-content-status::-webkit-scrollbar {
     display: block;
     width: 6px;
     background-color: #404040;
@@ -785,7 +802,8 @@ color: #569cd6;
 
 .modal-content-followup::-webkit-scrollbar-thumb, 
   .modal-content-listeners::-webkit-scrollbar-thumb,
-    .modal-content-statistics::-webkit-scrollbar-thumb {
+    .modal-content-statistics::-webkit-scrollbar-thumb,
+    .modal-content-status::-webkit-scrollbar-thumb {
     background-color: #569cd6;
 }
 
@@ -846,6 +864,21 @@ input[name="search"]:focus {
   overflow-y: auto;
 }
 
+.modal-content-status {
+  scrollbar-width: thin;
+  
+  width: 22rem;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -12rem;
+  transform: translateY(-50%);
+
+  max-height: 60rem;
+  overflow-y: auto;
+}
+
 .modal-content-followup {
   scrollbar-width: thin;
 
@@ -883,6 +916,11 @@ input[name="search"]:focus {
   color: var(--color-close);
   text-decoration: none;
   cursor: default;
+}
+
+.close-status {
+  top: -0.45rem;
+  right: 70px;
 }
 
 .close-followup {
@@ -952,7 +990,7 @@ input[name="search"]:focus {
   color: var(--color-tgGreen);
 }
 
-.trlisteners, .trstatistics {
+.trstatus, .trlisteners, .trstatistics {
   color: var(--color-fg-marquee);  
 }
 
@@ -1033,6 +1071,30 @@ select {
 
 .emaster {
   filter: var(--color-filter-emaster)
+}
+
+.alarm {
+  border: 2px  solid var(--color-tgRed) !important;
+}
+
+.msrounded {
+  margin: 1px 8px 1px 8px;
+  border-radius: 4px;  
+}
+
+.red {
+  color: #FFF;
+  background-color: var(--color-tgRed);
+}
+
+.orange {
+  color: #FFF;
+  background-color: #E98A03;
+}
+
+.green {
+  color: #FFF;
+  background-color: #009051;
 }
 
 /* <div class="bullet bulletLastActiveTG">&#x2022;</div>

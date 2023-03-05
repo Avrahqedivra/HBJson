@@ -44,6 +44,17 @@ DYNAMIC_TG = False
 HIDE_DMRID = "#"
 # beacons/icons pairs, for example '{ "2080000":"shield.png", "2060000":"shield.png" }'
 TGID_BEACONS = '{ "2000008":"shield.png" }'
+
+# ip, sites and services to be monitored (see also status button in menubar template)
+TO_BE_MONITORED = [
+    {"name": "HB1", "type": "tcp", "ip": "localhost", "port": 1234, "action": "connect"},
+    {"name": "HB2", "type": "tcp", "ip": "127.0.0.1", "port": 4567, "action": "connect"},
+    {"name": "IDF", "type": "tcp", "ip": "orange.fr", "action": "ping"},
+    {"name": "SITE", "type": "tcp", "ip": "monsite.url", "action": "ping"},
+    {"name": "TP1", "service": "analog_bridged1"},
+    {"name": "TP2", "service": "analog_bridged2"}
+]
+
 # sets default theme (dark or light)
 THEME = "theme-dark"
 

@@ -46,7 +46,7 @@
 			}
 		</style>
 	</head>
-
+	
 <body>
 	<center>
 		<noscript>You must enable JavaScript</noscript>
@@ -90,6 +90,24 @@
 							</tr>
 						</thead>
 						<tbody id="listeners">
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- The Status -->
+			<div id="statusdiv" style="display: none;">
+				<!-- Modal content -->
+				<div class="modal-content-status">
+					<span class="close close-status">&times;</span>
+					<table class="tablefixed">
+						<thead id="statusdivheader" tbodyid="status">
+							<tr class="headerRow">
+								<th class="thlename">Server</th>
+								<th class="thledate">Status</th>
+							</tr>
+						</thead>
+						<tbody id="status">
 						</tbody>
 					</table>
 				</div>
@@ -205,6 +223,53 @@
 </body>
 
 <script src="pureknob.js"></script>
+
+<script>
+/**
+	https://stackoverflow.com/questions/65022204/make-a-popup-modal-dialog-movable-draggable-once-it-has-appeared
+*/
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    /* if present, the header is where you move the DIV from:*/
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    /* otherwise, move the DIV from anywhere inside the DIV:*/
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    /* stop moving when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+</script>
 
 <script type="text/javascript">
 	var traffic = [];
@@ -566,6 +631,60 @@
 			// el.scrollIntoView(true);
 			el.focus();
 		}
+	}
+
+	function serverAlarm() {
+		for(let i=0; i< diagStatus.length; i++) {
+			if (diagStatus[i]["STATUS"] != true) {
+				$("#serverstatus").addClass("alarm");
+				return;
+			}
+		}
+		
+		$("#serverstatus").removeClass("alarm");
+	}
+
+	function serverStatus() {
+		var content = ""
+
+		$("#status tr").remove();
+		
+		var content = ""
+
+		for(let i=0; i< diagStatus.length; i++) {
+			var server = diagStatus[i];
+
+			content += "<tr class='trlisteners'><td>" + server['NAME'] + "</td>"
+
+			if (server["ACTION"] == "ping") {
+				var ping = server['TIME'];
+				if (ping == "None")
+					bgClass = "red";
+				else if (parseInt(ping) < 30)
+					bgClass = "green";
+				else if (parseInt(ping) < 60)
+					bgClass = "orange";
+				else
+					bgClass = "red";
+
+				content += "<td><div class='msrounded " + bgClass + "'>" + server['TIME'] + " ms</div></td>";
+			}
+			else {
+				// 🟠 (emoji orange circle)
+				if (server['STATUS'] == true)
+					content += "<td class='trstatisticsgreen'>🟢</td>"
+				else
+					content += "<td class='trstatisticsred'>🔴</td>"
+			}
+
+			content += "</tr>"
+		}
+
+		$("#status").append(content);
+		$("#statusdiv").show();
+
+		// Make the DIV element draggagle:
+		dragElement(document.getElementById("statusdiv"));
 	}
 
 	function followUpdUser(dmrid) {
@@ -965,8 +1084,6 @@
 		}
 	}
 
-
-
 	function doTraffic(t) {
 		if (t != null) {
 			if (Array.isArray(t))
@@ -1189,6 +1306,11 @@
 
 	$(document).ready(function () {
 		$(window).click(function (event) {
+			if (event.target == document.getElementById("statusdiv"))
+				$("#statusdiv").hide();
+		});
+
+		$(window).click(function (event) {
 			if (event.target == document.getElementById("listenersModal"))
 				$("#listenersModal").hide();
 		});
@@ -1232,6 +1354,7 @@
 			$("#statisticsModal").hide();
 			$("#listenersModal").hide();
 			$("#followUpModal").hide();
+			$("#statusdiv").hide();
 		});
 
 		$(document).on("dblclick", "#btnlisteners", function (e) {
@@ -1309,6 +1432,7 @@
 		showTitleDefault = "";
 		showStyleDefault = "";
 		showEmptyDefault = false;
+		diagStatus = [];
 
 		ticker = null;
 		tickerTG = [];
@@ -1387,6 +1511,11 @@
 						if (data != null) {
 							checkDeadOnline();
 
+							if (data.DIAGNOSTICS) {
+									diagStatus = data.DIAGNOSTICS;
+									serverAlarm();
+							}
+
 							if (data.BIGEARS)
 								$("#btnlisteners").text("\uD83D\uDD75 SWL " + data.BIGEARS);
 
@@ -1398,9 +1527,8 @@
 								// if (data.CONFIG.USERS)
 								//     subscribers = data.CONFIG.USERS.results;
 
-								if (data.CONFIG.BIGEARS) {
+								if (data.CONFIG.BIGEARS)
 									$("#btnlisteners").text("\uD83D\uDD75 SWL " + data.CONFIG.BIGEARS);
-								}
 
 								if (data.CONFIG.PACKETS) {
 									// will be done only once

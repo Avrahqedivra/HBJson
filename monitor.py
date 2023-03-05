@@ -44,6 +44,8 @@ import urllib.request
 import platform
 import os
 import binascii
+import socket
+import subprocess
 
 from urllib import parse
 
@@ -127,6 +129,7 @@ SILENTJ             = True
 VOICEJ              = False
 LISTENERSJ          = []
 CONTACTSJ           = []
+DIAG_TABLE          = []
 BUTTONBAR_HTML      = ""
 
 MOBILEPHONE         = False
@@ -771,15 +774,18 @@ def build_bridge_table(_bridges):
 #
 build_time = time()
 def build_stats():
-    global build_time, LISTENERSJ
+    global build_time, LISTENERSJ, DIAG_TABLE
     now = time()
 
     if (now > build_time + 0.5) and ('dashboard_server' in locals() or 'dashboard_server' in globals()):
+
+        build_Diagnostic_table()
+
         for client in dashboard_server.clients:
             if CONFIG:            
                 if client.page != "ccs7":
                     if client.page == "dashboard":
-                        CTABLEJ = { 'CTABLE' : CTABLE, 'EMPTY_MASTERS' : EMPTY_MASTERS, 'BIGEARS': str(len(dashboard_server.clients)), 'LISTENERS': LISTENERSJ }
+                        CTABLEJ = { 'CTABLE' : CTABLE, 'EMPTY_MASTERS' : EMPTY_MASTERS, 'BIGEARS': str(len(dashboard_server.clients)), 'LISTENERS': LISTENERSJ, 'DIAGNOSTICS': DIAG_TABLE }
                         client.sendMessage(json.dumps(CTABLEJ, ensure_ascii = False).encode('utf-8'))
                     elif client.page != "bridges":
                         CTABLEJ = { 'BIGEARS': str(len(dashboard_server.clients)), 'LISTENERS': LISTENERSJ }
@@ -876,6 +882,85 @@ def rts_update(p):
 
     build_stats()
 
+######################################################################
+#
+# BUILD DIAGNOSTIC TABLE
+#
+
+def test_server(ip, port, type):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM if type == "udp" else socket.SOCK_STREAM)
+    s.settimeout(0.125)
+
+    try:
+        if type == "udp":
+            s.sendto(b"hello", (ip, port))
+            data, addr = s.recvfrom(3000)
+            return True
+        else:
+            s.connect((ip, port))
+            s.shutdown(socket.SHUT_RDWR)
+            return True
+    except:
+        return False
+    finally:
+        s.close()
+
+# Fonction pour tester l'état d'un service systemd
+def test_systemd_service(service):
+    try:
+        result = subprocess.check_output(["systemctl", "is-active", service])
+        return result.strip() == b"active"
+    except:
+        return False
+
+# Fonction pour tester l'état d'un hôte avec la commande ping
+def test_ping(ip):
+    try:
+        ping_output = subprocess.check_output(["ping", "-c", "1", "-w", "1", ip])
+        ping_time = float(ping_output.split(b"time=")[1].split(b" ")[0])
+        ping_time *= 1.000 # Convert to milliseconds
+    except:
+        ping_time = None
+    return ping_time
+
+def build_Diagnostic_table():
+    global DIAG_TABLE
+
+    DIAG_TABLE = []
+
+    try:
+        for server in TO_BE_MONITORED:
+            try:
+                status = {
+                    'NAME': server['name'],
+                    'TYPE': server.get('type') if server['type'] else '',
+                    'ACTION': server.get('action') if server["action"] else '',
+                }
+
+                match server["type"]:
+                    case "tcp":
+                        match server["action"]:
+                            case "connect":
+                                status["STATUS"] = test_server(server["ip"], server["port"], server["type"])
+                                DIAG_TABLE.append(status)
+
+                            case "ping":
+                                status["STATUS"] = True
+                                status["TIME"] = test_ping(server["ip"])
+                                DIAG_TABLE.append(status)
+
+                    case "service":
+                        status["STATUS"] = test_systemd_service(server["service"])
+                        DIAG_TABLE.append(status)
+            except:
+                DIAG_TABLE.append({
+                    'NAME': server['name'],
+                    'TYPE': server.get('type') if server['type'] else '',
+                    'ACTION': server.get('action') if server["action"] else '',
+                    'STATUS': False
+                })
+    except:
+        pass
 
 def createlocalUsersFromSql():
     try:
@@ -1721,7 +1806,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.3.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.4.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
