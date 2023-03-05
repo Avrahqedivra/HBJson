@@ -633,54 +633,58 @@ function dragElement(elmnt) {
 		}
 	}
 
-	function serverAlarm() {
-		for(let i=0; i< diagStatus.length; i++) {
-			if (diagStatus[i]["STATUS"] != true) {
-				$("#serverstatus").addClass("alarm");
-				return;
+	function updateStatus() {
+		var content = ""
+		var alarm = false
+		var statusDivVisible = $("#statusdiv").is(":visible")
+
+		for(let i=0; i < diagStatus.length; i++) {
+			var server = diagStatus[i]
+
+			if (server["ACTION"] != "ping" && server["STATUS"] != true)
+				alarm = true
+
+			if (statusDivVisible) {
+				content += "<tr class='trlisteners'><td>" + server['NAME'] + "</td>"
+
+				if (server["ACTION"] == "ping") {
+					var ping = server['TIME'];
+					if (ping == "None")
+						bgClass = "red";
+					else if (parseInt(ping) < 30)
+						bgClass = "green";
+					else if (parseInt(ping) < 60)
+						bgClass = "orange";
+					else
+						bgClass = "red";
+
+					content += "<td><div class='msrounded " + bgClass + "'>" + server['TIME'] + " ms</div></td>";
+				}
+				else {
+					// 🟠 (emoji orange circle)
+					if (server['STATUS'] == true)
+						content += "<td class='trstatisticsgreen'>🟢</td>"
+					else {
+						alarm = true
+						content += "<td class='trstatisticsred'>🔴</td>"
+					}
+				}
+
+				content += "</tr>"
+				$("#status tr").remove()
+				$("#status").append(content);
 			}
 		}
-		
-		$("#serverstatus").removeClass("alarm");
+
+		if (alarm)
+			$("#serverstatus").addClass("alarm");
+		else
+			$("#serverstatus").removeClass("alarm");
 	}
 
 	function serverStatus() {
-		var content = ""
+		updateStatus();
 
-		$("#status tr").remove();
-		
-		var content = ""
-
-		for(let i=0; i< diagStatus.length; i++) {
-			var server = diagStatus[i];
-
-			content += "<tr class='trlisteners'><td>" + server['NAME'] + "</td>"
-
-			if (server["ACTION"] == "ping") {
-				var ping = server['TIME'];
-				if (ping == "None")
-					bgClass = "red";
-				else if (parseInt(ping) < 30)
-					bgClass = "green";
-				else if (parseInt(ping) < 60)
-					bgClass = "orange";
-				else
-					bgClass = "red";
-
-				content += "<td><div class='msrounded " + bgClass + "'>" + server['TIME'] + " ms</div></td>";
-			}
-			else {
-				// 🟠 (emoji orange circle)
-				if (server['STATUS'] == true)
-					content += "<td class='trstatisticsgreen'>🟢</td>"
-				else
-					content += "<td class='trstatisticsred'>🔴</td>"
-			}
-
-			content += "</tr>"
-		}
-
-		$("#status").append(content);
 		$("#statusdiv").show();
 
 		// Make the DIV element draggagle:
@@ -1513,7 +1517,7 @@ function dragElement(elmnt) {
 
 							if (data.DIAGNOSTICS) {
 									diagStatus = data.DIAGNOSTICS;
-									serverAlarm();
+									updateStatus();
 							}
 
 							if (data.BIGEARS)
