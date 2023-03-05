@@ -1090,17 +1090,20 @@ select {
 }
 
 .red {
-  color: var(--color-fg-marquee);
+  color: #fff;
+  font-weight: bold;
   background-color: var(--color-tgRed);
 }
 
 .orange {
-  color: var(--color-fg-marquee);
+  color: #fff;
+  font-weight: bold;
   background-color: #E98A03;
 }
 
 .green {
-  color: var(--color-fg-marquee);
+  color: #fff;
+  font-weight: bold;
   background-color: #009051;
 }
 
