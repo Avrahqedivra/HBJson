@@ -1077,23 +1077,30 @@ select {
   border: 2px  solid var(--color-tgRed) !important;
 }
 
+.statusLabel {
+  color: var(--color-fg-marquee); 
+  font-weight: bold;
+  float: right;
+  margin-right: 8px;
+}
+
 .msrounded {
   margin: 1px 8px 1px 8px;
   border-radius: 4px;  
 }
 
 .red {
-  color: #FFF;
+  color: var(--color-fg-marquee);
   background-color: var(--color-tgRed);
 }
 
 .orange {
-  color: #FFF;
+  color: var(--color-fg-marquee);
   background-color: #E98A03;
 }
 
 .green {
-  color: #FFF;
+  color: var(--color-fg-marquee);
   background-color: #009051;
 }
 

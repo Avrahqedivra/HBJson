@@ -649,7 +649,7 @@ function dragElement(elmnt) {
 
 				if (server["ACTION"] == "ping") {
 					var ping = server['TIME'];
-					if (ping == "None")
+					if (ping == null || parseInt(ping) == 0)
 						bgClass = "red";
 					else if (parseInt(ping) < 30)
 						bgClass = "green";
@@ -661,12 +661,14 @@ function dragElement(elmnt) {
 					content += "<td><div class='msrounded " + bgClass + "'>" + server['TIME'] + " ms</div></td>";
 				}
 				else {
+					var label = server['ACTION'] == "connect" ? "Port ":"Status "
+
 					// 🟠 (emoji orange circle)
 					if (server['STATUS'] == true)
-						content += "<td class='trstatisticsgreen'>🟢</td>"
+						content += "<td><div class='statusLabel'>" + label + "🟢</div></td>"
 					else {
 						alarm = true
-						content += "<td class='trstatisticsred'>🔴</td>"
+						content += "<td><div class='statusLabel'>" + label + "🔴</div></td>"
 					}
 				}
 

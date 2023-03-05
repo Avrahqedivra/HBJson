@@ -920,7 +920,7 @@ def test_ping(ip):
         ping_time = float(ping_output.split(b"time=")[1].split(b" ")[0])
         ping_time *= 1.000 # Convert to milliseconds
     except:
-        ping_time = None
+        ping_time = 0
     return ping_time
 
 def build_Diagnostic_table():
@@ -949,9 +949,10 @@ def build_Diagnostic_table():
                                 status["TIME"] = test_ping(server["ip"])
                                 DIAG_TABLE.append(status)
 
-                    case "service":
+                    case "srv":
                         status["STATUS"] = test_systemd_service(server["service"])
                         DIAG_TABLE.append(status)
+
             except:
                 DIAG_TABLE.append({
                     'NAME': server['name'],

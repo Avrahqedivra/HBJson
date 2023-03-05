@@ -51,8 +51,8 @@ TO_BE_MONITORED = [
     {"name": "HB2", "type": "tcp", "ip": "127.0.0.1", "port": 4567, "action": "connect"},
     {"name": "IDF", "type": "tcp", "ip": "orange.fr", "action": "ping"},
     {"name": "SITE", "type": "tcp", "ip": "monsite.url", "action": "ping"},
-    {"name": "TP1", "service": "analog_bridged1"},
-    {"name": "TP2", "service": "analog_bridged2"}
+    {"name": "TP1", "type": "srv", "service": "analog_bridged1", "action": "check"},
+    {"name": "TP2", "type": "srv", "service": "analog_bridged2", "action": "check"}
 ]
 
 # sets default theme (dark or light)
