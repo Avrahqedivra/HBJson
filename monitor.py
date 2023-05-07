@@ -1808,7 +1808,7 @@ if __name__ == '__main__':
     logging.info('monitor.py starting up')
 
     # exit code if Python version too old
-    if sys.version_info.major < 4 or sys.version_info.minor < 10:
+    if sys.version_info.major < 3 or sys.version_info.minor < 10:
         sys.exit("HBJson needs python 3.10.xx and upper!")
 
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
