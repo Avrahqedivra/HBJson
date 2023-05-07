@@ -35,6 +35,7 @@
 
 # Standard modules
 import sys
+import platform
 import json
 import csv
 import logging
@@ -62,7 +63,8 @@ from twisted.internet import reactor, endpoints, task, defer
 from twisted.web.server import Site
 from twisted.web import http
 from twisted.web.client import URI
-from twisted.web.resource import Resource, NoResource
+from twisted.web.resource import Resource
+from twisted.web.pages import notFound
 from twisted.web.static import File
 from twisted.web import server
 from twisted.web.server import Session
@@ -1582,7 +1584,7 @@ class staticHtmlFile(Resource):
 
         request.setResponseCode(http.NOT_FOUND)
         request.finish()
-        return NoResource()
+        return notFound()
 
 class staticFile(Resource):
     def __init__(self, file_Name, file_Folder, file_contentType):
@@ -1805,22 +1807,23 @@ if __name__ == '__main__':
 
     logging.info('monitor.py starting up')
 
+    # exit code if Python version too old
+    if sys.version_info.major < 4 or sys.version_info.minor < 10:
+        sys.exit("HBJson needs python 3.10.xx and upper!")
+
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.4.1:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
-
-    # exit code if Python version too old
-    if sys.version_info.major < 3 and sys.version_info.minor < 10:
-        sys.exit("HBJson needs python 3.10.xx and upper!")
+                '\n\n\tHBJSON v3.5.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
-    if os.path.isfile(LOG_PATH+"lastheard.log"):
-      try:
-         check_call("sed -i -e 's|\\x0||g' {}".format(LOG_PATH+"lastheard.log"), shell=True)
-         logging.info('Check lastheard.log file')
-      except CalledProcessError as err:
-         print(err)
+    if platform.system() == "Linux":
+        if os.path.isfile(LOG_PATH+"lastheard.log"):
+            try:
+                check_call("sed -i -e 's|\\x0||g' {}".format(LOG_PATH+"lastheard.log"), shell=True)
+                logging.info('Check lastheard.log file')
+            except CalledProcessError as err:
+                print(err)
     
     # Create Static Website index file
     sitelogo_html = get_template(PATH + "templates/sitelogo.html")
