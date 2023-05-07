@@ -34,6 +34,7 @@
 ###############################################################################
 
 # Standard modules
+import sys
 import json
 import csv
 import logging
@@ -1807,7 +1808,11 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.4.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.4.1:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+
+    # exit code if Python version too old
+    if sys.version_info.major < 3 and sys.version_info.minor < 10:
+        sys.exit("HBJson needs python 3.10.xx and upper!")
 
     # Check lastheard.log file
     if os.path.isfile(LOG_PATH+"lastheard.log"):
