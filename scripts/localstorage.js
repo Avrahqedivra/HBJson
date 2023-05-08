@@ -48,9 +48,8 @@ function zoom(v) {
 		default: zoomValue = 1;
 	}
 
-	document.body.style.zoom = zoomValue;	
-	document.body.style["-moz-transform"] = "scale(" + zoomValue + ")";
-	document.body.style["-moz-transform"] = "0 0";
+	document.body.style["transform"] = "scale(" + zoomValue + ")";
+	document.body.style["transform-origin"] = "top center";
 }
 
 function enhanceNames(name) {

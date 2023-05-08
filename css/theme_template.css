@@ -38,9 +38,8 @@ html, body {
 }
 
 .zoom {
-  zoom: 1;
-  -moz-transform: scale(1);
-  -moz-transform: 0 0;
+  transform: scale(1);
+  transform-origin: top center;
 }
 
 /*Tabs*/
