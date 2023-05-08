@@ -1716,7 +1716,7 @@ class web_server(Resource):
             else:
                 return staticFile(name, "html", "application/vnd.ms-excel")
 
-        return NoResource()
+        return notFound()
 
     def render_GET(self, request):
         global MOBILEPHONE
