@@ -37,11 +37,6 @@ html, body {
   margin: 0;
 }
 
-.zoom {
-  transform: scale(1);
-  transform-origin: top center;
-}
-
 /*Tabs*/
 #tabs {
   border-radius: var(--app-border-radius);
