@@ -1413,7 +1413,7 @@ function dragElement(elmnt) {
 
 	function addTicker(record) {
 		if (ticker != null) {
-			// console.log("adding ticker for tg " + tg);
+			// console.log("adding ticker for tg " + record.TGID);
 			var found = false;
 
 			for(let i=0; i<tickerTG.length; i++) {
@@ -1422,7 +1422,10 @@ function dragElement(elmnt) {
 			}
 
 			if (!found)
-				var delay = (new Date().getTime() - new Date(record.DATE+'T' + record.TIME + 'Z').getTime()) / 1000;
+				var time1 = record.TIME.split(":");
+				var time2 = new Date();
+				var delay = (time2.getMinutes() * 60 + time2.getSeconds()) - (parseInt(time1[1]) * 60 + parseInt(time1[2]));
+				// console.log("elapsed delay : " + delay)
 				tickerTG.push({ "tg": record.TGID, "delay": delay });
 		}
 	}
@@ -1493,6 +1496,7 @@ function dragElement(elmnt) {
 
 							var elements = document.getElementsByClassName("ticker"+tickerTG[i].tg);
 							if (elements != null && elements.length > 1) {
+								console.log("xxxxxx '" + tickerTG[i].delay + "'")
 								var value = new Date(tickerTG[i].delay * 1000).toISOString().slice(14, 19);
 
 								for(let j=0; j<elements.length; j++) {
