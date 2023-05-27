@@ -28,8 +28,8 @@
 ###############################################################################
 ###############################################################################
 #
-#   JSON service by Avrahqedivra F4JDN, F-16987
-#   MYSQL added by  Avrahqedivra F4JDN, F-16987
+#   Copyright (C) 2021-2023 JSON service by Avrahqedivra F4JDN, F-16987
+#   Copyright (C) 2021-2023 MYSQL added by  Avrahqedivra F4JDN, F-16987
 #
 ###############################################################################
 
