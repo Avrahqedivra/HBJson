@@ -1049,7 +1049,7 @@ function dragElement(elmnt) {
 					content += "<td class='alias ellipsis clickable" + ((showColumns.charAt(6) == '-') ? " visible'":"'") + " onclick='scrollIntoViewFromId(" + link + ")'>" + alias + "</td>";
 
 					if (record.PACKET == "START") {
-						addTicker(record.TGID);
+						addTicker(record);
 						content += "<td class='online"+ ((showColumns.charAt(7) == '-') ? " visible'":"'") + "><div class='ticker" + record.TGID + "'>00:00</div></td>";
 					} else {
 						deleteTicker(record.TGID);
@@ -1411,18 +1411,19 @@ function dragElement(elmnt) {
 		}
 	}
 
-	function addTicker(tg) {
+	function addTicker(record) {
 		if (ticker != null) {
 			// console.log("adding ticker for tg " + tg);
 			var found = false;
 
 			for(let i=0; i<tickerTG.length; i++) {
-				if (found = (tickerTG[i].tg == tg))
+				if (found = (tickerTG[i].tg == record.TGID))
 					break;
 			}
 
 			if (!found)
-				tickerTG.push({ "tg": tg, "delay": 0 });
+				var delay = (new Date().getTime() - new Date(record.DATE+'T' + record.TIME + 'Z').getTime()) / 1000;
+				tickerTG.push({ "tg": record.TGID, "delay": delay });
 		}
 	}
 
