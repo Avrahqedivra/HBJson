@@ -1496,7 +1496,6 @@ function dragElement(elmnt) {
 
 							var elements = document.getElementsByClassName("ticker"+tickerTG[i].tg);
 							if (elements != null && elements.length > 1) {
-								console.log("xxxxxx '" + tickerTG[i].delay + "'")
 								var value = new Date(tickerTG[i].delay * 1000).toISOString().slice(14, 19);
 
 								for(let j=0; j<elements.length; j++) {
