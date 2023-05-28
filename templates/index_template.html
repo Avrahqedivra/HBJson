@@ -1421,12 +1421,13 @@ function dragElement(elmnt) {
 					break;
 			}
 
-			if (!found)
+			if (!found) {
 				var time1 = record.TIME.split(":");
 				var time2 = new Date();
 				var delay = Math.max(0, (time2.getMinutes() * 60 + time2.getSeconds()) - (parseInt(time1[1]) * 60 + parseInt(time1[2])));
 				// console.log("elapsed delay : " + delay)
 				tickerTG.push({ "tg": record.TGID, "delay": delay });
+			}
 		}
 	}
 
