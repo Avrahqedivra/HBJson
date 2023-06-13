@@ -90,8 +90,9 @@ from config import *
 from extracommand import *
 
 # MYSQL stuff (pip install mysql-connector-python)
-# from mysql.connector import connect, Error
-# import pandas as pd
+if SQL_LOG == True:
+    from mysql.connector import connect, Error
+    import pandas as pd
 
 from crc16 import *
 
@@ -359,91 +360,92 @@ def initIpMap():
                 json.dump({ "IPMAP" : [] }, outfile)
 
 def mapIpAdresses():
-    global LISTENERSJ
+    global LISTENERSJ, DOIPMAP
 
-    try:
-        _rows = []
-        LISTENERSJ = []
+    if DOIPMAP == True:
+        try:
+            _rows = []
+            LISTENERSJ = []
 
-        for system in CTABLE['MASTERS']:
-            for peer in CTABLE['MASTERS'][system]['PEERS']:
-                record = CTABLE['MASTERS'][system]['PEERS'][peer]
-                if record["CALLSIGN"] and record["IP"] and record["PORT"]:
-                    _callsign = record["CALLSIGN"].strip()
-                    _netid = str(peer)
-                    _ip = record["IP"].strip()
-                    _port = str(record["PORT"])
-                    _rows.append((_ip, _port, _callsign, _netid))
+            for system in CTABLE['MASTERS']:
+                for peer in CTABLE['MASTERS'][system]['PEERS']:
+                    record = CTABLE['MASTERS'][system]['PEERS'][peer]
+                    if record["CALLSIGN"] and record["IP"] and record["PORT"]:
+                        _callsign = record["CALLSIGN"].strip()
+                        _netid = str(peer)
+                        _ip = record["IP"].strip()
+                        _port = str(record["PORT"])
+                        _rows.append((_ip, _port, _callsign, _netid))
 
-        if len(_rows) > 0:
-            if SQL_LOG == True:
-                with connect(host=SQL_HOST, user=SQL_USER, password=SQL_PASS, database=SQL_DATABASE) as connection:
-                    with connection.cursor(buffered=True) as cursor:
-                        cursor.executemany("INSERT IGNORE INTO ipmap (ip,port,callsign,netid) VALUES (%s,%s,%s,%s)", _rows)
-                        connection.commit()
+            if len(_rows) > 0:
+                if SQL_LOG == True:
+                    with connect(host=SQL_HOST, user=SQL_USER, password=SQL_PASS, database=SQL_DATABASE) as connection:
+                        with connection.cursor(buffered=True) as cursor:
+                            cursor.executemany("INSERT IGNORE INTO ipmap (ip,port,callsign,netid) VALUES (%s,%s,%s,%s)", _rows)
+                            connection.commit()
 
-                        if len(dashboard_server.clients) > 0:
-                            _query = ""
+                            if len(dashboard_server.clients) > 0:
+                                _query = ""
 
-                            for client in dashboard_server.clients:
-                                _p = client.peer.split(":")
-                                if len(_query) > 0:
-                                    _query = _query + " or "
-                                _query = _query + "ip='"+_p[1] + "'"
+                                for client in dashboard_server.clients:
+                                    _p = client.peer.split(":")
+                                    if len(_query) > 0:
+                                        _query = _query + " or "
+                                    _query = _query + "ip='"+_p[1] + "'"
 
-                            # print("select * from ipmap where " + _query)
-                            cursor.execute("select * from ipmap where " + _query)
+                                # print("select * from ipmap where " + _query)
+                                cursor.execute("select * from ipmap where " + _query)
 
-                            listeners = cursor.fetchall()
+                                listeners = cursor.fetchall()
 
-                            for row in listeners:
-                                LISTENERSJ.append({ 'CALLSIGN': row[2], 'IP': row[0], 'PORT': row[1], 'NETID': row[3] })
+                                for row in listeners:
+                                    LISTENERSJ.append({ 'CALLSIGN': row[2], 'IP': row[0], 'PORT': row[1], 'NETID': row[3] })
 
-                            # print(LISTENERSJ)
+                                # print(LISTENERSJ)
 
-                        cursor.close()
-                    connection.close()
-            else:
-                with open(LOG_PATH + "ipmap.json", 'r+') as file:
-                    ipmap = json.load(file)
-                    updated = False
-                    # print("rows size = " + str(len(_rows)))
+                            cursor.close()
+                        connection.close()
+                else:
+                    with open(LOG_PATH + "ipmap.json", 'r+') as file:
+                        ipmap = json.load(file)
+                        updated = False
+                        # print("rows size = " + str(len(_rows)))
 
-                    for row in _rows:
-                        found = False
-                        _callsign = row[2].strip()
-                        _netid = row[3]
-                        _ip = row[0].strip()
-                        _port = row[1]
+                        for row in _rows:
+                            found = False
+                            _callsign = row[2].strip()
+                            _netid = row[3]
+                            _ip = row[0].strip()
+                            _port = row[1]
 
-                        if len(ipmap["IPMAP"]) > 0:
-                            # print("callsign = " + _callsign + " ip = " + _ip)
+                            if len(ipmap["IPMAP"]) > 0:
+                                # print("callsign = " + _callsign + " ip = " + _ip)
+                                for record in ipmap["IPMAP"]:
+                                    if _ip == record["IP"]:
+                                        found = True
+                                        break
+
+                            if not found:
+                                # print("callsign = " + _callsign + " not found ip = " + _ip)
+                                updated = True
+                                ipmap["IPMAP"].append({ 'CALLSIGN': _callsign, 'IP': _ip, 'PORT': _port, 'NETID': _netid })
+
+                        if updated:
+                            file.seek(0)
+                            json.dump({ "IPMAP": ipmap["IPMAP"] }, file, indent=4)
+                            file.truncate()
+
+                        for client in dashboard_server.clients:
+                            _p = client.peer.split(":")
                             for record in ipmap["IPMAP"]:
-                                if _ip == record["IP"]:
-                                    found = True
-                                    break
+                                # print("clientip = " + _p[1] + " record['IP'] = " + record["IP"])
+                                if _p[1] == record["IP"]:
+                                    # print(record)
+                                    LISTENERSJ.append(record)
 
-                        if not found:
-                            # print("callsign = " + _callsign + " not found ip = " + _ip)
-                            updated = True
-                            ipmap["IPMAP"].append({ 'CALLSIGN': _callsign, 'IP': _ip, 'PORT': _port, 'NETID': _netid })
-
-                    if updated:
-                        file.seek(0)
-                        json.dump({ "IPMAP": ipmap["IPMAP"] }, file, indent=4)
-                        file.truncate()
-
-                    for client in dashboard_server.clients:
-                        _p = client.peer.split(":")
-                        for record in ipmap["IPMAP"]:
-                            # print("clientip = " + _p[1] + " record['IP'] = " + record["IP"])
-                            if _p[1] == record["IP"]:
-                                # print(record)
-                                LISTENERSJ.append(record)
-
-    except Error as e:
-        #if LOGINFO == True:
-        logging.info('MYSQL ERROR: {}'.format(e))
+        except Error as e:
+            #if LOGINFO == True:
+            logging.info('MYSQL ERROR: {}'.format(e))
 
 ##################################################
 # Cleaning entries in tables - Timeout (5 min) 
@@ -1232,6 +1234,7 @@ def process_message(_bmessage):
     if opcode == OPCODE['CONFIG_SND']:
         logging.debug('got CONFIG_SND opcode')
         CONFIG = load_dictionary(_bmessage)
+        # pickleToJson(CONFIG)
         CONFIG_RX = strftime('%Y-%m-%d %H:%M:%S', localtime(time()))
 
         if CTABLE['MASTERS']:
@@ -1242,6 +1245,7 @@ def process_message(_bmessage):
     elif opcode == OPCODE['BRIDGE_SND']:
         logging.debug('got BRIDGE_SND opcode')
         BRIDGES = load_dictionary(_bmessage)
+        # pickleToJson(BRIDGES)
         BRIDGES_RX = strftime('%Y-%m-%d %H:%M:%S', localtime(time()))
         if BRIDGES_INC:
            BTABLE['BRIDGES'] = build_bridge_table(BRIDGES)
@@ -1356,7 +1360,7 @@ def process_message(_bmessage):
             else:
                 jsonStr = { 'DATE': _now[0:10], 'TIME': _now[11:16], 'PACKET' : 'UNKNOWN GROUP VOICE LOG MESSAGE' }
 
-            dashboard_server.broadcast( {"TRAFFIC": jsonStr, "CTABLE": CTABLE, 'EMPTY_MASTERS' : EMPTY_MASTERS, "BIGEARS": str(len(dashboard_server.clients))  } )
+            dashboard_server.broadcast( {"TRAFFIC": jsonStr, """"CTABLE": CTABLE,""" 'EMPTY_MASTERS' : EMPTY_MASTERS, "BIGEARS": str(len(dashboard_server.clients))  } )
             
             # logging.info('Process [' + REPORT_PACKET + '] Message Took ' + str(int((ptime.perf_counter() - start) * 1000)) + 'ms')
         else:
@@ -1375,6 +1379,14 @@ def load_dictionary(_message):
     data = _message[1:]
     logging.debug('Successfully decoded dictionary')
     return loads(data)
+
+def pickleToJson(obj):
+    # convert pickle object to json object
+    json_obj = json.loads(json.dumps(obj, default=str))
+
+    # write the json file
+    with open(LOG_PATH + "message.json", "w", encoding="utf-8") as outfile:
+        json.dump(json_obj, outfile, ensure_ascii=False, indent=4)
 
 ######################################################################
 #
@@ -1814,7 +1826,7 @@ if __name__ == '__main__':
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.5.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.6.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if platform.system() == "Linux":

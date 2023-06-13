@@ -68,6 +68,9 @@ WEB_AUTH =  False
 # secret salt key for passcode generator
 WEB_SECRETKEY = "SECRETKEY"
 
+# do not log listeners ip maps (useless ?)
+DOIPMAP       = False
+
 # Authorization of access to SQL
 SQL_LOG       = False
 SQL_USER      = 'SQLUSER'
