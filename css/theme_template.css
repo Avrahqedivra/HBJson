@@ -654,9 +654,9 @@ color: #569cd6;
 }
 
 .mstgflag {
-  position: absolute;
+  position: relative;
   margin-top: 1px;
-  margin-left: -2rem;
+  margin-left: auto;
 }
 
 #masters td {

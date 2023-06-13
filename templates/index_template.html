@@ -148,7 +148,7 @@
 					<thead>
 						<tr class="headerRow">
 							<th class="thledate">Date</th>
-							<th class="thletime">Heure</th>
+							<th class="thletime" id="heure">Heure</th>
 							<th class="thleslot">Slot</th>
 							<th class="thletx" colspan=2>TX Connectés</th>
 							<th class="thlename">Name</th>
@@ -225,6 +225,22 @@
 <script src="pureknob.js"></script>
 
 <script>
+function updateTime() {
+  var now = new Date();
+  var hours = now.getHours();
+  var minutes = now.getMinutes();
+  var seconds = now.getSeconds();
+  
+  // Pad single digits with leading zeros
+  hours = (hours < 10 ? "0" : "") + hours;
+  minutes = (minutes < 10 ? "0" : "") + minutes;
+  seconds = (seconds < 10 ? "0" : "") + seconds;
+  
+  var timeString = hours + ":" + minutes + ":" + seconds;
+  
+  document.getElementById("heure").textContent = timeString;
+}
+
 /**
 	https://stackoverflow.com/questions/65022204/make-a-popup-modal-dialog-movable-draggable-once-it-has-appeared
 */
@@ -497,6 +513,19 @@ function dragElement(elmnt) {
 		return getTgFlag(str);
 	}
 
+	function getMasterComboFlags(format, value) {
+		if (value != "") {
+			var mf = getMasterFlag(format, value);
+
+			if (typeof mf === 'string' || mf instanceof String)
+				return '<img class="tgflag mstgflag" src="' + mf + '"/>';
+			else
+				return '<img class="tgflag mstgflag" src="' + mf[0] + '"/><img class="tgflag mstgflag" src="' + mf[1] + '"/>';
+		}
+
+		return "";
+	}
+
 	function updateMasters(masters, emaster) {
 		if (masters != null && $('#masters').is(':visible')) {
 				var content = "";
@@ -559,23 +588,27 @@ function dragElement(elmnt) {
 											+ '<td class="tdGradient" rowspan="2">' + record["CONNECTED"] + '</td>'
 											+ '<td class="' + ts1 + '">TS1</td><td class="' + cnx1 + '">';
 
+										// --------------------------------------------------------------------------------------------
 										if (record["1"]["SUB"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["1"]["SUB"]) + '"/>';
-										
+											content += getMasterComboFlags(1, record["1"]["SUB"]);
+
 										content += record["1"]["SUB"] + '</td><td class="' + cnx1 + '">'
-										
+
+										// --------------------------------------------------------------------------------------------
 										if (record["1"]["DEST"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["1"]["DEST"]) + '"/>';
+												content += getMasterComboFlags(0, record["1"]["DEST"]);
 
 										content += record["1"]["DEST"] + '</td></tr><tr><td class="' + ts2 + '">TS2</td><td class="' + cnx2 + '">';
 
+										// --------------------------------------------------------------------------------------------
 										if (record["2"]["SUB"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(1, record["2"]["SUB"]) + '"/>';
+											content += getMasterComboFlags(1, record["2"]["SUB"]);
 
 										content += record["2"]["SUB"] + '</td><td class="' + cnx2 + '">';
 
+										// --------------------------------------------------------------------------------------------
 										if (record["2"]["DEST"] != "")
-											content += '<img class="tgflag mstgflag" src="' + getMasterFlag(0, record["2"]["DEST"]) + '"/>';
+												content += getMasterComboFlags(0, record["2"]["DEST"]);
 
 										content += record["2"]["DEST"] + '</td></tr>';
 								}
@@ -1015,13 +1048,27 @@ function dragElement(elmnt) {
 					globalPercentage += percentage;
 
 					var flagUrl = getFlag(record.CALLSIGN, dmrid);
+					var flagFirst = "";
+					var flagSecond = "";
+
 					if (flagUrl == "")
 						flagUrl = flag64["shield"]; // "shield.png";
 
 					var alias = record.ALIAS.replace("/images/flags/", "").replace("/img/flags/", "").replace("<img src=", "<img class='tgflag' src=");
 
-					if (alias.indexOf("<img") == -1)
-						alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
+					if (alias.indexOf("<img") == -1) {
+					
+						var tgf = getTgFlag(record.TGID);
+						if (typeof tgf === 'string' || tgf instanceof String) {
+							alias = '<img class="tgflag" src="' + getTgFlag(record.TGID) + '">' + alias;
+						}
+						else {
+							flagFirst = tgf[0];
+							flagSecond = tgf[1];
+
+							alias = '<img class="tgflag" src="' + flagFirst + '">' + '<img class="tgflag" src="' + flagSecond + '">' + alias;
+						}
+					} 
 
 					content = '<tr class=' + bgClass + '>'
 						+ "<td class='tdDate"+ ((showColumns.charAt(0) == '-') ? " visible'":"'") + ">" + record.DATE + "</td>"
@@ -1029,7 +1076,7 @@ function dragElement(elmnt) {
 						+ "<td class='slot"+ ((showColumns.charAt(2) == '-') ? " visible'":"'") + ">" + record.TS + "</td>"
 
 					// they both depend on TX connected
-						+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>"
+						+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://www.qrz11.com/app.php/cssearch?callsign=" + callsign + ">" + callsign + "</a></td>"
 						+ "<td dmrid=" + record.DMRID + " class='dmrid"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + ">(" + dmrid + ")</td>";
 
 					if (record.NAME.toUpperCase() == callsign)
@@ -1268,7 +1315,7 @@ function dragElement(elmnt) {
 									+ "<td class='slot"+ ((showColumns.charAt(2) == '-') ? " visible'":"'") + ">" + record.TS + "</td>"
 
 								// they both depend on TX connected
-									+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://qrz.com/db/" + callsign + ">" + callsign + "</a></td>"
+									+ "<td class='callsign ellipsis"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + "><img class='tgflag' src='" + flagUrl + "'/><a target='_blank' href=https://www.qrz11.com/app.php/cssearch?callsign=" + callsign + ">" + callsign + "</a></td>"
 									+ "<td dmrid=" + record.DMRID + " class='dmrid"+ ((showColumns.charAt(3) == '-') ? " visible'":"'") + ">(" + dmrid + ")</td>";
 
 								if (record.NAME.toUpperCase() == callsign)
@@ -1492,10 +1539,13 @@ function dragElement(elmnt) {
 					log("Connected to " + url)
 
 					ticker = setInterval(() => {
+						// Update the time every second
+						updateTime();
+
 						for(let i=0; i<tickerTG.length; i++) {
 							tickerTG[i].delay++;
 
-							var elements = document.getElementsByClassName("ticker"+tickerTG[i].tg);
+							var elements = document.getElementsByClassName("ticker" + tickerTG[i].tg);
 							if (elements != null && elements.length > 1) {
 								var value = new Date(tickerTG[i].delay * 1000).toISOString().slice(14, 19);
 
@@ -1551,6 +1601,9 @@ function dragElement(elmnt) {
 								if (data.CONFIG.LISTENERS)
 									listenerList = data.CONFIG.LISTENERS;
 							} else {
+								if (data.TRAFFIC)
+									doTraffic(data.TRAFFIC);
+
 								if (!mobileDevice) {
 									if (data.CTABLE)
 										treatTables(data.CTABLE, data.EMPTY_MASTERS);
@@ -1558,9 +1611,6 @@ function dragElement(elmnt) {
 									if (data.BRIDGES)
 										updateBridges(data.BRIDGES);
 								}
-
-								if (data.TRAFFIC)
-									doTraffic(data.TRAFFIC);
 
 								// if (data.BTABLE)
 								// 	log(JSON.stringify(data.BTABLE));
