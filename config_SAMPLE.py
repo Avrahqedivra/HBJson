@@ -13,6 +13,7 @@ SOCKET_SERVER_PORT = 9020                       # Websocket server for realtime 
 JSON_SERVER_PORT = 9990                         # Has to be above 1024 if you're not running as root
 DISPLAY_LINES =  20                             # number of lines displayed in index_template
 CLIENT_TIMEOUT  = 0                             # Clients are timed out after this many seconds, 0 to disable
+START_TOT       = 240                           # TOT
 
 # list of NETWORK_ID from OPB links not to show in local "lastheard" traffic, for example: "260210,260211,260212"
 OPB_FILTER = ""

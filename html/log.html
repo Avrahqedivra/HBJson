@@ -10,27 +10,23 @@
         <link rel="stylesheet" href="mysite_template.css">
         <link rel="stylesheet" href="logplus_template.css">
 
-	    <meta name="description" content="Copyright (c) 2016, 2017, 2018, 2019.The Regents of the K0USY Group. All rights reserved. Version SP2ONG 2019-2020 (v20200629), HBJSON (c) JMC 2021" />
+	    <meta name="description" content="Copyright (c) 2016, 2017, 2018, 2019.The Regents of the K0USY Group. All rights reserved. Version SP2ONG 2019-2020 (v20200629), HBJSON (c) JMC 2021-2023" />
     </head>
 
 	<body>
         <center>
             <noscript>You must enable JavaScript</noscript>
 
-            <div id="siteHeader">
-                <div id="sitelogo">
-                    <<<site_logo>>>
-                </div>
+            <div id="sitelogo" style="display: none"><<<site_logo>>></div>
 
-                <div id="buttonArea" style="margin-bottom:1rem;">
-                    <<<button_bar>>>
-                </div>
-        
+            <<<button_bar>>>                
+
+            <div id="siteHeader" style="display: none">
                 <div name="hbtables">
                     <div id="insertPoint">
                         <table id="tableLog" class="tables logplus tablefixed">
                             <tbody id="hblinkLog"></tbody>
-                        </table>';
+                        </table>
                     </div>
                 </div>
 
@@ -139,11 +135,21 @@
         console.log(msg);
     };
 
+    $(document).ready(function() {
+        // document ready occurs before windows.onLoad
+        if (getConfigFromLocalStorage != null) {
+            getConfigFromLocalStorage();
+
+            if (document.documentElement.className != settings[0].config.theme)
+                document.documentElement.className = settings[0].config.theme;
+        }
+
+        initMenubar();
+    })
+
     window.onload = function() {
         hideAllTG = false;
         var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>";
-
-        getConfigFromLocalStorage();
 
         if (isNaN(displayLines))
             displayLines = 10;
@@ -219,6 +225,9 @@
         
 
         socket = new WSConnection().connect(wsuri);
+
+        $("#menubar").show();
+        $("#siteHeader").show();
     };
 
     window.onunload = () => {

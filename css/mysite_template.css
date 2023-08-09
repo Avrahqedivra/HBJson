@@ -74,3 +74,125 @@ h1 {
     }
 } 
 */
+
+/* -------------- start menubar style -------------- */
+
+/* 
+    https://www.youtube.com/watch?v=xVdaWXKz6j8 
+    https://stackoverflow.com/questions/30376088/jquery-menubar-jquery-javascript-css
+*/
+
+.menubar {    
+    width: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    font-family: var(--color-font-html);
+    font-weight: 400;
+    font-size: 1.1rem;
+    background-color: var(--color-menubar-background);
+    opacity: 0.9;
+    z-index: 1000;
+}
+.menubar li {
+    text-align: left;
+    min-width: 2.5rem;
+}
+.menubar li img {
+    height: 1.3rem;
+    max-width: 6rem;
+}
+.menubar ul {
+    list-style-type: none;    
+    padding: 0;
+    margin: 0;
+}
+.menubar ul li {
+    display: inline-block;
+}
+.menubar ul li:hover {
+   background-color: var(--color-menubar-hover);
+}
+.menubar > ul li:hover a {
+    color: var(--color-dropdown-content);
+}
+.menubar ul li a, visited {
+    display: block;
+    padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+    text-decoration: none;
+    color: var(--color-menubar-foreground);
+}
+.menubar ul li a:hover {
+    color: var(--color-menubar-foreground);
+}
+.menubar ul li:hover > ul {
+    display: block;
+}
+.menubar ul ul {
+    display: none;
+    position: absolute;
+    min-width: auto;
+    background-color: var(--color-menubar-background);
+}
+.menubar ul ul li {
+    display: block;
+}
+.menubar ul ul li:hover {
+    color: var(--color-menubar-foreground);
+}
+.menubar ul li:hover ul li a, visited {
+    color: var(--color-menubar-foreground);
+}
+.menubar ul ul li:hover > ul {
+    display: block;
+}
+.menubar ul ul ul {
+    margin: -5rem 0 0 16rem;
+    color: var(--color-menubar-foreground);
+}
+.menubar ul ul ul li a:hover {
+    color: var(--color-dropdown-hover);
+}
+.menubar li i {
+    margin-right: 0.3rem;
+}
+.nopadding {
+    padding: 0.25rem 0.25rem 0 0.25rem !important;
+}
+
+.container {
+    position: relative;
+}
+  
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+/* -------------- end menubar style -------------- */
+
+
+sitelogo {
+    display: none;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+#siteHeader {
+	display: none;
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: calc(var(--color-sitelogo-posY) - (var(--color-sitelogo-height) / 2));
+    left: var(--color-sitelogo-posX);
+    -ms-transform: translateY(calc(-1 * var(--color-sitelogo-posY)));
+    transform: translateY(calc(-1 * var(--color-sitelogo-posY)));
+
+    -ms-transform: translateX(calc(-1 * var(--color-sitelogo-posX)));
+    transform: translateX(calc(-1 * var(--color-sitelogo-posX)));
+}

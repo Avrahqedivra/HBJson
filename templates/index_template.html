@@ -51,97 +51,93 @@
 	<center>
 		<noscript>You must enable JavaScript</noscript>
 
-		<div id="siteHeader">
-			<div id="sitelogo"><<<site_logo>>></div>
+		<div id="sitelogo" style="display:none"><<<site_logo>>></div>
 
-			<div id="buttonArea"><<<button_bar>>><div class="button iconbutton" id="btnlisteners">&#x1F441; 0</div></div>
+		<<<button_bar>>>
 
-			<!-- The Modal -->
-			<div id="statisticsModal" class="modal">
-				<!-- Modal content -->
-				<div class="modal-content-statistics">
-					<span class="close close-statistics">&times;</span>
-					<table class="tablefixed">
-						<thead id="theadStatistics" tbodyid="statistics">
-							<tr class="headerRow">
-								<th class="thlstg">TG</th>
-								<th class="thlsCnx">Nb Cnx</th>
-								<th class="thlsDelay">Total Time</th>
-							</tr>
-						</thead>
-						<tbody id="statistics">
-						</tbody>
-					</table>
+			<div id="modals">
+				<!-- The Followup -->
+				<div id="followUpModal" class="modal">
+					<!-- Modal content -->
+					<div class="modal-content-followup">
+						<span class="close close-followup">&times;</span>
+						<table class="tablefixed">
+							<thead id="theadFollowUp" tbodyid="followup">
+								<tr class="headerRow">
+									<th class="thlename">Name</th>
+									<th class="thledate">Date</th>
+									<th class="thletime">Time</th>
+									<th class="thletg">TG</th>
+									<th class="thlelog">LOG</th>
+									<th class="thledelay">TX</th>
+								</tr>
+							</thead>
+							<tbody id="followup">								
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-
-			<!-- The Modal -->
-			<div id="listenersModal" class="modal">
-				<!-- Modal content -->
-				<div class="modal-content-listeners">
-					<span class="close close-listeners">&times;</span>
-					<table class="tablefixed">
-						<thead id="theadListeners" tbodyid="listeners">
-							<tr class="headerRow">
-								<th class="thlscallsign">Callsign</th>
-								<th class="thlsip">IP</th>
-								<th class="thlsport">Port</th>
-								<th class="thlsnetid">NetID</th>
-							</tr>
-						</thead>
-						<tbody id="listeners">
-						</tbody>
-					</table>
+	
+				<!-- The Statistics -->
+				<div id="statisticsModal" class="modal">
+					<!-- Modal content -->
+					<div class="modal-content-statistics">
+						<span class="close close-statistics">&times;</span>
+						<table class="tablefixed">
+							<thead id="theadStatistics" tbodyid="statistics">
+								<tr class="headerRow">
+									<th class="thlstg">TG</th>
+									<th class="thlsCnx">Nb Cnx</th>
+									<th class="thlsDelay">Total Time</th>
+								</tr>
+							</thead>
+							<tbody id="statistics">
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-
-			<!-- The Status -->
-			<div id="statusdiv" style="top: 300px; display: none;">
-				<!-- Modal content -->
-				<div class="modal-content-status">
-					<span class="close close-status">&times;</span>
-					<table class="tablefixed">
-						<thead id="statusdivheader" tbodyid="status">
-							<tr class="headerRow">
-								<th class="thlename">Server</th>
-								<th class="thledate">Status</th>
-							</tr>
-						</thead>
-						<tbody id="status">
-						</tbody>
-					</table>
+	
+				<!-- The Listeners -->
+				<div id="listenersModal" class="modal">
+					<!-- Modal content -->
+					<div class="modal-content-listeners">
+						<span class="close close-listeners">&times;</span>
+						<table class="tablefixed">
+							<thead id="theadListeners" tbodyid="listeners">
+								<tr class="headerRow">
+									<th class="thlscallsign">Callsign</th>
+									<th class="thlsip">IP</th>
+									<th class="thlsport">Port</th>
+									<th class="thlsnetid">NetID</th>
+								</tr>
+							</thead>
+							<tbody id="listeners">
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-
-			<!-- The Modal -->
-			<div id="followUpModal" class="modal">
-				<!-- Modal content -->
-				<div class="modal-content-followup">
-					<span class="close close-followup">&times;</span>
-					<table class="tablefixed">
-						<thead id="theadFollowUp" tbodyid="followup">
-							<tr class="headerRow">
-								<th class="thlename">Name</th>
-								<th class="thledate">Date</th>
-								<th class="thletime">Time</th>
-								<th class="thletg">TG</th>
-								<th class="thlelog">LOG</th>
-								<th class="thledelay">TX</th>
-							</tr>
-						</thead>
-						<tbody id="followup">
-						</tbody>
-					</table>
+	
+				<!-- The Status -->
+				<div id="statusdiv" style="display: none;">
+					<!-- Modal content -->
+					<div class="modal-content-status">
+						<span class="close close-status">&times;</span>
+						<table class="tablefixed">
+							<thead id="statusdivheader" tbodyid="status">
+								<tr class="headerRow">
+									<th class="thlename">Server</th>
+									<th class="thledate">Status</th>
+								</tr>
+							</thead>
+							<tbody id="status">
+							</tbody>
+						</table>
+					</div>
 				</div>
+	
 			</div>
-
-			<!-- The Modal -->
-			<div id="inputModal" class="modal">
-				<!-- Modal content -->
-				<div class="modal-content-input">
-						<input type="search" id="search" name="search" placeholder="DMRID or CALLSIGN"><button type="button" onclick="followupdmrid()">Search</button>
-				</div>
-			</div>
+	
+		<div id="siteHeader" style="display:none">
 
 			<div name="hbtables" id="hbtables">
 				<table id="lastActive" class="tables lastActive tablefixed" style="display: none;">
@@ -631,7 +627,7 @@ function dragElement(elmnt) {
 
 				if (record.PACKET == "START") {
 					var t = new Date(record.DATE + " " + record.TIME);
-					if ((Date.now() - t.getTime()) > 240000) {
+					if ((Date.now() - t.getTime()) / 1000 > startTot) {
 						// log("timeout, resetting status to END : " + JSON.stringify(traffic[i]));
 						found = true;
 						record.PACKET = "END";
@@ -666,7 +662,7 @@ function dragElement(elmnt) {
 		}
 	}
 
-	function updateStatus() {
+	function updateStatus(willBeShown) {
 		var content = ""
 		var alarm = false
 		var statusDivVisible = $("#statusdiv").is(":visible")
@@ -677,7 +673,7 @@ function dragElement(elmnt) {
 			if (server["ACTION"] != "ping" && server["STATUS"] != true)
 				alarm = true
 
-			if (statusDivVisible) {
+				if (statusDivVisible || willBeShown) {
 				content += "<tr class='trlisteners'><td>" + server['NAME'] + "</td>"
 
 				if (server["ACTION"] == "ping") {
@@ -718,11 +714,11 @@ function dragElement(elmnt) {
 	}
 
 	function serverStatus() {
-		updateStatus();
+		updateStatus(true);
 
 		$("#statusdiv").show();
 
-		// Make the DIV element draggagle:
+		// Make the DIV element draggable:
 		dragElement(document.getElementById("statusdiv"));
 	}
 
@@ -1356,8 +1352,65 @@ function dragElement(elmnt) {
 			updatePeers(CTable["PEERS"]);
 		}
 	}
+	
+	function checkDeadTicker() {
+		if (ticker != null) {
+			for(let i=tickerTG.length-1; i >= 0; i--) {
+				if (tickerTG[i].delay > startTot) {
+					// console.log("deleting dead ticker for tg " + tickerTG[i].tg);
+					tickerTG.splice(i, 1);
+				}
+			}
+		}
+	}
+
+	function deleteTicker(tg) {
+		if (ticker != null) {
+			for(let i=0; i<tickerTG.length; i++) {
+				if (tickerTG[i].tg == tg) {
+					// console.log("deleting ticker for tg " + tg);
+					tickerTG.splice(i, 1);
+					break;
+				}
+			}
+		}
+	}
+
+	function addTicker(record) {
+		if (ticker != null) {
+			// console.log("adding ticker for tg " + record.TGID);
+			var found = false;
+
+			for(let i=0; i<tickerTG.length; i++) {
+				if (found = (tickerTG[i].tg == record.TGID))
+					break;
+			}
+
+			if (!found)
+				try {
+					var time1 = record.TIME.split(":");
+					var time2 = new Date();
+					var delay = Math.max(0, (time2.getMinutes() * 60 + time2.getSeconds()) - (parseInt(time1[1]) * 60 + parseInt(time1[2])));
+					// console.log("elapsed delay : " + delay)
+					tickerTG.push({ "tg": record.TGID, "delay": delay });
+				}
+				catch(e) {
+					console.log("xxxx " + record.TIME);
+				}
+		}
+	}
 
 	$(document).ready(function () {
+		// document ready occurs before windows.onLoad
+		if (getConfigFromLocalStorage != null) {
+			getConfigFromLocalStorage();
+
+			if (document.documentElement.className != settings[0].config.theme)
+					document.documentElement.className = settings[0].config.theme;
+		}
+
+		initMenubar();
+
 		$(window).click(function (event) {
 			if (event.target == document.getElementById("statusdiv"))
 				$("#statusdiv").hide();
@@ -1434,55 +1487,14 @@ function dragElement(elmnt) {
 				document.getElementById("inputModal").style.display = 'none';
 		}, false);
 	})
-	
-	function checkDeadTicker() {
-		if (ticker != null) {
-			for(let i=tickerTG.length-1; i >= 0; i--) {
-				if (tickerTG[i].delay > 240) {
-					// console.log("deleting dead ticker for tg " + tickerTG[i].tg);
-					tickerTG.splice(i, 1);
-				}
-			}
-		}
-	}
-
-	function deleteTicker(tg) {
-		if (ticker != null) {
-			for(let i=0; i<tickerTG.length; i++) {
-				if (tickerTG[i].tg == tg) {
-					// console.log("deleting ticker for tg " + tg);
-					tickerTG.splice(i, 1);
-					break;
-				}
-			}
-		}
-	}
-
-	function addTicker(record) {
-		if (ticker != null) {
-			// console.log("adding ticker for tg " + record.TGID);
-			var found = false;
-
-			for(let i=0; i<tickerTG.length; i++) {
-				if (found = (tickerTG[i].tg == record.TGID))
-					break;
-			}
-
-			if (!found) {
-				var time1 = record.TIME.split(":");
-				var time2 = new Date();
-				var delay = Math.max(0, (time2.getMinutes() * 60 + time2.getSeconds()) - (parseInt(time1[1]) * 60 + parseInt(time1[2])));
-				// console.log("elapsed delay : " + delay)
-				tickerTG.push({ "tg": record.TGID, "delay": delay });
-			}
-		}
-	}
 
 	window.onload = () => {
 		doApplyConfig = true;
 		lastActive = [];
 		listeners = 0;
 		lastActiveTG = 0;
+		startTot = parseInt("<<<START_TOT>>>"); if (startTot == 0) startTot = 240;
+		bannerDelay = parseInt("<<<BANNER_DELAY>>>");
 		mobileDevice = "<<<MOBILE>>>" == "True";
 
 		showColumnsDefault = "";
@@ -1506,9 +1518,6 @@ function dragElement(elmnt) {
 
 		var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=dashboard";
 
-		if (getConfigFromLocalStorage != null)
-			getConfigFromLocalStorage();
-
 		if (isNaN(displayLines))
 			displayLines = 10;
 
@@ -1516,6 +1525,26 @@ function dragElement(elmnt) {
 			if (!tgfilter.has('' + tgid))
 				$("#insertPoint").append($("<div id='tg" + tgid + "marker'></div>"));
 		});
+
+		document.getElementById("menuSearch").style.display = "inline-block";		
+
+		// don't show banner if already done within 3600s
+		if (bannerDelay == 0 || (Math.floor(Date.now() - settings[0].config.last) / 1000) < 3600) {
+			$("#menubar").show();
+			$("#siteHeader").show();
+		}
+		else {			
+			$("#sitelogo").show();
+
+			setTimeout(() => {
+				$("#sitelogo").hide();
+				$("#menubar").show();
+				$("#siteHeader").show();
+
+				// reset settings timer 
+				saveSettings();
+			}, bannerDelay);
+		}
 
 		function WSConnection() {
 			'use strict';
@@ -1574,11 +1603,11 @@ function dragElement(elmnt) {
 
 							if (data.DIAGNOSTICS) {
 									diagStatus = data.DIAGNOSTICS;
-									updateStatus();
+									updateStatus(false);
 							}
 
 							if (data.BIGEARS)
-								$("#btnlisteners").text("\uD83D\uDD75 SWL " + data.BIGEARS);
+								$("#btnlisteners").text(data.BIGEARS);
 
 							if (data.LISTENERS)
 								listenerList = data.LISTENERS;
@@ -1589,7 +1618,7 @@ function dragElement(elmnt) {
 								//     subscribers = data.CONFIG.USERS.results;
 
 								if (data.CONFIG.BIGEARS)
-									$("#btnlisteners").text("\uD83D\uDD75 SWL " + data.CONFIG.BIGEARS);
+									$("#btnlisteners").text(data.BIGEARS);
 
 								if (data.CONFIG.PACKETS) {
 									// will be done only once

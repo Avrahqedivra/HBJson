@@ -1,6 +1,6 @@
 cookieSettingsName = window.location.hostname+"_hbjson_settings";
 settingsValidity = 5;	    // 5 days
-settings = [ { config: { "theme": "theme-dark", hidetg: false } }, { "map": { "zoom" : 6.5 } }, { name: "openbridges", "open": true }, {"name": "masters", "open": true }, { "name": "peers", "open": true }];
+settings = [ { config: { "theme": "theme-dark", hidetg: false, "last": 0 } }, { "map": { "zoom" : 6.5 } }, { name: "openbridges", "open": true }, {"name": "masters", "open": true }, { "name": "peers", "open": true }];
 
 // localStorage.setItem('theme', themeName);
 // localStorage.getItem('theme', themeName);
@@ -35,6 +35,29 @@ names["Nathanael"] = "Nathanaël";
 names["Joel"] = "Joël";
 names["Jeremie"] = "Jérémie";
 
+function adjustMenuLayoutStyle(f) {
+  siteHeader.style.transform = "scale(" + zoomValue + ")";
+  siteHeader.style.marginTop = isFixed ?  "3.3rem":"0";
+  menubar.style.position = isFixed ? "fixed":"relative";
+  lockbutton.classList.remove(isFixed ? "fa-lock-open":"fa-lock")
+  lockbutton.classList.add(isFixed ? "fa-lock":"fa-lock-open")
+}
+
+function initMenubar() {
+    lockbutton = document.getElementById("lockButton");
+    menubar = document.getElementById("menubar");
+    siteHeader = document.getElementById("siteHeader");
+    isFixed = true;
+
+    lockbutton.addEventListener("click", () => {
+        isFixed = !isFixed;
+    
+        adjustMenuLayoutStyle(isFixed);
+    });
+    
+    adjustMenuLayoutStyle(isFixed);
+}
+
 String.prototype.capitalize = function (lower) {
     return (lower ? this.toLowerCase() : this).replace(/(?:^|\s|['`‘’.-])[^\x00-\x60^\x7B-\xDF](?!(\s|$))/g, function (a) {
         return a.toUpperCase();
@@ -48,8 +71,8 @@ function zoom(v) {
 		default: zoomValue = 1;
 	}
 
-	document.body.style["transform"] = "scale(" + zoomValue + ")";
-	document.body.style["transform-origin"] = "top center";
+	document.getElementById("siteHeader").style["transform"] = "scale(" + zoomValue + ")";
+	document.getElementById("siteHeader").style["transform-origin"] = "top center";
 }
 
 function enhanceNames(name) {
@@ -107,7 +130,7 @@ function saveSettings() {
     var pe = document.getElementById("peers").style.display != "none";
 
     settings = [
-        { "config": { "theme": themeSettings, hidetg: hideAllTG } },
+        { "config": { "theme": themeSettings, hidetg: hideAllTG, "last": Date.now() } },
         { "map": { "zoom" : (map != null) ? map.getZoom() : 6.5 } },
         { "name": "openbridges",    "open": ob, "colspan": $("#theadOpenbridges tr th").length }, 
         { "name": "masters",        "open": ma, "colspan": $("#theadMasters tr th").length }, 
@@ -183,8 +206,12 @@ function getConfigFromLocalStorage() {
         cookie = settings;
         createCookie(cookieSettingsName, JSON.stringify(settings), settingsValidity);
     }
-    else    
+    else {
+        if (cookie[0].config.last == null)
+            cookie[0].config.last = 0;
+
         settings = cookie;
+    }
 }
 
 const flag64 = [];

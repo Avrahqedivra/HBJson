@@ -97,7 +97,7 @@ if SQL_LOG == True:
 from crc16 import *
 
 # support for xlsx files
-import xlsxwriter
+# import xlsxwriter
 
 # SP2ONG - Increase the value if HBlink link break occurs
 NetstringReceiver.MAX_LENGTH = 500000000
@@ -267,7 +267,24 @@ def replaceSystemStrings(data):
         .replace("<<<DISPLAY_PERCENT>>>", str(DISPLAY_PERCENT)) \
         .replace("<<<MOBILE>>>", str(MOBILEPHONE)) \
         .replace("<<<THEME>>>", THEME) \
+        .replace("<<<BANNER_DELAY>>>", str(BANNER_DELAY)) \
+        .replace("<<<START_TOT>>>", str(START_TOT)) \
         .replace("<<<HIDE_DMRID>>>", str(HIDE_DMRID))#.replace("class=\"theme-dark\"", "class=\"theme-light\"")
+
+def IsTgidAllowed(tgid):
+  for i in range(len(tgid_allowed)):  
+    pattern = tgid_allowed[i]
+    index = pattern.find("*")
+
+    # no wildcard, check equality
+    if index == -1 and pattern == tgid:
+        return True
+
+    # wildcard, check partial equality
+    if tgid.startswith(pattern[0:index]):
+        return True
+
+  return False
 
 def logMySQL(_data):
     if SQL_LOG == True:
@@ -411,6 +428,7 @@ def mapIpAdresses():
                         updated = False
                         # print("rows size = " + str(len(_rows)))
 
+                        # for each entry in masters
                         for row in _rows:
                             found = False
                             _callsign = row[2].strip()
@@ -418,6 +436,7 @@ def mapIpAdresses():
                             _ip = row[0].strip()
                             _port = row[1]
 
+                            # check if ip in master already in map
                             if len(ipmap["IPMAP"]) > 0:
                                 # print("callsign = " + _callsign + " ip = " + _ip)
                                 for record in ipmap["IPMAP"]:
@@ -425,16 +444,22 @@ def mapIpAdresses():
                                         found = True
                                         break
 
+                            # if not add new ip in ipmap
                             if not found:
                                 # print("callsign = " + _callsign + " not found ip = " + _ip)
                                 updated = True
                                 ipmap["IPMAP"].append({ 'CALLSIGN': _callsign, 'IP': _ip, 'PORT': _port, 'NETID': _netid })
 
+                        # save the file if modified
                         if updated:
+                            # remove duplicates
+                            ipmap["IPMAP"] = list({ each['NETID'] : each for each in ipmap["IPMAP"] }.values())
+
                             file.seek(0)
                             json.dump({ "IPMAP": ipmap["IPMAP"] }, file, indent=4)
                             file.truncate()
 
+                        # lookup connected users ip address in the ipmap
                         for client in dashboard_server.clients:
                             _p = client.peer.split(":")
                             for record in ipmap["IPMAP"]:
@@ -779,12 +804,12 @@ def build_bridge_table(_bridges):
 #
 build_time = time()
 def build_stats():
-    global build_time, LISTENERSJ, DIAG_TABLE
+    global build_time, LISTENERSJ, DIAG_TABLE, CONFIG
     now = time()
 
     if (now > build_time + 0.5) and ('dashboard_server' in locals() or 'dashboard_server' in globals()):
 
-        build_Diagnostic_table()
+        # build_Diagnostic_table()
 
         for client in dashboard_server.clients:
             if CONFIG:            
@@ -927,7 +952,7 @@ def test_ping(ip):
     except:
         ping_time = 0
     return ping_time
-
+"""
 def build_Diagnostic_table():
     global DIAG_TABLE
 
@@ -942,21 +967,19 @@ def build_Diagnostic_table():
                     'ACTION': server.get('action') if server["action"] else '',
                 }
 
-                match server["type"]:
-                    case "tcp":
-                        match server["action"]:
-                            case "connect":
-                                status["STATUS"] = test_server(server["ip"], server["port"], server["type"])
-                                DIAG_TABLE.append(status)
-
-                            case "ping":
-                                status["STATUS"] = True
-                                status["TIME"] = test_ping(server["ip"])
-                                DIAG_TABLE.append(status)
-
-                    case "srv":
-                        status["STATUS"] = test_systemd_service(server["service"])
+                if server["type"] == "tcp":
+                    if server["action"] == "connect":
+                        status["STATUS"] = test_server(server["ip"], server["port"], server["type"])
                         DIAG_TABLE.append(status)
+
+                    elif server["action"] == "ping":
+                        status["STATUS"] = True
+                        status["TIME"] = test_ping(server["ip"])
+                        DIAG_TABLE.append(status)
+
+                elif server["type"] == "srv":
+                    status["STATUS"] = test_systemd_service(server["service"])
+                    DIAG_TABLE.append(status)
 
             except:
                 DIAG_TABLE.append({
@@ -967,7 +990,7 @@ def build_Diagnostic_table():
                 })
     except:
         pass
-
+"""
 def createlocalUsersFromSql():
     try:
         with connect(host=SQL_HOST, user=SQL_USER, password=SQL_PASS,database=SQL_DATABASE) as connection:
@@ -1069,7 +1092,7 @@ def createLogTableJson():
 
             REPORT_TGID = row[8][2:]
 
-            if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed):
+            if (len(tgid_allowed) == 0 or IsTgidAllowed(REPORT_TGID)):
                 REPORT_DATE     = row[0]
                 REPORT_DELAY    = row[1]
                 REPORT_INFRA    = row[4]
@@ -1234,7 +1257,6 @@ def process_message(_bmessage):
     if opcode == OPCODE['CONFIG_SND']:
         logging.debug('got CONFIG_SND opcode')
         CONFIG = load_dictionary(_bmessage)
-        # pickleToJson(CONFIG)
         CONFIG_RX = strftime('%Y-%m-%d %H:%M:%S', localtime(time()))
 
         if CTABLE['MASTERS']:
@@ -1245,7 +1267,6 @@ def process_message(_bmessage):
     elif opcode == OPCODE['BRIDGE_SND']:
         logging.debug('got BRIDGE_SND opcode')
         BRIDGES = load_dictionary(_bmessage)
-        # pickleToJson(BRIDGES)
         BRIDGES_RX = strftime('%Y-%m-%d %H:%M:%S', localtime(time()))
         if BRIDGES_INC:
            BTABLE['BRIDGES'] = build_bridge_table(BRIDGES)
@@ -1272,7 +1293,7 @@ def process_message(_bmessage):
             logging.debug('BACKEND OBP "{}" WITH ID="{}" NOT ALLOWED'.format(REPORT_SYS, REPORT_SRC_ID))
             return
 
-        if (len(tgid_allowed) == 0 or REPORT_TGID in tgid_allowed) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
+        if (len(tgid_allowed) == 0 or IsTgidAllowed(REPORT_TGID)) and REPORT_TYPE == 'GROUP VOICE' and REPORT_RXTX != 'TX' and REPORT_SRC_ID not in opbfilter:
             REPORT_DATE     = _now[0:10]
             REPORT_TIME     = _now[11:19]
             REPORT_PACKET   = p[1]
@@ -1297,7 +1318,7 @@ def process_message(_bmessage):
                     # remove all previous START packet if any
                     subset = traffic["TRAFFIC"]
                     for record in subset:
-                        if record["PACKET"] != "START":
+                        if record["PACKET"] != "START" or (datetime.datetime.now() - (datetime.datetime.strptime(record["DATE"] + " " + record["TIME"], '%Y-%m-%d %H:%M:%S'))).total_seconds() < START_TOT:
                             MESSAGEJ.append(record)
 
                     # append new entry
@@ -1341,7 +1362,7 @@ def process_message(_bmessage):
                             record["TIME"] = record["TIME"] + ":00"
 
                         # add only "END" packets
-                        if record["PACKET"] != "START":
+                        if record["PACKET"] != "START" or (datetime.datetime.now() - (datetime.datetime.strptime(record["DATE"] + " " + record["TIME"], '%Y-%m-%d %H:%M:%S'))).total_seconds() < START_TOT:
                             MESSAGEJ.append(record)
 
                     # append new entry
@@ -1360,11 +1381,11 @@ def process_message(_bmessage):
             else:
                 jsonStr = { 'DATE': _now[0:10], 'TIME': _now[11:16], 'PACKET' : 'UNKNOWN GROUP VOICE LOG MESSAGE' }
 
-            dashboard_server.broadcast( {"TRAFFIC": jsonStr, """"CTABLE": CTABLE,""" 'EMPTY_MASTERS' : EMPTY_MASTERS, "BIGEARS": str(len(dashboard_server.clients))  } )
+            dashboard_server.broadcast( {"TRAFFIC": jsonStr, 'EMPTY_MASTERS' : EMPTY_MASTERS, "BIGEARS": str(len(dashboard_server.clients))  } )
             
             # logging.info('Process [' + REPORT_PACKET + '] Message Took ' + str(int((ptime.perf_counter() - start) * 1000)) + 'ms')
         else:
-            if (len(tgid_allowed) != 0 and REPORT_TGID not in tgid_allowed):
+            if (len(tgid_allowed) != 0 and not IsTgidAllowed(REPORT_TGID)):
                 logging.debug('TG{} NOT ALLOWED'.format(REPORT_TGID))
             logging.debug('{} UNKNOWN LOG MESSAGE'.format(_now[10:19]))
     else:
@@ -1379,14 +1400,6 @@ def load_dictionary(_message):
     data = _message[1:]
     logging.debug('Successfully decoded dictionary')
     return loads(data)
-
-def pickleToJson(obj):
-    # convert pickle object to json object
-    json_obj = json.loads(json.dumps(obj, default=str))
-
-    # write the json file
-    with open(LOG_PATH + "message.json", "w", encoding="utf-8") as outfile:
-        json.dump(json_obj, outfile, ensure_ascii=False, indent=4)
 
 ######################################################################
 #
@@ -1481,11 +1494,6 @@ class dashboard(WebSocketServerProtocol):
 
                         if _traffic and _traffic["TRAFFIC"]:
                             INITIALLIST = reversed(_traffic["TRAFFIC"]) 
-                            # _traffic = reversed(_traffic["TRAFFIC"])
-                            # _tglist = list(TGID_ORDER.split(","))
-                            # for record in _traffic:
-                            #     if record["TGID"] in _tglist:
-                            #         INITIALLIST.append(record)
                         else:
                             logging.info("Creating empty " + LOG_PATH + "lastheard.json")
                             with open(LOG_PATH + "lastheard.json", 'w') as outfile:
@@ -1737,7 +1745,7 @@ class web_server(Resource):
         logging.info('static website requested: %s', request)
         session = request.getSession()
         authenticated = IAuthenticated(session)
-        userAgent = auth = request.getHeader('User-Agent')
+        userAgent = request.getHeader('User-Agent')
 
         try:
             if userAgent.lower().index("mobile"):
@@ -1820,13 +1828,13 @@ if __name__ == '__main__':
     logging.info('monitor.py starting up')
 
     # exit code if Python version too old
-    if sys.version_info.major < 3 or sys.version_info.minor < 10:
-        sys.exit("HBJson needs python 3.10.xx and upper!")
+    if sys.version_info.major < 3 or sys.version_info.minor < 9:
+        sys.exit("HBJson needs python 3.9.xx and upper!")
 
     logger.info('\n\n\tCopyright (c) 2016, 2017, 2018, 2019\n\tThe Regents of the K0USY Group. All rights reserved.' \
                 '\n\n\tPython 3 port:\n\t2019 Steve Miller, KC1AWV <smiller@kc1awv.net>' \
                 '\n\n\tHBMonitor v1 SP2ONG 2019-2021' \
-                '\n\n\tHBJSON v3.6.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
+                '\n\n\tHBJSON v3.8.0:\n\t2021, 2022, 2023 Jean-Michel Cohen, F4JDN <f4jdn@outlook.fr>\n\n')
 
     # Check lastheard.log file
     if platform.system() == "Linux":
@@ -1931,4 +1939,3 @@ if __name__ == '__main__':
     initIpMap()
 
     reactor.run()
-

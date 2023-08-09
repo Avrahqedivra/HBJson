@@ -6,6 +6,8 @@ config_hbjsons.py
 .DS_Store
 *.log
 log/*.json
+log/*.log
+log/trace
 !log/contacts_fr_dept.json
 /*.json
 logo/*.*
@@ -28,3 +30,6 @@ test.py
 
 html/bar.html
 scripts/f3498e88e8.js
+travailbar.html
+.gitignore
+/*.json

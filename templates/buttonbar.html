@@ -1,52 +1,87 @@
-<div id="infoLine">
-	This is an info line
+  <div id="menubar" class="menubar" style="display:none;">
+    <ul>
+      <li><a href="index.html"><img src="sitelogo.png"></a></li>
+        
+      <li><a target='_self' title="Status" onclick="javascript:serverStatus()"><div id="serverstatus" class='fa fa-warning'></div></a></li>
+        
+      <li><a href="#" title="Servers"><i class='fa fa-server'></i></a>
+          <ul>
+              <li><a target="_blank" href="http://www.freedmr.uk/server_test.php">FreeDMR Status</a></li>		
+              <li><a target="_blank" href="https://freedmr-lh.gb7fr.org.uk/searchbuilder/">FreeDMR Search</a></li>
+              <li><a target='_blank' href="http://rc-f4knh.net:8081/">TG33 F4KNH RC</a></li>
+              <li><a target='_blank' href="http://51.79.167.57:8080/">TG20838 Grenoble</a></li>
+              <li><a target='_blank' href="http://francophonie.link/">TG937 / 20899 FDMR Francophonie</a></li>
+          </ul>
+      </li>
+        
+      <li><a href="#" title="Utils"><i class='fas fa-user-cog'></i></a>
+        <ul>
+            <li><a target='_blank' href="bridges.html">Bridges</a></li>
+            <li><a target='_blank' href="http://sharkrf.link">OpenSpot</a></li>
+            <li><a target='_blank' href="http://pi-star.local/">pi-star</a></li>
+            <li><a target='_blank' href="https://web.telegram.org">Telegram</a></li>
+        </ul>
+      </li>
+        
+      <li><a  href="#" title="Statistics" Onclick="javascript:stats();"><i class='fa fa-bar-chart'></i></a></li>
+        
+      <li><a target="_self" href="ccs7manager.html" title="Ccs7mng"><i class='fa fa-file'></i></a></li>
+
+      <li><a href="#" title="Log+"><i class='fa fa-list-ul'></i></a>
+        <ul>
+          <li><a target="_self" href="loglast.html">Log+ Total</a></li>
+          <li><a target="_self" href="index_tabs_v2.html">Log+ TG</a></li>
+          <li><a target="_self" href="log.html">Log+ Live</a></li>
+        </ul>
+      </li>
+
+      <li><a href="#"title="Map+"><i class='fas fa-map-marked'></i></a>
+        <ul>
+          <li><a target='_self' href="map.html">Monde map</a></li>
+          <li><a target='_self' href="https://www.f4igo.fr/">Repeater map</a></li>
+          <li><a target='_self' href="https://aprs.fi/#!mt=roadmap&z=11&lat=48.8367&lng=2.2535&timerange=3600&tail=3600">APRS map</a></li>
+        </ul>
+      </li>
+          
+      <li><a href="#"title="Services"><i class='fas fa-cloud-sun-rain'></i></a>
+        <ul>
+          <li><a target='_blank' href="https://www.wunderground.com/dashboard/pws/ISAINT195">Pylone DM92 Station</a></li>
+            <li><a target='_blank' href="meteo.html">Prévisions Météo</a></li>
+            <li><a target='_blank' href="https://www.windy.com/fr/-Satellite-satellite?satellite,47.264,2.856,5">Radar Satelitte</a></li>
+            <li><a target='_blank' href="https://www.blitzortung.org/fr/live_dynamic_maps3.php">Radar Orages</a></li>
+            <li><a target='_blank' href="https://www.flightradar24.com/47.45,3.1/6">Radar Avions</a></li>
+            <li><a target='_blank' href="https://www.pollens.fr/">Météo Pollens</a></li>
+            <li><a target='_blank' href="tc.html">Waze Live</a></li>
+            <li><a target='_blank' href="tcwc.html">WebCam Live</a></li>
+        </ul>
+      </li>
+
+      <li><a target="_blank" title="Google" href="https://google.fr"><i class="fa-brands fa-google"></i></a></li>
+
+      <div style="display: inline-block; background-color: rgba(255, 128, 39, 0.4); border-radius: 6px;font-size:1.4rem;font-weight:800;color:white;">
+        <li><a href="#" title="Font smaller" Onclick="zoom(-1)" style="width:1.5rem;padding:0 0.25rem 0 0.5rem;">A-</a></li>
+        <li><a href="#" title="Font reset" Onclick="zoom(0)" style="width:1.5rem;padding:0 0.25rem 0 0.25rem;">A</a></li>
+        <li><a href="#" title="Font bigger" Onclick="zoom(1)" style="width:1.5rem;padding:0 0.5rem 0 0.25rem;">A+</a></li>
+      </div>
+
+      <li><a title="Dashboard users" style="width:3rem;"><i class='fa fa-eye'></i><div id="btnlisteners" style="display: inline-block;">0</div></a></li>
+        
+      <li><a href="#" title="Theme" ><i class='fas fa-moon'></i></a>
+        <ul>
+          <li><a href="#" onclick="javascript:document.documentElement.className = 'theme-dark';">Dark</a></li>
+          <li><a href="#"  onclick="javascript:document.documentElement.className = 'theme-light';">Light</a></li>
+          <li><a href="#"  onclick="javascript:themeSettings='auto';adjustTheme()">Auto</a></li>
+          <li><a href="#" onclick="javascript:saveSettings()">Save</a></li>
+        </ul>
+      </li>
+        
+      <li><a href="#" title="Refresh" Onclick="javascript:window.location.reload(false);"><i class='fa fa-refresh'></i></a></li>
+        
+      <li><a href="#" title="FixMenu"><i id="lockButton" class="fas fa-lock"></i></a></li>
+
+      <div id="menuSearch" style="display: none;">
+        <li><input title="Type your contact" type="search" id="search" name="search" placeholder="DMRID/CALLID"></li>
+        <li><button title="Search your contact" type="button" class="fas fa-search" onclick="followupdmrid()"></button></li>
+      </div>
+    </ul>
 </div>
-
-<marquee id="marquee" direction="left" behavior="scroll" scrollamount="6">Your own marquee</marquee>
-
-<br>
-<a target='_self' onclick="javascript:serverStatus()"><div id="serverstatus" class="button noiconbutton">Status</div></a>
-<a target='_self' href="index.html"><div class="button noiconbutton">Home</div></a>
-
-<div class="dropdown">
-	<div class="button noiconbutton">HB' Server</div>
-    <div class="dropdown-content">
-        <a target="_blank" href="index.html">Monitor</a>
-    </div>
-</div>
-
-<div class="dropdown">
-    <div class="button noiconbutton">Hotspot</div>
-    <div class="dropdown-content">
-        <a target="_blank" href="http://pi-star.local/">pi-star</a>
-    </div>
-</div>
-
-<a target="_self" href="ccs7manager.html"><div class="button noiconbutton">CCS7Mgr</div></a>
-<a target='_blank' Onclick="javascript:window.location.reload(false);"><div class="button iconbutton">↻ Refresh</div></a>
-<a target='_self' href="bridges.html"><div class="button noiconbutton">Bridges</div></a>
-<a target='_blank' Onclick="javascript:stats();"><div class="button iconbutton">Statistics</div></a>
-
-<div class="dropdown" >
-    <div class="button noiconbutton">Log+</div>
-    <div class="dropdown-content">
-        <a target="_self" href="loglast.html">Log+ Total</a>
-        <a target="_self" href="log.html">Log+ Live</a>
-    </div>
-</div>
-
-<a target="_self" href="map.html"><div class="button noiconbutton">QSO'Map</div></a>
-
-<div class="dropdown">
-    <div class="button noiconbutton">Mode</div>
-    <div class="dropdown-content">
-        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-dark';">Dark</a>
-        <a target="_blank" onclick="javascript:document.documentElement.className = 'theme-light';">Light</a>
-        <a target="_blank" onclick="javascript:themeSettings='auto';adjustTheme()">Auto</a>
-    </div>
-</div>
-<a target="_blank" onclick="javascript:$('#inputModal').show();document.getElementById('search').focus()"><div class="button noiconbutton">Search</div></a>
-
-<a target='_blank' Onclick="zoom(-1);"><div class="button iconbutton">A-</div></a>
-<a target='_blank' Onclick="zoom(0);"><div class="button iconbutton">A</div></a>
-<a target='_blank' Onclick="zoom(1)"><div class="button iconbutton">A+</div></a>

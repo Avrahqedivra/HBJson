@@ -1,32 +1,26 @@
 <!DOCTYPE html>
-<html class="<<<THEME>>>" manifest="hbjson.appcache">
+<html class="<<<THEME>>>" id="htmlmap" style="display: none" manifest="hbjson.appcache">
     <head>
         <link rel="icon" type="image/x-icon" href="favicon.ico" />
         <meta charset="UTF-8">
         <meta http-equiv="refresh" content="20000"/>
-	    <meta name="description" content="Copyright (c) 2021, 2022 jmc - F4JDN. All rights reserved."/>
+	    <meta name="description" content="Copyright (c) 2021, 2023 jmc - F4JDN. All rights reserved."/>
         <title>HBJSON Monitor</title>
 
         <link rel="stylesheet" href="theme_template.css"/>
         <link rel="stylesheet" href="mysite_template.css"/>        
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="crossorigin=""/>
-        <script type="application/javascript" src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
-        <script type="application/javascript" src=" https://unpkg.com/@joergdietrich/leaflet.terminator@1.0.0/L.Terminator.js"></script>
     </head>
 
 	<body>
         <center>
             <noscript>You must enable JavaScript</noscript>
 
-            <div id="siteHeader">
-                <div id="sitelogo">
-                    <<<site_logo>>>
-                </div>
-                <div id="buttonArea">
-                    <<<button_bar>>>
-                </div>
-                <br/>
+            <div id="sitelogo" style="display: none"><<<site_logo>>></div>
 
+            <<<button_bar>>>
+
+            <div id="siteHeader" style="display:none">
                 <!-- The Modal -->
                 <div id="listenersModal" class="modal">
                     <!-- Modal content -->
@@ -47,7 +41,7 @@
                     </div>
                 </div>
 
-                <div name="hbtables">
+                <div name="hbtables" id="hbtables">
                     <div id="insertPoint">
                         <div id="lastcallercontainer"style="text-align: left;">
                             <div id="callerinfo">
@@ -173,40 +167,6 @@
             stroke: white;
         }
     </style>
-
-    <script type="application/javascript">
-        $(document).ready(function() {
-            $(window).click(function(e) {
-                if (event.target == document.getElementById("listenersModal"))
-                    $("#listenersModal").hide();
-            });        
-
-            $(document).on("click", ".close", function() {
-                $("#listenersModal").hide();
-            });
-
-            $(document).on("dblclick", "#btnlisteners", function(e) {
-                if (e.ctrlKey) {
-                    $("#listeners tr").remove();
-                    var content = "";
-
-                    listenerList = uniqByKeepLast(listenerList, swl => swl.NETID);
-
-                    listenerList.forEach(swl => {
-                        content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl.PORT + "</td><td>" + swl.NETID + "</td></tr>";
-                    });
-
-                    $("#listeners").append(content);
-                    $("#listenersModal").show();
-                }
-            });
-        });
-    </script> 
-
-    <!-- 
-        france, dom, belgique, suisse geojson 
-    -->
-    <script type="application/javascript" src="mapssvg.js"></script>
 
     <script type="application/javascript">
         // see names list in localstorage
@@ -617,13 +577,50 @@
             map.addLayer(geojson);
         }
 
+        $(document).ready(function() {
+            // document ready occurs before windows.onLoad
+            if (getConfigFromLocalStorage != null) {
+                getConfigFromLocalStorage();
+
+                if (document.documentElement.className != settings[0].config.theme)
+                    document.documentElement.className = settings[0].config.theme;
+            }
+
+            initMenubar();
+
+            $(window).click(function(e) {
+                if (event.target == document.getElementById("listenersModal"))
+                    $("#listenersModal").hide();
+            });        
+
+            $(document).on("click", ".close", function() {
+                $("#listenersModal").hide();
+            });
+
+            $(document).on("dblclick", "#btnlisteners", function(e) {
+                if (e.ctrlKey) {
+                    $("#listeners tr").remove();
+                    var content = "";
+
+                    listenerList = uniqByKeepLast(listenerList, swl => swl.NETID);
+
+                    listenerList.forEach(swl => {
+                        content += "<tr class='trlisteners'><td>" + swl.CALLSIGN + "</td><td>" + swl.IP + "</td><td>" + swl.PORT + "</td><td>" + swl.NETID + "</td></tr>";
+                    });
+
+                    $("#listeners").append(content);
+                    $("#listenersModal").show();
+                }
+            });
+        });
+
         window.onload = () => {
             listeners = 0;
             traffic = [];
             contacts = [];
             callers = [];
             listenerList = [];
-            currentZoom = 6.5;
+            currentZoom = settings[1].map.zoom;
             subscribers = null;
             departments = [];
             tgfilter = new Set("<<<TGID_FILTER>>>".split(','));
@@ -654,9 +651,11 @@
             content += "<div>SWL<div id='btnlisteners' class='legendIndicator'>0</div></div></div>";
             $('#legendinfo').append(content);
 
-            getConfigFromLocalStorage();
-
             var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=map";
+
+            $("#htmlmap").show();
+            $("#menubar").show();
+            $("#siteHeader").show();
 
             initMap();
 
@@ -764,4 +763,12 @@
             socket = null;
         }
 </script>
+
+<!-- 
+    france, dom, belgique, suisse geojson 
+-->
+<script type="application/javascript" src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
+<script type="application/javascript" src=" https://unpkg.com/@joergdietrich/leaflet.terminator@1.0.0/L.Terminator.js"></script>
+<script type="application/javascript" src="mapssvg.js"></script>
+
 </html>

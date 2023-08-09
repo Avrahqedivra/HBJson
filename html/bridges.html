@@ -35,16 +35,13 @@
         <center>
             <noscript>You must enable JavaScript</noscript>
 
-            <div id="siteHeader">
-                <div id="sitelogo">
-                    <<<site_logo>>>
-                </div>
+            <div id="sitelogo" style="display:none"><<<site_logo>>></div>
 
-                <div id="buttonArea" style="margin-bottom:1rem;">
-                    <<<button_bar>>>
-                </div>
-        
-                <div name="hbtables">
+            <<<button_bar>>>
+
+            <div id="siteHeader" style="display:none">
+                
+                <div name="hbtables" id="hbtables">
                     <div id="insertPoint">
                         <table id="tableBridges" class="tables bridges tablefixed">
                             <tbody id="bridges"></tbody>
@@ -167,6 +164,16 @@
     }
 
     $(document).ready(function() {
+        // document ready occurs before windows.onLoad
+        if (getConfigFromLocalStorage != null) {
+            getConfigFromLocalStorage();
+
+            if (document.documentElement.className != settings[0].config.theme)
+                document.documentElement.className = settings[0].config.theme;
+        }
+
+        initMenubar();
+
         // fills the select options on click
         // as they are empty on init
         document.addEventListener('click', function (e) {
@@ -211,8 +218,6 @@
 
     window.onload = function() {
         var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>?page=bridges";
-
-        getConfigFromLocalStorage();
 
         if (isNaN(displayLines))
             displayLines = 10;
@@ -285,6 +290,9 @@
         
 
         socket = new WSConnection().connect(wsuri);
+
+        $("#menubar").show();
+        $("#siteHeader").show();
     };
 
     window.onunload = () => {

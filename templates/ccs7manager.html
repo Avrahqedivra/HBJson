@@ -4,7 +4,7 @@
         <link rel="icon" type="image/x-icon" href="favicon.ico" />
         <meta charset="UTF-8">
         <title>CCS7 Manager</title>
-	    <meta name="description" content="CCS7 Manager - copyright (c) 2021-2023 jmc - F4JDN. All rights reserved."/>
+	    <meta name="description" content="CCS7 Manager - copyright (c) 2021, 2023 jmc - F4JDN. All rights reserved."/>
 
         <link rel="stylesheet" href="theme_template.css"/>
         <link rel="stylesheet" href="mysite_template.css"/>
@@ -28,100 +28,95 @@
         </div>
 
         <center>
-        <div id="siteHeader" style="text-align: center;">
-            <div id="sitelogo">
-                <<<site_logo>>>
-            </div>
+            <div id="sitelogo" style="display:none"><<<site_logo>>></div>
+                
+            <<<button_bar>>>
 
-            <div id="buttonArea">
-                <<<button_bar>>>
-            </div>
-            <br/>
-            <div id="listenersModal" class="modal_ccs7">
-                <!-- Modal content -->
-                <div class="modal-content_ccs7">
-                    <div class="caption">
-                        <div class="title">WebCCS7 Manager by F4JDN based on F4IKZ version</div>
-                        <div class="close_ccs7" onclick="location.href='index.html';">&times;</div>
-                        <div id="help_ccs7" class="help_ccs7">?</div>
-                    </div>
-                    <div style="display: inline-block; width:22rem">
-                        <fieldset class="group countryGroup">
-                            <legend>Country :</legend> 
-                            <select id="countries" multiple class="style widthHeight" disabled></select>
-
-                            <div style="margin-top: 0.25rem;">
-                                <div style="display: inline-block;">
-                                    <input type="checkbox" id="chkAll" disabled>
-                                    <label for="chkAll">ALL</label>
-                                </div>
-
-                                <div style="display: inline-block; margin-left: 3rem;">
-                                    <input type="checkbox" id="chkNoCountries" disabled>
-                                    <label for="chkNoCountries">No countries</label>
-                                </div>
-                            </div>
-                            <div style="margin: 0.5rem 0 0 0.25rem;">
-                                <span>Contacts selected :</span>&nbsp;<span id="nbcontacts">0</span>
-                            </div>
-                        </fieldset>
-                        
-                        <fieldset class="group databaseGroup">
-                            <legend>Databases :</legend> 
-                            <select id="databaseList">
-                                <option idx="2" value="https://database.radioid.net/static/users.json">RadioID [Licenced]</option>
-                                <option idx="3" value="https://ham-digital.org/status/users.json">Ham Digital [Licenced]</option>
-                                <option idx="4" value="https://www.radioid.net/static/rptrs.json">RadioID [Repeaters]</option>
-                                
-                                <!-- DONT FORGET TO ADJUST THOSE FOLLOWING URLS AND LABELS TO YOUR WEBSITE -->
-                                <option idx="1" value="http://francophonie.link/local_subscriber_ids.json">Francophonie [Unlicenced]</option>
-                                <option idx="5" value="http://francophonie.link/active_subscriber_ids.json">Active subscribers</option>
-                            </select> 
-
-                            <div style="padding-top: 1.0rem;">
-                                <input type="file" id="openfile" accept=".json" style="display:none">
-                                <button style="margin-left: 0.25rem; width: 9rem;" type="button" id="openjson">Open JSON</button>
-                                <button style="margin-right: 0.25rem; width: 9rem; float: right;" type="button" id="update">Download</button>
-                                <div style="margin: 1rem 0 0 0.25rem;">Version Date: 28/06/2022</div>
-                            </div>
-                        </fieldset>
-                    </div>
-                    
-                    <div style="width:23rem; vertical-align: top; float: right; margin-right: 2rem">
-                        <fieldset class="group deviceGroup">
-                            <legend>Devices :</legend> 
-                            <select id="devices" class="style widthHeight" multiple disabled></select>
-
-                            <div style="margin-top: 1.5rem;">
-                                <div style="display: inline-block;">
-                                    <input type="checkbox" id="chkDevicesAll" disabled>
-                                    <label for="chkDevicesAll">ALL</label>
-                                </div>
-                            </div>
-                        </fieldset>
-                        
-                        <div style="padding-top: 1.0rem;">
-                            <button style="margin-left: 0.25rem; width: 9rem;" type="button" id="export">Export CSV</button>
-                            <button style="margin-right: 0.25rem; width: 9rem; float: right;" type="button" disabled>Output Folder</button>
-                            <input type="text" style="background-color: transparent; margin: 1rem 0.25rem 0 0.25rem; width: 100%;" id="downloadfolder" value="C:\Users\~\Downloads" readonly>
+            <div id="siteHeader" style="display:none">    
+                <br/>
+                <div id="listenersModal" class="modal_ccs7">
+                    <!-- Modal content -->
+                    <div class="modal-content_ccs7">
+                        <div class="caption">
+                            <div class="title">WebCCS7 Manager by F4JDN based on F4IKZ version</div>
+                            <div class="close_ccs7" onclick="location.href='index.html';">&times;</div>
+                            <div id="help_ccs7" class="help_ccs7">?</div>
                         </div>
+                        <div style="display: inline-block; width:22rem">
+                            <fieldset class="group countryGroup">
+                                <legend>Country :</legend> 
+                                <select id="countries" multiple class="style widthHeight" disabled></select>
+
+                                <div style="margin-top: 0.25rem;">
+                                    <div style="display: inline-block;">
+                                        <input type="checkbox" id="chkAll" disabled>
+                                        <label for="chkAll">ALL</label>
+                                    </div>
+
+                                    <div style="display: inline-block; margin-left: 3rem;">
+                                        <input type="checkbox" id="chkNoCountries" disabled>
+                                        <label for="chkNoCountries">No countries</label>
+                                    </div>
+                                </div>
+                                <div style="margin: 0.5rem 0 0 0.25rem;">
+                                    <span>Contacts selected :</span>&nbsp;<span id="nbcontacts">0</span>
+                                </div>
+                            </fieldset>
+                            
+                            <fieldset class="group databaseGroup">
+                                <legend>Databases :</legend> 
+                                <select id="databaseList">
+                                    <option idx="2" value="https://database.radioid.net/static/users.json">RadioID [Licenced]</option>
+                                    <option idx="3" value="https://ham-digital.org/status/users.json">Ham Digital [Licenced]</option>
+                                    <option idx="4" value="https://www.radioid.net/static/rptrs.json">RadioID [Repeaters]</option>
+                                    
+                                    <!-- DONT FORGET TO ADJUST THOSE FOLLOWING URLS AND LABELS TO YOUR WEBSITE -->
+                                    <option idx="1" value="http://francophonie.link/local_subscriber_ids.json">Francophonie [Unlicenced]</option>
+                                    <option idx="5" value="http://francophonie.link/active_subscriber_ids.json">Active subscribers</option>
+                                </select> 
+
+                                <div style="padding-top: 1.0rem;">
+                                    <input type="file" id="openfile" accept=".json" style="display:none">
+                                    <button style="margin-left: 0.25rem; width: 9rem;" type="button" id="openjson">Open JSON</button>
+                                    <button style="margin-right: 0.25rem; width: 9rem; float: right;" type="button" id="update">Download</button>
+                                    <div style="margin: 1rem 0 0 0.25rem;">Version Date: 28/06/2022</div>
+                                </div>
+                            </fieldset>
+                        </div>
+                        
+                        <div style="width:23rem; vertical-align: top; float: right; margin-right: 2rem">
+                            <fieldset class="group deviceGroup">
+                                <legend>Devices :</legend> 
+                                <select id="devices" class="style widthHeight" multiple disabled></select>
+
+                                <div style="margin-top: 1.5rem;">
+                                    <div style="display: inline-block;">
+                                        <input type="checkbox" id="chkDevicesAll" disabled>
+                                        <label for="chkDevicesAll">ALL</label>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
+                            <div style="padding-top: 1.0rem;">
+                                <button style="margin-left: 0.25rem; width: 9rem;" type="button" id="export">Export CSV</button>
+                                <button style="margin-right: 0.25rem; width: 9rem; float: right;" type="button" disabled>Output Folder</button>
+                                <input type="text" style="background-color: transparent; margin: 1rem 0.25rem 0 0.25rem; width: 100%;" id="downloadfolder" value="C:\Users\~\Downloads" readonly>
+                            </div>
+                        </div>
+                        
+                        <footer class="footer_ccs7">
+                            <div class="static">STATUS:</div><div class="status" id="loaded"></div>
+                        </footer>
                     </div>
-                    
-                    <footer class="footer_ccs7">
-                        <div class="static">STATUS:</div><div class="status" id="loaded"></div>
-                    </footer>
                 </div>
-            </div>
 
-            <div id="footer">
-                <span>Copyright (c) 2021-22 <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN</a></span>
+                <div id="footer">
+                    <span>Copyright (c) 2021-23 <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN</a></span>
+                </div>
+                <!--THIS COPYRIGHT NOTICE MUST BE DISPLAYED AS A CONDITION OF THE LICENCE GRANT FOR THIS SOFTWARE. ALL DERIVATEIVES WORKS MUST CARRY THIS NOTICE -->
             </div>
-            <!--THIS COPYRIGHT NOTICE MUST BE DISPLAYED AS A CONDITION OF THE LICENCE GRANT FOR THIS SOFTWARE. ALL DERIVATEIVES WORKS MUST CARRY THIS NOTICE -->
-        </div>
-        <div id="overlay"></div>
-        </center>
-
-        
+            <div id="overlay"></div>
+        </center>        
     </body>
 <!--
     // https://web.dev/browser-fs-access/
@@ -469,6 +464,9 @@
             if (userJson.length > 0) {
                 $("#loaded").text("Wait... Sorting and normalizing country names");
 
+                if (Array.isArray(userJson) && userJson[0].results != null)
+                    userJson = userJson[0].results;
+
                 userJson.sort(compare);
 
                 for(let i=0; i < userJson.length; i++)
@@ -620,7 +618,15 @@
             hideAllTG = false;
             userJson = [];
 
-            getConfigFromLocalStorage();
+            // document ready occurs before windows.onLoad
+            if (getConfigFromLocalStorage != null) {
+                getConfigFromLocalStorage();
+
+                if (document.documentElement.className != settings[0].config.theme)
+                    document.documentElement.className = settings[0].config.theme;
+            }
+
+            initMenubar();
 
             // Check for the various File API support.
             if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -711,5 +717,8 @@
                 alert('The File APIs are not fully supported in this browser.');
             }
         });
+
+        $("#menubar").show();
+        $("#siteHeader").show();
     </script>
 </html>

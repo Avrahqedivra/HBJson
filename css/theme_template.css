@@ -37,6 +37,11 @@ html, body {
   margin: 0;
 }
 
+.zoom {
+  transform: scale(1);
+  transform-origin: top center;
+}
+
 /*Tabs*/
 #tabs {
   border-radius: var(--app-border-radius);
@@ -759,7 +764,10 @@ color: #569cd6;
 }
 
 #statusdiv {
-  position: absolute;
+  top: 10rem;
+  left: 16rem;
+
+  position: fixed;
   z-index: 9;
   background-color: #f1f1f1;
   text-align: center;
@@ -834,27 +842,12 @@ input[name="search"]:focus {
   height: inherit;
 }
 
-.modal-content-listeners {
-  scrollbar-width: thin;
-  
-  width: 40rem;
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -20rem;
-  transform: translateY(-50%);
-
-  max-height: 60rem;
-  overflow-y: auto;
-}
-
 .modal-content-statistics {
   scrollbar-width: thin;
-  
+
   width: 22rem;
   margin: 0;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   margin-left: -12rem;
@@ -867,7 +860,7 @@ input[name="search"]:focus {
 .modal-content-status {
   scrollbar-width: thin;
   
-  width: 22rem;
+  width: 17rem;
   margin: 0;
   position: absolute;
   top: 50%;
@@ -879,15 +872,40 @@ input[name="search"]:focus {
   overflow-y: auto;
 }
 
+.fuimg {
+  text-align: left;
+  padding-top: 0.25rem;
+  padding-left: 0.25rem;
+}
+
+.fuimg img {
+  cursor: pointer;
+}
+
 .modal-content-followup {
   scrollbar-width: thin;
 
   width: 50rem;
   margin: 0;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 55%;
   margin-left: -30rem;
+  transform: translateY(-50%);
+
+  max-height: 60rem;
+  overflow-y: auto;
+}
+
+.modal-content-listeners {
+  scrollbar-width: thin;
+  
+  width: 40rem;
+  margin: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-left: -20rem;
   transform: translateY(-50%);
 
   max-height: 60rem;
@@ -920,7 +938,6 @@ input[name="search"]:focus {
 
 .close-status {
   top: -0.45rem;
-  right: 70px;
 }
 
 .close-followup {
@@ -1122,6 +1139,8 @@ select {
 
 /* end modal */
 
+/* https://rolle.design/proper-way-to-use-css-scss-variables */
+
 .theme-light {
   /* html, body */
   --table-width: 85rem;
@@ -1265,7 +1284,15 @@ select {
 
   --color-red-progressbar: #c00303;
   --color-green-progressbar: #02b102;
-  --color-text-progressbar: white;  
+  --color-text-progressbar: black;
+
+  --color-menubar-foreground: #303030;
+  --color-menubar-background: #ffffff;
+  --color-menubar-hover: #d0d0d0;
+
+  --color-sitelogo-posX: 50%;
+  --color-sitelogo-posY: 45%;
+  --color-sitelogo-height: 16rem;
 }
 
 .theme-dark {
@@ -1413,4 +1440,12 @@ select {
   --color-red-progressbar: #ad0000;
   --color-green-progressbar: #035f03;
   --color-text-progressbar: #ffffff;
+
+  --color-menubar-foreground: #ffffff;
+  --color-menubar-background: #303030;
+  --color-menubar-hover: #505050;
+
+  --color-sitelogo-posX: 50%;
+  --color-sitelogo-posY: 45%;
+  --color-sitelogo-height: 16rem;
 }

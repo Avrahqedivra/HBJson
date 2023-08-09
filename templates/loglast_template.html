@@ -53,15 +53,11 @@
     <center>
         <noscript>You must enable JavaScript</noscript>
 
-        <div id="siteHeader">
-            <div id="sitelogo">
-                <<<site_logo>>>
-            </div>
+		<div id="sitelogo" style="display:none"><<<site_logo>>></div>
 
-            <div id="buttonArea">
-                <<<button_bar>>>
-            </div>
+        <<<button_bar>>>
 
+        <div id="siteHeader" style="display:none">    
             <!-- The Modal -->
             <div id="listenersModal" class="modal">
                 <!-- Modal content -->
@@ -104,7 +100,7 @@
                 </div>
             </div>
 
-            <div name="hbtables">
+            <div name="hbtables" id="hbtables">
                 <div id="insertPoint">
                     <div style="font-size:2rem; color:var(--color-fg-infoline); padding-top: 5rem;">Téléchargement de la
                         liste en cours...</div>
@@ -113,7 +109,7 @@
 
             <div id="footer">
                 <span>Copyright (c) 2019, 2020, 2021 NumeriX. All rights reserved.
-                    <br>JSON, MYSQL version by <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN </a>2021-2023. <br>
+                    <br>JSON, MYSQL version by <a href=https://github.com/avrahqedivra/HBJson>jmc - F4JDN </a>2021, 2022. <br>
                 </span>
             </div>
             <br>
@@ -272,6 +268,18 @@
         console.log(msg);
     };
 
+    $(document).ready(function() {
+        // document ready occurs before windows.onLoad
+        if (getConfigFromLocalStorage != null) {
+            getConfigFromLocalStorage();
+
+            if (document.documentElement.className != settings[0].config.theme)
+                document.documentElement.className = settings[0].config.theme;
+        }
+
+        initMenubar();
+    })
+
     window.onload = () => {
         logLast = [];
         hideAllTG = false;
@@ -287,9 +295,6 @@
 	    }
 
         var wsuri = "ws://" + window.location.hostname + ":<<<SOCKET_SERVER_PORT>>>";
-
-        if (getConfigFromLocalStorage != null)
-            getConfigFromLocalStorage();
 
         // https://stackoverflow.com/questions/34088381/websocket-and-javascript-promises
         function WSConnection() {
@@ -363,6 +368,9 @@
         };
 
         socket = new WSConnection().connect(wsuri);
+
+        $("#menubar").show();
+        $("#siteHeader").show();
     };
 
     window.onunload = () => {
