@@ -15,6 +15,9 @@ DISPLAY_LINES =  20                             # number of lines displayed in i
 CLIENT_TIMEOUT  = 0                             # Clients are timed out after this many seconds, 0 to disable
 START_TOT       = 240                           # TOT
 
+# how long the sitelogo should appear for the dashboard page
+BANNER_DELAY    = 2000
+
 # list of NETWORK_ID from OPB links not to show in local "lastheard" traffic, for example: "260210,260211,260212"
 OPB_FILTER = ""
 # allowed Backend OBP, if specified, precise all allowed SRC_ID, for example { "OBP-GLOBAL": { "20881", "20883" } }
