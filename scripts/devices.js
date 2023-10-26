@@ -11,5 +11,6 @@ devices = [
     { name: "DVPi", value: "DVPI", code: 10 },
     { name: "PI-Star", value: "PISTAR", code: 11 },
     { name: "Nextion (stripped)", value: "NEXTION", code: 12 },
-    { name: "BlueDV", value: "BLUEDV", code: 13 }
+    { name: "BlueDV", value: "BLUEDV", code: 13 },
+    { name: "Abbree DM-F8", value: "DM-F8", code: 14 }
 ];

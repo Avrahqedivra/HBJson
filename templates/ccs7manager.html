@@ -247,6 +247,9 @@
                     case "BLUEDV":
                         pattern = radio_id + "," + callsign + "," + wholename + "," + city + "," + state + "," + country + ",DMR";
                         break;
+                    case "DM-F8": 
+                        pNum + "," + callsign + "," + "Private Call" + "," + radio_id + "," + "None" + "," + "," + city + "," + state + "," + country + "," + remarks
+                        break;
                 }
                 return pattern;
             } catch(e) {
@@ -276,9 +279,8 @@
                     case "TYT":     content = "Radio ID,Callsign,Name,NickName,City,State,Country,,,,,,\r\n"; break;
                     case "BAOFENG": content = "Contact Name,Call Type,Call ID,Call Receive Tone\r\n"; break;
                     case "NEXTION": content = "RADIO_ID,CALLSIGN,FIRST_NAME,LAST_NAME,CITY,STATE,COUNTRY\r\n"; break;
-
+                    case "DM-F8": content = "No.,Call Alias,Call Type,Call ID,Call Alert,Repeater Number,City,State / Prov,Country,Remarks,\r\n"; break;
                     case "PISTAR":  ext = ".dat";
-
                     case "DVPI":
                     case "BLUEDV":  break;
                 }
