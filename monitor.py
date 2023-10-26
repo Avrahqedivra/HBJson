@@ -1178,7 +1178,7 @@ def fetchRemoteUsersFiles(fileurl):
         filepath = PATH + "assets/" + filename
 
         # local_subscriber_ids.json is in root folder
-        if filename == "local_subscriber_ids.json":
+        if filename == LOCAL_SUB_FILE:
             if os.path.exists("./" + filename):
                 return filename
             else:
@@ -1279,6 +1279,13 @@ def process_message(_bmessage):
             logging.info('BRIDGE EVENT: {}'.format(repr(_message[1:])))
         
         p = _message[1:].split(",")
+
+        REPORT_TGID     = p[8]
+
+        # skip TGID in TGID_FILTER
+        if (len(TGID_FILTER) > 0 and REPORT_TGID in TGID_FILTER):
+            return
+
         rts_update(p)
         opbfilter = get_opbf()
 
@@ -1286,7 +1293,6 @@ def process_message(_bmessage):
         REPORT_RXTX     = p[2]
         REPORT_SYS      = p[3]
         REPORT_SRC_ID   = p[5]
-        REPORT_TGID     = p[8]
 
         # check for filtered BACKEND OBP
         if REPORT_SYS in OPB_BACKEND and REPORT_SRC_ID not in OPB_BACKEND[REPORT_SYS]:
@@ -1529,6 +1535,10 @@ class dashboard(WebSocketServerProtocol):
                         if _command["request"] == "loglast":
                             # depending on SQL_LOG use SQL or text file option
                             self.sendMessage(json.dumps({"LOGLAST": createlogLastFromSql(True) if SQL_LOG == True else createLogTableJson()  }, ensure_ascii = False).encode('utf-8'), isBinary)
+                        elif _command["request"] == "subscribers":
+                            with open(PATH + LOCAL_SUB_FILE, 'r') as infile:
+                                SUBSCRIBERS = json.load(infile)['results']
+                                self.sendMessage(json.dumps({"SUBSCRIBERS": SUBSCRIBERS  }, ensure_ascii = False).encode('utf-8'), isBinary)
                         elif _command["request"] == "user" and _command["callsign"]:
                             response = ""
 
