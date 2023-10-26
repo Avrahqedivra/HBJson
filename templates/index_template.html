@@ -3,7 +3,7 @@
 
 <head>
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
-		<meta charset="UTF-8">
+		<meta charset="utf-8">
 		<meta http-equiv="refresh" content="20000"/>
 		<title>HBJSON Monitor</title>
 
@@ -144,13 +144,13 @@
 					<thead>
 						<tr class="headerRow">
 							<th class="thledate">Date</th>
-							<th class="thletime" id="heure">Heure</th>
+							<th class="thletime" id="heure">Time</th>
 							<th class="thleslot">Slot</th>
-							<th class="thletx" colspan=2>TX Connectés</th>
+							<th class="thletx" colspan=2>Last TX</th>
 							<th class="thlename">Name</th>
 							<th class="thletg">TGs</th>
 							<th class="thlepc">%</th>
-							<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Cliquez ICI)</a></th>
+							<th class="thlelog"><a target="_self" href="loglast.html">LOG+ (Click HERE)</a></th>
 							<th class="thledelay">TX (s)</th>
 							<th class="thlenetid">NetID</th>
 							<th class="thlemaster">Master Infra</th>
@@ -166,8 +166,8 @@
 						<thead id="theadOpenbridges" tbodyid="openbridges">
 							<tr class="headerRow">
 								<th class="thopmaster">OpenBridge</th>
-								<th class="thopnetid">ID Réseau(x)</th>
-								<th class="thopcalls">Appel(s) Actif(s)</th>
+								<th class="thopnetid">Network(s) ID</th>
+								<th class="thopcalls">Active Call(s)</th>
 							</tr>
 						</thead>
 						<tbody id="openbridges">
@@ -179,9 +179,9 @@
 							<tr class="headerRow">
 								<th class="thmsmaster">Master</th>
 								<th class="thmsnetid">NetID</th>
-								<th class="thmstime">Connecté(s)</th>
+								<th class="thmstime">Connected</th>
 								<th class="thmsslot">Slot</th>
-								<th class="thmstx">Poste(s) Connecté(s) TX</th>
+								<th class="thmstx">Connected Rigs TX</th>
 								<th class="thmsdest">Conf. Destination</th>
 							</tr>
 						</thead>
@@ -194,9 +194,9 @@
 							<tr class="headerRow">
 								<th class="thpemaster">Peer</th>
 								<th class="thpenetid">NetID</th>
-								<th class="thpetime">Connecté(s)</th>
+								<th class="thpetime">Connected</th>
 								<th class="thpeslot">Slot</th>
-								<th class="thpetx">Poste(s) Connecté(s) TX</th>
+								<th class="thpetx">Connected Rigs TX</th>
 								<th class="thpedest">Conf. Destination</th>
 							</tr>
 						</thead>
@@ -927,7 +927,7 @@ function dragElement(elmnt) {
 							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>'
 							+	'<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>'
 							+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
-							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>'
+							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>Connected TX</th>'
 							+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>'
 							+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
 							+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
@@ -1210,7 +1210,7 @@ function dragElement(elmnt) {
 									showStyle = tgsetting["title-style"] ? tgsetting["title-style"]:showStyleDefault;
 									
 									emptyTable = '<div class="titleRow"><div class="titleCell" style="' + showStyle + '">' + showTitle 
-											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">◌</div></div><div class="titlePadding">&nbsp;</div><div class="titleFiller">&nbsp;</div></div>' 
+											+ '<div class="homearrow" onclick="scrollIntoViewFromId(`siteHeader`)">&#x25CC;</div></div><div class="titlePadding">&nbsp;</div><div class="titleFiller">&nbsp;</div></div>' 
 											+ '<table id=tb' + tgName + ' class="entitledTables lastheard tablefixed">';
 								}
 
@@ -1223,7 +1223,7 @@ function dragElement(elmnt) {
 							+ '<th class="thledate'+ ((showColumns.charAt(0) == "-") ? ' visible"':'"') + '>Date</th>' 
 							+ '<th class="thletime'+ ((showColumns.charAt(1) == "-") ? ' visible"':'"') + '>Heure</th>' 
 							+ '<th class="thleslot'+ ((showColumns.charAt(2) == "-") ? ' visible"':'"') + '>Slot</th>' 
-							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>TX Connectés</th>' 
+							+ '<th class="thletx'+ ((showColumns.charAt(3) == "-") ? ' visible"':'"') + ' colspan=2>Connected TX</th>' 
 							+ '<th class="thlename'+ ((showColumns.charAt(4) == "-") ? ' visible"':'"') + '>Name</th>' 
 							+ '<th class="thletg'+ ((showColumns.charAt(5) == "-") ? ' visible"':'"') + '>TG' + tgid + '</th>' 
 							+ '<th class="thlelog'+ ((showColumns.charAt(6) == "-") ? ' visible"':'"') + '><a target="_self" href="loglast.html">LOG+ (Cliquez ICI) </a></th>' 
